@@ -839,6 +839,10 @@ class Api
             unset($params['PlatformID']);
         }
 
+        if (empty($params['ItemURL']) === true) {
+            unset($params['ItemURL']);
+        }
+
         if (count($params['Items']) > 0) {
             $itemName = '';
             foreach ($params['Items'] as $item) {
