@@ -913,7 +913,7 @@ class Api
      */
     public function parseResult($data)
     {
-        if ($data['CheckMacValue'] !== $this->generateKey($data)) {
+        if ($data['CheckMacValue'] !== strtoupper($this->generateKey($data))) {
             $data['RtnCode'] = '10400002';
         }
         $data['statusReason'] = preg_replace('/(\.|。)$/', '', $this->getStatusReason($data['RtnCode']));
