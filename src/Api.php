@@ -787,7 +787,9 @@ class Api
      */
     public function getApiEndpoint()
     {
-        return $this->options['sandbox'] === false ? 'https://payment.allpay.com.tw/Cashier/AioCheckOut/V2' : 'https://payment-stage.allpay.com.tw/Cashier/AioCheckOut/V2';
+        return $this->options['sandbox'] === false ?
+            'https://payment.allpay.com.tw/Cashier/AioCheckOut/V2' :
+            'https://payment-stage.allpay.com.tw/Cashier/AioCheckOut/V2';
     }
 
     /**
@@ -866,9 +868,7 @@ class Api
             unset($params['CheckMacValue']);
         }
 
-        uksort($params, function ($a, $b) {
-            return strcasecmp($a, $b);
-        });
+        ksort($params, SORT_NATURAL | SORT_FLAG_CASE);
 
         $macValue = 'HashKey='.$this->options['HashKey'];
         foreach ($params as $key => $value) {
@@ -887,7 +887,7 @@ class Api
             '%29' => ')',
         ]);
 
-        return strtoupper(hash('md5', $macValue));
+        return hash('md5', $macValue);
     }
 
     /**
