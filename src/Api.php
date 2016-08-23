@@ -822,6 +822,7 @@ class Api
             'PlatformID'        => '',
             'InvoiceMark'       => InvoiceState::No,
             'Items'             => [],
+            'ItemURL'           => '',
             'EncryptType'       => EncryptType::ENC_MD5,
             'UseRedeem'         => UseRedeem::No,
 
@@ -869,7 +870,6 @@ class Api
         }
 
         ksort($params, SORT_NATURAL | SORT_FLAG_CASE);
-
         $macValue = 'HashKey='.$this->options['HashKey'];
         foreach ($params as $key => $value) {
             $macValue .= '&'.$key.'='.$value;
