@@ -14,7 +14,6 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Request\Sync;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use PayumTW\Allpay\Api;
@@ -57,12 +56,8 @@ class CaptureAction extends GatewayAwareAction implements ActionInterface, ApiAw
 
         if (isset($httpRequest->request['RtnCode']) === true) {
             $model->replace($this->api->parseResult($httpRequest->request));
-            $this->gateway->execute(new Sync($model));
         } else {
             $targetUrl = $request->getToken()->getTargetUrl();
-            if (empty($model['ClientBackURL']) === true) {
-                $model['ClientBackURL'] = $targetUrl;
-            }
 
             if (empty($model['OrderResultURL']) === true) {
                 $model['OrderResultURL'] = $targetUrl;
@@ -76,9 +71,6 @@ class CaptureAction extends GatewayAwareAction implements ActionInterface, ApiAw
 
                 $model['ReturnURL'] = $notifyToken->getTargetUrl();
             }
-
-            dump($this->api->preparePayment($model->toUnsafeArray()));
-            exit;
 
             throw new HttpPostRedirect(
                 $this->api->getApiEndpoint(),

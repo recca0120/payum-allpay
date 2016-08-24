@@ -829,6 +829,8 @@ class Api
 
             // ATM, Tenpay
             'ExpireDate'        => '',
+            'PaymentInfoURL'    => '',
+            'ClientRedirectURL' => '',
 
             // CVS, BARCODE
             'Desc_1'            => '',

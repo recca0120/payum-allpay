@@ -35,10 +35,15 @@ class NotifyAction extends GatewayAwareAction implements ApiAwareInterface
         $this->gateway->execute($httpRequest);
 
         if ($this->api->verifyHash($httpRequest->request) === false) {
-            throw new HttpResponse('CheckMacValue verify fail.', 400);
+            throw new HttpResponse('0|CheckMacValue verify fail.', 400);
         }
 
-        throw new HttpResponse('OK', 200);
+        if ($model['MerchantTradeNo'] !== $httpRequest->request['MerchantTradeNo']) {
+            throw new HttpResponse('0|MerchantTradeNo fail.', 400);
+        }
+        $model->replace($httpRequest->request);
+
+        throw new HttpResponse('1|OK', 200);
     }
 
     /**
