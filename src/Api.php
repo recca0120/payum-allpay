@@ -802,32 +802,53 @@ class Api
      */
     public function request(array $params, $request)
     {
-        $redirectUrl = $this->getRedirectUrl($request);
+        $clientBackUrl = $request->getToken()->getTargetUrl();
 
         $supportedParams = [
-            'ReturnURL'         => $redirectUrl,
-            'ClientBackURL'     => $redirectUrl,
-            'OrderResultURL'    => $redirectUrl,
+            'MerchantID'        => $this->options['MerchantID'],
             'MerchantTradeNo'   => '',
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
             'PaymentType'       => 'aio',
             'TotalAmount'       => '',
             'TradeDesc'         => '',
+            'ItemName'          => '',
+            'ReturnURL'         => '',
             'ChoosePayment'     => PaymentMethod::ALL,
+            'ClientBackURL'     => $clientBackUrl,
+            'ItemURL'           => '',
             'Remark'            => '',
             'ChooseSubPayment'  => PaymentMethodItem::None,
+            'OrderResultURL'    => $clientBackUrl,
             'NeedExtraPaidInfo' => ExtraPaymentInfo::No,
-            'DeviceSource'      => $this->options['DeviceSource'],
+            'DeviceSource'      => $this->deviceSource(),
             'IgnorePayment'     => '',
             'PlatformID'        => '',
             'InvoiceMark'       => InvoiceState::No,
-            'Items'             => [],
-            'ItemURL'           => '',
             'EncryptType'       => EncryptType::ENC_MD5,
+
+            'Items'             => [],
+
+            // ATM, Tenpay
+            'ExpireDate'        => '',
+
+            // CVS, BARCODE
+            'Desc_1'            => '',
+            'Desc_2'            => '',
+            'Desc_3'            => '',
+            'Desc_4'            => '',
+
+            // Credit
+            'CreditInstallment' => '',
+            'InstallmentAmount' => '',
+            'Redeem'            => '',
             'UseRedeem'         => UseRedeem::No,
 
-            'MerchantID'        => $this->options['MerchantID'],
-            'ItemName'          => '',
+            // Credit 定期定客
+            'PeriodAmount'      => '',
+            'PeriodType'        => '',
+            'Frequency'         => '',
+            'ExecTimes'         => '',
+            'PeriodReturnURL'   => '',
         ];
 
         $params = array_replace(
@@ -895,20 +916,6 @@ class Api
     }
 
     /**
-     * getRedirectUrl.
-     *
-     * @param mixed $request
-     *
-     * @return string
-     */
-    public function getRedirectUrl($request)
-    {
-        $scheme = parse_url($request->getToken()->getTargetUrl());
-
-        return sprintf('%s://%s%s', $scheme['scheme'], $scheme['host'], $scheme['path']);
-    }
-
-    /**
      * parseResult.
      *
      * @param mixed $data
@@ -940,5 +947,17 @@ class Api
         }
 
         return $statusReason;
+    }
+
+    /**
+     * deviceSource.
+     *
+     * @return bool
+     */
+    protected function deviceSource()
+    {
+        $detect = new MobileDetect();
+
+        return ($detect->isMobile() === false && $detect->isTablet() === false) ? DeviceType::PC : DeviceType::Mobile;
     }
 }
