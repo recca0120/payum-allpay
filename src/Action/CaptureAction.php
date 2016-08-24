@@ -2,18 +2,29 @@
 
 namespace PayumTW\Allpay\Action;
 
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
+use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Sync;
+use Payum\Core\Security\GenericTokenFactoryAwareInterface;
+use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use PayumTW\Allpay\Api;
 
-class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
+class CaptureAction extends GatewayAwareAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
 {
+    use ApiAwareTrait,
+        GatewayAwareTrait,
+        GenericTokenFactoryAwareTrait;
+
     /**
      * @var Api
      */
@@ -39,7 +50,6 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
     public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
-
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         $httpRequest = new GetHttpRequest();
@@ -49,7 +59,31 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
             $model->replace($this->api->parseResult($httpRequest->request));
             $this->gateway->execute(new Sync($model));
         } else {
-            throw $this->api->request($model->toUnsafeArray(), $request);
+            $targetUrl = $request->getToken()->getTargetUrl();
+            if (empty($model['ClientBackURL']) === true) {
+                $model['ClientBackURL'] = $targetUrl;
+            }
+
+            if (empty($model['OrderResultURL']) === true) {
+                $model['OrderResultURL'] = $targetUrl;
+            }
+
+            if (empty($model['ReturnURL']) === true && $request->getToken() && $this->tokenFactory) {
+                $notifyToken = $this->tokenFactory->createNotifyToken(
+                    $request->getToken()->getGatewayName(),
+                    $request->getToken()->getDetails()
+                );
+
+                $model['ReturnURL'] = $notifyToken->getTargetUrl();
+            }
+
+            dump($this->api->preparePayment($model->toUnsafeArray()));
+            exit;
+
+            throw new HttpPostRedirect(
+                $this->api->getApiEndpoint(),
+                $this->api->preparePayment($model->toUnsafeArray())
+            );
         }
     }
 

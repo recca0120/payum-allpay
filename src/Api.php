@@ -5,7 +5,6 @@ namespace PayumTW\Allpay;
 use Detection\MobileDetect;
 use Http\Message\MessageFactory;
 use Payum\Core\HttpClientInterface;
-use Payum\Core\Reply\HttpPostRedirect;
 use PayumTW\Allpay\Constants\DeviceType;
 use PayumTW\Allpay\Constants\EncryptType;
 use PayumTW\Allpay\Constants\ExtraPaymentInfo;
@@ -802,10 +801,8 @@ class Api
      *
      * @return array
      */
-    public function request(array $params, $request)
+    public function preparePayment(array $params)
     {
-        $clientBackUrl = $request->getToken()->getTargetUrl();
-
         $supportedParams = [
             'MerchantID'        => $this->options['MerchantID'],
             'MerchantTradeNo'   => '',
@@ -816,13 +813,13 @@ class Api
             'ItemName'          => '',
             'ReturnURL'         => '',
             'ChoosePayment'     => PaymentMethod::ALL,
-            'ClientBackURL'     => $clientBackUrl,
+            'ClientBackURL'     => '',
             'ItemURL'           => '',
             'Remark'            => '',
             'ChooseSubPayment'  => PaymentMethodItem::None,
-            'OrderResultURL'    => $clientBackUrl,
+            'OrderResultURL'    => '',
             'NeedExtraPaidInfo' => ExtraPaymentInfo::No,
-            'DeviceSource'      => $this->isMobile() ? DeviceType::PC : DeviceType::Mobile,
+            'DeviceSource'      => $this->isMobile() ? DeviceType::Mobile : DeviceType::PC,
             'IgnorePayment'     => '',
             'PlatformID'        => '',
             'InvoiceMark'       => InvoiceState::No,
@@ -878,19 +875,19 @@ class Api
         }
         unset($params['Items']);
 
-        $params['CheckMacValue'] = $this->generateKey($params);
+        $params['CheckMacValue'] = $this->calculateHash($params);
 
-        return new HttpPostRedirect($this->getApiEndpoint(), $params);
+        return $params;
     }
 
     /**
-     * generateKey.
+     * calculateHash.
      *
      * @param array $params
      *
      * @return string
      */
-    protected function generateKey($params)
+    protected function calculateHash($params)
     {
         if (isset($params['CheckMacValue']) === true) {
             unset($params['CheckMacValue']);
@@ -918,20 +915,39 @@ class Api
     }
 
     /**
+     * Verify if the hash of the given parameter is correct.
+     *
+     * @param array $params
+     *
+     * @return bool
+     */
+    public function verifyHash(array $params)
+    {
+        if (empty($params['CheckMacValue'])) {
+            return false;
+        }
+
+        $hash = $params['CheckMacValue'];
+        unset($params['CheckMacValue']);
+
+        return $hash === strtoupper($this->calculateHash($params));
+    }
+
+    /**
      * parseResult.
      *
-     * @param mixed $data
+     * @param mixed $params
      *
      * @return array
      */
-    public function parseResult($data)
+    public function parseResult($params)
     {
-        if ($data['CheckMacValue'] !== strtoupper($this->generateKey($data))) {
-            $data['RtnCode'] = '10400002';
+        if ($this->verifyHash($params) === false) {
+            $params['RtnCode'] = '10400002';
         }
-        $data['statusReason'] = preg_replace('/(\.|。)$/', '', $this->getStatusReason($data['RtnCode']));
+        $params['statusReason'] = preg_replace('/(\.|。)$/', '', $this->getStatusReason($params['RtnCode']));
 
-        return $data;
+        return $params;
     }
 
     /**
