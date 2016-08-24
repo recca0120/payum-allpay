@@ -9,6 +9,7 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
+use Payum\Core\Request\Sync;
 use PayumTW\Allpay\Api;
 
 class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
@@ -46,6 +47,7 @@ class CaptureAction extends GatewayAwareAction implements ApiAwareInterface
 
         if (isset($httpRequest->request['RtnCode']) === true) {
             $model->replace($this->api->parseResult($httpRequest->request));
+            $this->gateway->execute(new Sync($model));
         } else {
             throw $this->api->request($model->toUnsafeArray(), $request);
         }

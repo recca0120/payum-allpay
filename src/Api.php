@@ -822,7 +822,7 @@ class Api
             'ChooseSubPayment'  => PaymentMethodItem::None,
             'OrderResultURL'    => $clientBackUrl,
             'NeedExtraPaidInfo' => ExtraPaymentInfo::No,
-            'DeviceSource'      => $this->deviceSource(),
+            'DeviceSource'      => $this->isMobile() ? DeviceType::PC : DeviceType::Mobile,
             'IgnorePayment'     => '',
             'PlatformID'        => '',
             'InvoiceMark'       => InvoiceState::No,
@@ -952,14 +952,14 @@ class Api
     }
 
     /**
-     * deviceSource.
+     * isMobile.
      *
      * @return bool
      */
-    protected function deviceSource()
+    protected function isMobile()
     {
         $detect = new MobileDetect();
 
-        return ($detect->isMobile() === false && $detect->isTablet() === false) ? DeviceType::PC : DeviceType::Mobile;
+        return ($detect->isMobile() === false && $detect->isTablet() === false) ? false : true;
     }
 }
