@@ -2,9 +2,11 @@
 
 namespace PayumTW\Allpay;
 
+use Detection\MobileDetect;
 use Http\Message\MessageFactory;
 use Payum\Core\HttpClientInterface;
 use Payum\Core\Reply\HttpPostRedirect;
+use PayumTW\Allpay\Constants\DeviceType;
 use PayumTW\Allpay\Constants\EncryptType;
 use PayumTW\Allpay\Constants\ExtraPaymentInfo;
 use PayumTW\Allpay\Constants\InvoiceState;
