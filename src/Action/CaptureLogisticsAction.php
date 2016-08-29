@@ -16,9 +16,9 @@ use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
-use PayumTW\Allpay\Api;
+use PayumTW\Allpay\LogisticsApi as Api;
 
-class CaptureAction extends GatewayAwareAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
+class CaptureLogisticsAction extends GatewayAwareAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
 {
     use ApiAwareTrait,
         GatewayAwareTrait,
@@ -54,31 +54,39 @@ class CaptureAction extends GatewayAwareAction implements ActionInterface, ApiAw
         $httpRequest = new GetHttpRequest();
         $this->gateway->execute($httpRequest);
 
-        if (isset($httpRequest->request['RtnCode']) === true) {
+        if (isset($httpRequest->request['CVSStoreID']) === true) {
             $model->replace($this->api->parseResult($httpRequest->request));
 
             return;
         }
 
         $targetUrl = $request->getToken()->getTargetUrl();
+        if (empty($model['ReceiverName']) === true) {
+            if (empty($model['ServerReplyURL']) === true) {
+                $model['ServerReplyURL'] = $targetUrl;
+            }
 
-        if (empty($model['OrderResultURL']) === true) {
-            $model['OrderResultURL'] = $targetUrl;
+            $params = $this->api->prepareMap($model->toUnsafeArray());
+            throw new HttpPostRedirect(
+                $params['apiEndpoint'],
+                $params['params']
+            );
         }
 
-        if (empty($model['ReturnURL']) === true && $request->getToken() && $this->tokenFactory) {
+        if (empty($model['ServerReplyURL']) === true) {
             $notifyToken = $this->tokenFactory->createNotifyToken(
                 $request->getToken()->getGatewayName(),
                 $request->getToken()->getDetails()
             );
 
-            $model['ReturnURL'] = $notifyToken->getTargetUrl();
+            $model['ServerReplyURL'] = $model['LogisticsC2CReplyURL'] = $notifyToken->getTargetUrl();
         }
 
-        throw new HttpPostRedirect(
-            $this->api->getApiEndpoint(),
-            $this->api->preparePayment($model->toUnsafeArray())
-        );
+        if (empty($model['ClientReplyURL']) === true) {
+            $model['ClientReplyURL'] = $targetUrl;
+        }
+
+        $model->replace($this->api->parseResult($this->api->payment($model->toUnsafeArray())));
     }
 
     /**

@@ -2,18 +2,13 @@
 
 namespace PayumTW\Allpay;
 
-use Detection\MobileDetect;
+use DeviceType;
 use Http\Message\MessageFactory;
+use InvoiceState;
 use Payum\Core\HttpClientInterface;
-use PayumTW\Allpay\Constants\DeviceType;
-use PayumTW\Allpay\Constants\EncryptType;
-use PayumTW\Allpay\Constants\ExtraPaymentInfo;
-use PayumTW\Allpay\Constants\InvoiceState;
-use PayumTW\Allpay\Constants\PaymentMethod;
-use PayumTW\Allpay\Constants\PaymentMethodItem;
-use PayumTW\Allpay\Constants\UseRedeem;
+use PayumTW\Allpay\Bridge\Allpay\AllInOne;
 
-class Api
+class Api extends BaseApi
 {
     /**
      * @var HttpClientInterface
@@ -794,7 +789,24 @@ class Api
     }
 
     /**
-     * prepare.
+     * getApi.
+     *
+     * @method getApi
+     *
+     * @return \PayumTW\Allpay\Bridge\Allpay\AllInOne
+     */
+    protected function getApi()
+    {
+        $api = new AllInOne();
+        $api->HashKey = $this->options['HashKey'];
+        $api->HashIV = $this->options['HashIV'];
+        $api->MerchantID = $this->options['MerchantID'];
+
+        return $api;
+    }
+
+    /**
+     * preparePayment.
      *
      * @param array $params
      * @param mixed $request
@@ -803,136 +815,35 @@ class Api
      */
     public function preparePayment(array $params)
     {
-        $supportedParams = [
-            'MerchantID'        => $this->options['MerchantID'],
-            'MerchantTradeNo'   => '',
-            'MerchantTradeDate' => date('Y/m/d H:i:s'),
-            'PaymentType'       => 'aio',
-            'TotalAmount'       => '',
-            'TradeDesc'         => '',
-            'ItemName'          => '',
-            'ReturnURL'         => '',
-            'ChoosePayment'     => PaymentMethod::ALL,
-            'ClientBackURL'     => '',
-            'ItemURL'           => '',
-            'Remark'            => '',
-            'ChooseSubPayment'  => PaymentMethodItem::None,
-            'OrderResultURL'    => '',
-            'NeedExtraPaidInfo' => ExtraPaymentInfo::No,
-            'DeviceSource'      => $this->isMobile() ? DeviceType::Mobile : DeviceType::PC,
-            'IgnorePayment'     => '',
-            'PlatformID'        => '',
-            'InvoiceMark'       => InvoiceState::No,
-            'EncryptType'       => EncryptType::ENC_MD5,
-
-            'Items'             => [],
-
-            // ATM, Tenpay
-            'ExpireDate'        => '',
-            'PaymentInfoURL'    => '',
-            'ClientRedirectURL' => '',
-
-            // CVS, BARCODE
-            'Desc_1'            => '',
-            'Desc_2'            => '',
-            'Desc_3'            => '',
-            'Desc_4'            => '',
-
-            // Credit
-            'CreditInstallment' => '',
-            'InstallmentAmount' => '',
-            'Redeem'            => '',
-            'UseRedeem'         => UseRedeem::No,
-
-            // Credit 定期定客
-            'PeriodAmount'      => '',
-            'PeriodType'        => '',
-            'Frequency'         => '',
-            'ExecTimes'         => '',
-            'PeriodReturnURL'   => '',
-        ];
-
-        $params = array_replace(
-            $supportedParams,
-            array_intersect_key($params, $supportedParams)
+        $api = $this->getApi();
+        $api->Send['MerchantTradeDate'] = date('Y/m/d H:i:s');
+        $api->Send['DeviceSource'] = $this->isMobile() ? DeviceType::Mobile : DeviceType::PC;
+        $api->Send = array_replace(
+            $api->Send,
+            array_intersect_key($params, $api->Send)
         );
 
-        if (empty($params['PlatformID']) === true) {
-            unset($params['PlatformID']);
+        // 電子發票參數
+        /*
+        $api->Send['InvoiceMark'] = InvoiceState::Yes;
+        $api->SendExtend['RelateNumber'] = $MerchantTradeNo;
+        $api->SendExtend['CustomerEmail'] = 'test@allpay.com.tw';
+        $api->SendExtend['CustomerPhone'] = '0911222333';
+        $api->SendExtend['TaxType'] = TaxType::Dutiable;
+        $api->SendExtend['CustomerAddr'] = '台北市南港區三重路19-2號5樓D棟';
+        $api->SendExtend['InvoiceItems'] = array();
+        // 將商品加入電子發票商品列表陣列
+        foreach ($api->Send['Items'] as $info)
+        {
+            array_push($api->SendExtend['InvoiceItems'],array('Name' => $info['Name'],'Count' =>
+                $info['Quantity'],'Word' => '個','Price' => $info['Price'],'TaxType' => TaxType::Dutiable));
         }
+        $api->SendExtend['InvoiceRemark'] = '測試發票備註';
+        $api->SendExtend['DelayDay'] = '0';
+        $api->SendExtend['InvType'] = InvType::General;
+        */
 
-        if (empty($params['ItemURL']) === true) {
-            unset($params['ItemURL']);
-        }
-
-        if (count($params['Items']) > 0) {
-            $itemName = '';
-            foreach ($params['Items'] as $item) {
-                $itemName .= vsprintf('#%s %d %s x %u', $item);
-                if (array_key_exists('ItemURL', $params) === false && array_key_exists('URL', $item) === true) {
-                    $params['ItemURL'] = $item['URL'];
-                }
-            }
-            $params['ItemName'] = mb_substr($itemName, 1, 200);
-        }
-        unset($params['Items']);
-
-        $params['CheckMacValue'] = $this->calculateHash($params);
-
-        return $params;
-    }
-
-    /**
-     * calculateHash.
-     *
-     * @param array $params
-     *
-     * @return string
-     */
-    protected function calculateHash($params)
-    {
-        if (isset($params['CheckMacValue']) === true) {
-            unset($params['CheckMacValue']);
-        }
-
-        ksort($params, SORT_NATURAL | SORT_FLAG_CASE);
-        $macValue = 'HashKey='.$this->options['HashKey'];
-        foreach ($params as $key => $value) {
-            $macValue .= '&'.$key.'='.$value;
-        }
-        $macValue .= '&HashIV='.$this->options['HashIV'];
-        $macValue = urlencode($macValue);
-        $macValue = strtolower($macValue);
-        $macValue = strtr($macValue, [
-            '%2d' => '-',
-            '%5f' => '_',
-            '%2e' => '.',
-            '%21' => '!',
-            '%2a' => '*',
-            '%28' => '(',
-            '%29' => ')',
-        ]);
-
-        return hash('md5', $macValue);
-    }
-
-    /**
-     * Verify if the hash of the given parameter is correct.
-     *
-     * @param array $params
-     *
-     * @return bool
-     */
-    public function verifyHash(array $params)
-    {
-        if (empty($params['CheckMacValue'])) {
-            return false;
-        }
-
-        $hash = $params['CheckMacValue'];
-        unset($params['CheckMacValue']);
-
-        return $hash === strtoupper($this->calculateHash($params));
+        return $api->CheckOut();
     }
 
     /**
@@ -950,34 +861,5 @@ class Api
         $params['statusReason'] = preg_replace('/(\.|。)$/', '', $this->getStatusReason($params['RtnCode']));
 
         return $params;
-    }
-
-    /**
-     * getStatusReason.
-     *
-     * @param string $code
-     *
-     * @return string
-     */
-    protected function getStatusReason($code)
-    {
-        $statusReason = '拒絕交易';
-        if (isset($this->code[$code]) === true) {
-            $statusReason = $this->code[$code];
-        }
-
-        return $statusReason;
-    }
-
-    /**
-     * isMobile.
-     *
-     * @return bool
-     */
-    protected function isMobile()
-    {
-        $detect = new MobileDetect();
-
-        return ($detect->isMobile() === false && $detect->isTablet() === false) ? false : true;
     }
 }
