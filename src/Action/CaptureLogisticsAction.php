@@ -60,13 +60,15 @@ class CaptureLogisticsAction extends GatewayAwareAction implements ActionInterfa
             return;
         }
 
-        $targetUrl = $request->getToken()->getTargetUrl();
-        if (empty($model['ReceiverName']) === true) {
+        $token = $request->getToken();
+        $targetUrl = $token->getTargetUrl();
+        // 無 SenderName 時則執行地圖查詢
+        if (empty($model['SenderName']) === true) {
             if (empty($model['ServerReplyURL']) === true) {
                 $model['ServerReplyURL'] = $targetUrl;
             }
-
             $params = $this->api->prepareMap($model->toUnsafeArray());
+
             throw new HttpPostRedirect(
                 $params['apiEndpoint'],
                 $params['params']
@@ -75,8 +77,8 @@ class CaptureLogisticsAction extends GatewayAwareAction implements ActionInterfa
 
         if (empty($model['ServerReplyURL']) === true) {
             $notifyToken = $this->tokenFactory->createNotifyToken(
-                $request->getToken()->getGatewayName(),
-                $request->getToken()->getDetails()
+                $token->getGatewayName(),
+                $token->getDetails()
             );
 
             $model['ServerReplyURL'] = $model['LogisticsC2CReplyURL'] = $notifyToken->getTargetUrl();
@@ -86,7 +88,8 @@ class CaptureLogisticsAction extends GatewayAwareAction implements ActionInterfa
             $model['ClientReplyURL'] = $targetUrl;
         }
 
-        $model->replace($this->api->parseResult($this->api->payment($model->toUnsafeArray())));
+        $payment = $this->api->payment($model->toUnsafeArray());
+        $model->replace($this->api->parseResult($payment));
     }
 
     /**
