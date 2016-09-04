@@ -1,4 +1,4 @@
-# Esunbank
+# Allpay
 
 The Payum extension to rapidly build new extensions.
 

@@ -2,7 +2,6 @@
 
 namespace PayumTW\Allpay;
 
-use Detection\MobileDetect;
 use Device;
 use Exception;
 use Http\Message\MessageFactory;
@@ -47,23 +46,6 @@ class LogisticsApi extends BaseApi
         $this->client = $client;
         $this->messageFactory = $messageFactory;
     }
-
-   /**
-    * @param array $fields
-    *
-    * @return array
-    */
-   protected function doRequest($method, array $fields)
-   {
-       $headers = [];
-       $request = $this->messageFactory->createRequest($method, $this->getApiEndpoint(), $headers, http_build_query($fields));
-       $response = $this->client->send($request);
-       if (false == ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
-           throw HttpException::factory($request, $response);
-       }
-
-       return $response;
-   }
 
     /**
      * getApi.
@@ -124,23 +106,8 @@ class LogisticsApi extends BaseApi
      *
      * @return array
      */
-    public function payment(array $params)
+    public function preparePayment(array $params)
     {
-        switch ($params['LogisticsSubType']) {
-            case LogisticsSubType::TCAT:
-                $params['LogisticsType'] = LogisticsType::HOME;
-                break;
-            default:
-                $params['LogisticsType'] = LogisticsType::CVS;
-                break;
-        }
-
-        if ($params['IsCollection'] === IsCollection::NO) {
-            $params['CollectionAmount'] = 0;
-        } elseif (isset($params['CollectionAmount']) === false) {
-            $params['CollectionAmount'] = (int) $params['GoodsAmount'];
-        }
-
         $api = $this->getApi();
         $api->Send = array_merge($api->Send, [
             'MerchantTradeNo'      => '',
@@ -167,7 +134,27 @@ class LogisticsApi extends BaseApi
 
         $api->SendExtend = [];
 
-        switch ($params['LogisticsType']) {
+        $api->Send = array_replace(
+            $api->Send,
+            array_intersect_key($params, $api->Send)
+        );
+
+        if (empty($api->Send['LogisticsType']) === true) {
+            $api->Send['LogisticsType'] = LogisticsType::CVS;
+            switch ($api->Send['LogisticsSubType']) {
+                case LogisticsSubType::TCAT:
+                    $api->Send['LogisticsType'] = LogisticsType::HOME;
+                    break;
+            }
+        }
+
+        if ($api->Send['IsCollection'] === IsCollection::NO) {
+            $api->Send['CollectionAmount'] = 0;
+        } elseif (isset($api->Send['CollectionAmount']) === false) {
+            $api->Send['CollectionAmount'] = (int) $api->Send['GoodsAmount'];
+        }
+
+        switch ($api->Send['LogisticsType']) {
             case LogisticsType::HOME:
                 $api->SendExtend = array_merge($api->SendExtend, [
                     'SenderZipCode'         => '',
@@ -187,11 +174,6 @@ class LogisticsApi extends BaseApi
                 ]);
                 break;
         }
-
-        $api->Send = array_replace(
-            $api->Send,
-            array_intersect_key($params, $api->Send)
-        );
 
         $api->SendExtend = array_replace(
             $api->SendExtend,
@@ -235,41 +217,12 @@ class LogisticsApi extends BaseApi
         }
 
         if ($this->verifyHash($params) === false) {
-            $params['ResCode'] = '10400002';
+            $params['RtnCode'] = '10400002';
         }
 
-        $params['statusReason'] = array_get($params, 'RtnMsg');
+        $params['statusReason'] = isset($params['RtnMsg']) === true ? $params['RtnMsg'] : '配送異常，請和客服聯繫';
         // $params['statusReason'] = preg_replace('/(\.|。)$/', '', $this->getStatusReason($params['ResCode']));
 
         return $params;
-    }
-
-    /**
-     * getStatusReason.
-     *
-     * @param string $code
-     *
-     * @return string
-     */
-    protected function getStatusReason($code)
-    {
-        $statusReason = '拒絕交易';
-        if (isset($this->code[$code]) === true) {
-            $statusReason = $this->code[$code];
-        }
-
-        return $statusReason;
-    }
-
-    /**
-     * isMobile.
-     *
-     * @return bool
-     */
-    protected function isMobile()
-    {
-        $detect = new MobileDetect();
-
-        return ($detect->isMobile() === false && $detect->isTablet() === false) ? false : true;
     }
 }

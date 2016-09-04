@@ -60,16 +60,17 @@ class CaptureAction extends GatewayAwareAction implements ActionInterface, ApiAw
             return;
         }
 
-        $targetUrl = $request->getToken()->getTargetUrl();
+        $token = $request->getToken();
+        $targetUrl = $token->getTargetUrl();
 
         if (empty($model['OrderResultURL']) === true) {
             $model['OrderResultURL'] = $targetUrl;
         }
 
-        if (empty($model['ReturnURL']) === true && $request->getToken() && $this->tokenFactory) {
+        if (empty($model['ReturnURL']) === true && $token && $this->tokenFactory) {
             $notifyToken = $this->tokenFactory->createNotifyToken(
-                $request->getToken()->getGatewayName(),
-                $request->getToken()->getDetails()
+                $token->getGatewayName(),
+                $token->getDetails()
             );
 
             $model['ReturnURL'] = $notifyToken->getTargetUrl();

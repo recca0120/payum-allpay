@@ -3,6 +3,7 @@
 namespace PayumTW\Allpay;
 
 use Detection\MobileDetect;
+use Exception;
 
 abstract class BaseApi
 {
