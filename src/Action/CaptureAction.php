@@ -25,11 +25,6 @@ class CaptureAction extends GatewayAwareAction implements ActionInterface, ApiAw
         GenericTokenFactoryAwareTrait;
 
     /**
-     * @var Api
-     */
-    protected $api;
-
-    /**
      * {@inheritdoc}
      */
     public function setApi($api)

@@ -25,11 +25,6 @@ class CaptureLogisticsAction extends GatewayAwareAction implements ActionInterfa
         GenericTokenFactoryAwareTrait;
 
     /**
-     * @var Api
-     */
-    protected $api;
-
-    /**
      * {@inheritdoc}
      */
     public function setApi($api)
