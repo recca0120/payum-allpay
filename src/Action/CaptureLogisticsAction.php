@@ -3,7 +3,6 @@
 namespace PayumTW\Allpay\Action;
 
 use Payum\Core\Action\ActionInterface;
-use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -18,11 +17,11 @@ use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use PayumTW\Allpay\LogisticsApi as Api;
 
-class CaptureLogisticsAction extends GatewayAwareAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
+class CaptureLogisticsAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
 {
-    use ApiAwareTrait,
-        GatewayAwareTrait,
-        GenericTokenFactoryAwareTrait;
+    use ApiAwareTrait;
+    use GatewayAwareTrait;
+    use GenericTokenFactoryAwareTrait;
 
     /**
      * {@inheritdoc}

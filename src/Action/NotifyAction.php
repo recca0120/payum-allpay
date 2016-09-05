@@ -2,19 +2,22 @@
 
 namespace PayumTW\Allpay\Action;
 
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
 use PayumTW\Allpay\Api;
 
-class NotifyAction extends GatewayAwareAction implements ApiAwareInterface
+class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
 {
     use ApiAwareTrait;
+    use GatewayAwareTrait;
 
     public function __construct()
     {
