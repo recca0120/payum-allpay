@@ -1,5 +1,14 @@
 # Allpay
 
+[![StyleCI](https://styleci.io/repos/63962833/shield?style=flat)](https://styleci.io/repos/63962833)
+[![Build Status](https://travis-ci.org/payum-tw/allpay.svg)](https://travis-ci.org/payum-tw/allpay)
+[![Total Downloads](https://poser.pugx.org/payum-tw/allpay/d/total.svg)](https://packagist.org/packages/payum-tw/allpay)
+[![Latest Stable Version](https://poser.pugx.org/payum-tw/allpay/v/stable.svg)](https://packagist.org/packages/payum-tw/allpay)
+[![Latest Unstable Version](https://poser.pugx.org/payum-tw/allpay/v/unstable.svg)](https://packagist.org/packages/payum-tw/allpay)
+[![License](https://poser.pugx.org/payum-tw/allpay/license.svg)](https://packagist.org/packages/payum-tw/allpay)
+[![Monthly Downloads](https://poser.pugx.org/payum-tw/allpay/d/monthly)](https://packagist.org/packages/payum-tw/allpay)
+[![Daily Downloads](https://poser.pugx.org/payum-tw/allpay/d/daily)](https://packagist.org/packages/payum-tw/allpay)
+
 The Payum extension to rapidly build new extensions.
 
 1. Create new project
