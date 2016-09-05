@@ -1,7 +1,7 @@
 # Allpay
 
 [![StyleCI](https://styleci.io/repos/63962833/shield?style=flat)](https://styleci.io/repos/63962833)
-[![Build Status](https://travis-ci.org/payum-tw/allpay.svg)](https://travis-ci.org/payum-tw/allpay)
+[![Build Status](https://travis-ci.org/recca0120/payum-allpay.svg)](https://travis-ci.org/recca0120/payum-allpay)
 [![Total Downloads](https://poser.pugx.org/payum-tw/allpay/d/total.svg)](https://packagist.org/packages/payum-tw/allpay)
 [![Latest Stable Version](https://poser.pugx.org/payum-tw/allpay/v/stable.svg)](https://packagist.org/packages/payum-tw/allpay)
 [![Latest Unstable Version](https://poser.pugx.org/payum-tw/allpay/v/unstable.svg)](https://packagist.org/packages/payum-tw/allpay)
