@@ -17,12 +17,12 @@ class AllpayLogisticsGatewayFactory extends GatewayFactory
     protected function populateConfig(ArrayObject $config)
     {
         $config->defaults([
-            'payum.factory_name'           => 'allpay_logistics',
-            'payum.factory_title'          => 'Allpay Logistics',
-            'payum.action.capture'         => new CaptureLogisticsAction(),
-            'payum.action.status'          => new StatusLogisticsAction(),
+            'payum.factory_name' => 'allpay_logistics',
+            'payum.factory_title' => 'Allpay Logistics',
+            'payum.action.capture' => new CaptureLogisticsAction(),
+            'payum.action.status' => new StatusLogisticsAction(),
             'payum.action.convert_payment' => new ConvertPaymentLogisticsAction(),
-            'payum.action.notify'          => new NotifyAction(),
+            'payum.action.notify' => new NotifyAction(),
         ]);
 
         /*
@@ -35,10 +35,10 @@ class AllpayLogisticsGatewayFactory extends GatewayFactory
 
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = [
-                'MerchantID'   => '2000132',
-                'HashKey'      => '5294y06JbISpM5x9',
-                'HashIV'       => 'v77hoKGq4kWxNNIS',
-                'sandbox'      => true,
+                'MerchantID' => '2000132',
+                'HashKey' => '5294y06JbISpM5x9',
+                'HashIV' => 'v77hoKGq4kWxNNIS',
+                'sandbox' => true,
             ];
 
             $config->defaults($config['payum.default_options']);

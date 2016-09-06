@@ -12,13 +12,13 @@ class AllpayLogistics extends \AllpayLogistics
     {
         // 參數初始化
         $ParamList = [
-            'MerchantID'       => '',
-            'MerchantTradeNo'  => '',
+            'MerchantID' => '',
+            'MerchantTradeNo' => '',
             'LogisticsSubType' => '',
-            'IsCollection'     => '',
-            'ServerReplyURL'   => '',
-            'ExtraData'        => '',
-            'Device'           => Device::PC,
+            'IsCollection' => '',
+            'ServerReplyURL' => '',
+            'ExtraData' => '',
+            'Device' => Device::PC,
         ];
         $this->PostParams = $this->GetPostParams($this->Send, $ParamList);
         $this->PostParams['LogisticsType'] = LogisticsType::CVS;

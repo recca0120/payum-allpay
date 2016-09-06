@@ -154,13 +154,13 @@ class AllpayLogistics
     {
         // 參數初始化
         $ParamList = [
-            'MerchantID'       => '',
-            'MerchantTradeNo'  => '',
+            'MerchantID' => '',
+            'MerchantTradeNo' => '',
             'LogisticsSubType' => '',
-            'IsCollection'     => '',
-            'ServerReplyURL'   => '',
-            'ExtraData'        => '',
-            'Device'           => Device::PC,
+            'IsCollection' => '',
+            'ServerReplyURL' => '',
+            'ExtraData' => '',
+            'Device' => Device::PC,
         ];
         $this->PostParams = $this->GetPostParams($this->Send, $ParamList);
         $this->PostParams['LogisticsType'] = LogisticsType::CVS;
@@ -183,28 +183,28 @@ class AllpayLogistics
     {
         // 參數初始化
         $ParamList = [
-            'MerchantID'           => '',
-            'MerchantTradeNo'      => '',
-            'MerchantTradeDate'    => '',
-            'LogisticsType'        => '',
-            'LogisticsSubType'     => '',
-            'GoodsAmount'          => 0,
-            'CollectionAmount'     => 0,
-            'IsCollection'         => IsCollection::NO,
-            'GoodsName'            => '',
-            'SenderName'           => '',
-            'SenderPhone'          => '',
-            'SenderCellPhone'      => '',
-            'ReceiverName'         => '',
-            'ReceiverPhone'        => '',
-            'ReceiverCellPhone'    => '',
-            'ReceiverEmail'        => '',
-            'TradeDesc'            => '',
-            'ServerReplyURL'       => '',
-            'ClientReplyURL'       => '',
+            'MerchantID' => '',
+            'MerchantTradeNo' => '',
+            'MerchantTradeDate' => '',
+            'LogisticsType' => '',
+            'LogisticsSubType' => '',
+            'GoodsAmount' => 0,
+            'CollectionAmount' => 0,
+            'IsCollection' => IsCollection::NO,
+            'GoodsName' => '',
+            'SenderName' => '',
+            'SenderPhone' => '',
+            'SenderCellPhone' => '',
+            'ReceiverName' => '',
+            'ReceiverPhone' => '',
+            'ReceiverCellPhone' => '',
+            'ReceiverEmail' => '',
+            'TradeDesc' => '',
+            'ServerReplyURL' => '',
+            'ClientReplyURL' => '',
             'LogisticsC2CReplyURL' => '',
-            'Remark'               => '',
-            'PlatformID'           => '',
+            'Remark' => '',
+            'PlatformID' => '',
         ];
         $this->PostParams = $this->GetPostParams($this->Send, $ParamList);
 
@@ -223,7 +223,7 @@ class AllpayLogistics
             case LogisticsType::CVS:
                 $CvsParamList = [
                     'ReceiverStoreID' => '',
-                    'ReturnStoreID'   => '',
+                    'ReturnStoreID' => '',
                 ];
                 $this->PostParams = $this->GetPostParams($this->SendExtend, $CvsParamList, $this->PostParams);
 
@@ -233,13 +233,13 @@ class AllpayLogistics
                 break;
             case LogisticsType::HOME:
                 $HomeParamList = [
-                    'SenderZipCode'         => '',
-                    'SenderAddress'         => '',
-                    'ReceiverZipCode'       => '',
-                    'ReceiverAddress'       => '',
-                    'Temperature'           => Temperature::ROOM,
-                    'Distance'              => Distance::SAME,
-                    'Specification'         => Specification::CM_60,
+                    'SenderZipCode' => '',
+                    'SenderAddress' => '',
+                    'ReceiverZipCode' => '',
+                    'ReceiverAddress' => '',
+                    'Temperature' => Temperature::ROOM,
+                    'Distance' => Distance::SAME,
+                    'Specification' => Specification::CM_60,
                     'ScheduledDeliveryTime' => '',
                 ];
                 $this->PostParams = $this->GetPostParams($this->SendExtend, $HomeParamList, $this->PostParams);
@@ -350,31 +350,31 @@ class AllpayLogistics
     {
         // 參數初始化
         $ParamList = [
-            'MerchantID'           => '',
-            'MerchantTradeNo'      => '',
-            'MerchantTradeDate'    => '',
-            'LogisticsType'        => '',
-            'LogisticsSubType'     => '',
-            'GoodsAmount'          => 0,
-            'CollectionAmount'     => 0,
-            'IsCollection'         => IsCollection::NO,
-            'GoodsName'            => '',
-            'SenderName'           => '',
-            'SenderPhone'          => '',
-            'SenderCellPhone'      => '',
-            'ReceiverName'         => '',
-            'ReceiverPhone'        => '',
-            'ReceiverCellPhone'    => '',
-            'ReceiverEmail'        => '',
-            'TradeDesc'            => '',
-            'ServerReplyURL'       => '',
+            'MerchantID' => '',
+            'MerchantTradeNo' => '',
+            'MerchantTradeDate' => '',
+            'LogisticsType' => '',
+            'LogisticsSubType' => '',
+            'GoodsAmount' => 0,
+            'CollectionAmount' => 0,
+            'IsCollection' => IsCollection::NO,
+            'GoodsName' => '',
+            'SenderName' => '',
+            'SenderPhone' => '',
+            'SenderCellPhone' => '',
+            'ReceiverName' => '',
+            'ReceiverPhone' => '',
+            'ReceiverCellPhone' => '',
+            'ReceiverEmail' => '',
+            'TradeDesc' => '',
+            'ServerReplyURL' => '',
             'LogisticsC2CReplyURL' => '',
-            'Remark'               => '',
-            'PlatformID'           => '',
+            'Remark' => '',
+            'PlatformID' => '',
         ];
 
         // 幕後物流訂單建立不可設定Client端回覆網址(ClientReplyURL)
-        if (!empty($this->Send['ClientReplyURL'])) {
+        if (! empty($this->Send['ClientReplyURL'])) {
             throw new Exception('ClientReplyURL should be null.');
         }
 
@@ -395,7 +395,7 @@ class AllpayLogistics
             case LogisticsType::CVS:
                 $CvsParamList = [
                     'ReceiverStoreID' => '',
-                    'ReturnStoreID'   => '',
+                    'ReturnStoreID' => '',
                 ];
                 $this->PostParams = $this->GetPostParams($this->SendExtend, $CvsParamList, $this->PostParams);
 
@@ -405,13 +405,13 @@ class AllpayLogistics
                 break;
             case LogisticsType::HOME:
                 $HomeParamList = [
-                    'SenderZipCode'         => '',
-                    'SenderAddress'         => '',
-                    'ReceiverZipCode'       => '',
-                    'ReceiverAddress'       => '',
-                    'Temperature'           => Temperature::ROOM,
-                    'Distance'              => Distance::SAME,
-                    'Specification'         => Specification::CM_60,
+                    'SenderZipCode' => '',
+                    'SenderAddress' => '',
+                    'ReceiverZipCode' => '',
+                    'ReceiverAddress' => '',
+                    'Temperature' => Temperature::ROOM,
+                    'Distance' => Distance::SAME,
+                    'Specification' => Specification::CM_60,
                     'ScheduledDeliveryTime' => '',
                 ];
                 $this->PostParams = $this->GetPostParams($this->SendExtend, $HomeParamList, $this->PostParams);
@@ -541,7 +541,7 @@ class AllpayLogistics
             throw new Exception('Feedback is required.');
         }
 
-        if (!isset($Feedback['CheckMacValue'])) {
+        if (! isset($Feedback['CheckMacValue'])) {
             throw new Exception('Feedback CheckMacValue is required.');
         } else {
             $FeedbackCheckMacValue = $Feedback['CheckMacValue'];
@@ -561,21 +561,21 @@ class AllpayLogistics
 
         // 參數初始化
         $ParamList = [
-            'MerchantID'        => '',
+            'MerchantID' => '',
             'AllPayLogisticsID' => '',
-            'SenderName'        => '',
-            'SenderPhone'       => '',
-            'SenderCellPhone'   => '',
-            'SenderZipCode'     => '',
-            'SenderAddress'     => '',
-            'ReceiverName'      => '',
-            'ReceiverPhone'     => '',
+            'SenderName' => '',
+            'SenderPhone' => '',
+            'SenderCellPhone' => '',
+            'SenderZipCode' => '',
+            'SenderAddress' => '',
+            'ReceiverName' => '',
+            'ReceiverPhone' => '',
             'ReceiverCellPhone' => '',
-            'ReceiverEmail'     => '',
-            'ReceiverZipCode'   => '',
-            'ReceiverAddress'   => '',
-            'ServerReplyURL'    => '',
-            'PlatformID'        => '',
+            'ReceiverEmail' => '',
+            'ReceiverZipCode' => '',
+            'ReceiverAddress' => '',
+            'ServerReplyURL' => '',
+            'PlatformID' => '',
         ];
         $this->PostParams = $this->GetPostParams($this->Send, $ParamList);
 
@@ -617,17 +617,17 @@ class AllpayLogistics
 
         // 參數初始化
         $ParamList = [
-            'MerchantID'        => '',
+            'MerchantID' => '',
             'AllPayLogisticsID' => '',
-            'ServerReplyURL'    => '',
-            'GoodsName'         => '',
-            'GoodsAmount'       => 0,
-            'SenderName'        => '',
-            'SenderPhone'       => '',
-            'Remark'            => '',
-            'Quantity'          => '',
-            'Cost'              => '',
-            'PlatformID'        => '',
+            'ServerReplyURL' => '',
+            'GoodsName' => '',
+            'GoodsAmount' => 0,
+            'SenderName' => '',
+            'SenderPhone' => '',
+            'Remark' => '',
+            'Quantity' => '',
+            'Cost' => '',
+            'PlatformID' => '',
         ];
         $this->PostParams = $this->GetPostParams($this->Send, $ParamList);
         $this->PostParams['CollectionAmount'] = 0;
@@ -654,19 +654,19 @@ class AllpayLogistics
         $QuantityNumber = count(explode('#', $this->PostParams['Quantity']));
         $CostNumber = count(explode('#', $this->PostParams['Cost']));
 
-        if (!empty($this->PostParams['GoodsName']) and !empty($this->PostParams['Quantity'])) {
+        if (! empty($this->PostParams['GoodsName']) and ! empty($this->PostParams['Quantity'])) {
             if ($GoodsNameNumber != $QuantityNumber) {
                 throw new Exception('GoodsName number and Quantity number do not match.');
             }
         }
 
-        if (!empty($this->PostParams['Quantity']) and !empty($this->PostParams['Cost'])) {
+        if (! empty($this->PostParams['Quantity']) and ! empty($this->PostParams['Cost'])) {
             if ($GoodsNameNumber != $CostNumber) {
                 throw new Exception('Quantity number and Cost number do not match.');
             }
         }
 
-        if (!empty($this->PostParams['Cost']) and !empty($this->PostParams['GoodsName'])) {
+        if (! empty($this->PostParams['Cost']) and ! empty($this->PostParams['GoodsName'])) {
             if ($GoodsNameNumber != $CostNumber) {
                 throw new Exception('Cost number and GoodsName number do not match.');
             }
@@ -697,9 +697,9 @@ class AllpayLogistics
 
         // 參數初始化
         $ParamList = [
-            'MerchantID'         => '',
+            'MerchantID' => '',
             'RtnMerchantTradeNo' => '',
-            'PlatformID'         => '',
+            'PlatformID' => '',
         ];
         $this->PostParams = $this->GetPostParams($this->Send, $ParamList);
 
@@ -729,11 +729,11 @@ class AllpayLogistics
 
         // 參數初始化
         $ParamList = [
-            'MerchantID'        => '',
+            'MerchantID' => '',
             'AllPayLogisticsID' => '',
-            'ShipmentDate'      => '',
-            'ReceiverStoreID'   => '',
-            'PlatformID'        => '',
+            'ShipmentDate' => '',
+            'ReceiverStoreID' => '',
+            'PlatformID' => '',
         ];
         $this->PostParams = $this->GetPostParams($this->Send, $ParamList);
 
@@ -770,14 +770,14 @@ class AllpayLogistics
 
         // 參數初始化
         $ParamList = [
-            'MerchantID'        => '',
+            'MerchantID' => '',
             'AllPayLogisticsID' => '',
-            'CVSPaymentNo'      => '',
-            'CVSValidationNo'   => '',
-            'StoreType'         => '',
-            'ReceiverStoreID'   => '',
-            'ReturnStoreID'     => '',
-            'PlatformID'        => '',
+            'CVSPaymentNo' => '',
+            'CVSValidationNo' => '',
+            'StoreType' => '',
+            'ReceiverStoreID' => '',
+            'ReturnStoreID' => '',
+            'PlatformID' => '',
         ];
         $this->PostParams = $this->GetPostParams($this->Send, $ParamList);
 
@@ -823,11 +823,11 @@ class AllpayLogistics
 
         // 參數初始化
         $ParamList = [
-            'MerchantID'        => '',
+            'MerchantID' => '',
             'AllPayLogisticsID' => '',
-            'CVSPaymentNo'      => '',
-            'CVSValidationNo'   => '',
-            'PlatformID'        => '',
+            'CVSPaymentNo' => '',
+            'CVSValidationNo' => '',
+            'PlatformID' => '',
         ];
         $this->PostParams = $this->GetPostParams($this->Send, $ParamList);
 
@@ -859,9 +859,9 @@ class AllpayLogistics
 
         // 參數初始化
         $ParamList = [
-            'MerchantID'        => '',
+            'MerchantID' => '',
             'AllPayLogisticsID' => '',
-            'PlatformID'        => '',
+            'PlatformID' => '',
         ];
         $this->PostParams = $this->GetPostParams($this->Send, $ParamList);
         $this->PostParams['TimeStamp'] = strtotime('now');
@@ -892,9 +892,9 @@ class AllpayLogistics
 
         // 參數初始化
         $ParamList = [
-            'MerchantID'        => '',
+            'MerchantID' => '',
             'AllPayLogisticsID' => '',
-            'PlatformID'        => '',
+            'PlatformID' => '',
         ];
         $this->PostParams = $this->GetPostParams($this->Send, $ParamList);
 
@@ -918,11 +918,11 @@ class AllpayLogistics
 
         // 參數初始化
         $ParamList = [
-            'MerchantID'        => '',
+            'MerchantID' => '',
             'AllPayLogisticsID' => '',
-            'CVSPaymentNo'      => '',
-            'CVSValidationNo'   => '',
-            'PlatformID'        => '',
+            'CVSPaymentNo' => '',
+            'CVSValidationNo' => '',
+            'PlatformID' => '',
         ];
         $this->PostParams = $this->GetPostParams($this->Send, $ParamList);
 
@@ -948,10 +948,10 @@ class AllpayLogistics
 
         // 參數初始化
         $ParamList = [
-            'MerchantID'        => '',
+            'MerchantID' => '',
             'AllPayLogisticsID' => '',
-            'CVSPaymentNo'      => '',
-            'PlatformID'        => '',
+            'CVSPaymentNo' => '',
+            'PlatformID' => '',
         ];
         $this->PostParams = $this->GetPostParams($this->Send, $ParamList);
 
@@ -987,10 +987,10 @@ class AllpayLogistics
     protected function ValidateID($Name, $Value, $MaxLength = 1, $AllowEmpty = false)
     {
         if (empty($Value)) {
-            if (!$AllowEmpty) {
+            if (! $AllowEmpty) {
                 throw new Exception($Name.' is required.');
             }
-        } elseif (!preg_match('/^\d{1,'.$MaxLength.'}$/', $Value)) {
+        } elseif (! preg_match('/^\d{1,'.$MaxLength.'}$/', $Value)) {
             throw new Exception('Invalid '.$Name.'.');
         }
     }
@@ -998,10 +998,10 @@ class AllpayLogistics
     protected function ValidateURL($Name, $Value, $MaxLength = 200, $AllowEmpty = false)
     {
         if (empty($Value)) {
-            if (!$AllowEmpty) {
+            if (! $AllowEmpty) {
                 throw new Exception($Name.' is required.');
             }
-        } elseif (!preg_match('/^(http|https):\/\/+/', $Value)) {
+        } elseif (! preg_match('/^(http|https):\/\/+/', $Value)) {
             throw new Exception('Invalid '.$Name.'.');
         } elseif ($this->StringLength($Value) > $MaxLength) {
             throw new Exception($Name.' max length is '.$MaxLength.'.');
@@ -1011,7 +1011,7 @@ class AllpayLogistics
     protected function ValidateString($Name, $Value, $MaxLength = 1, $AllowEmpty = false)
     {
         if (empty($Value)) {
-            if (!$AllowEmpty) {
+            if (! $AllowEmpty) {
                 throw new Exception($Name.' is required.');
             }
         } elseif ($this->StringLength($Value) > $MaxLength) {
@@ -1022,10 +1022,10 @@ class AllpayLogistics
     protected function ValidateAmount($Name, $Value, $AllowEmpty = false)
     {
         if (empty($Value)) {
-            if (!$AllowEmpty) {
+            if (! $AllowEmpty) {
                 throw new Exception($Name.' is required.');
             }
-        } elseif ((gettype($Value) != 'integer') or (!preg_match('/^\d+$/', $Value))) {
+        } elseif ((gettype($Value) != 'integer') or (! preg_match('/^\d+$/', $Value))) {
             throw new Exception('Invalid '.$Name.'.');
         }
     }
@@ -1033,10 +1033,10 @@ class AllpayLogistics
     protected function ValidatePhoneNumber($Name, $Value, $AllowEmpty = false)
     {
         if (empty($Value)) {
-            if (!$AllowEmpty) {
+            if (! $AllowEmpty) {
                 throw new Exception($Name.' is required.');
             }
-        } elseif (!preg_match('/^\d{7,20}$/', $Value)) {
+        } elseif (! preg_match('/^\d{7,20}$/', $Value)) {
             throw new Exception('Invalid '.$Name.'.');
         }
     }
@@ -1044,12 +1044,12 @@ class AllpayLogistics
     protected function ValidateEmail($Name, $Value, $MaxLength = 100, $AllowEmpty = false)
     {
         if (empty($Value)) {
-            if (!$AllowEmpty) {
+            if (! $AllowEmpty) {
                 throw new Exception($Name.' is required.');
             }
         } elseif ($this->StringLength($Value) > $MaxLength) {
             throw new Exception($Name.' max length is '.$MaxLength.'.');
-        } elseif (!preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9]{2,4}$/', $Value)) {
+        } elseif (! preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9]{2,4}$/', $Value)) {
             throw new Exception('Invalid '.$Name.'.');
         }
     }
@@ -1057,10 +1057,10 @@ class AllpayLogistics
     protected function ValidateZipCode($Name, $Value, $AllowEmpty = false)
     {
         if (empty($Value)) {
-            if (!$AllowEmpty) {
+            if (! $AllowEmpty) {
                 throw new Exception($Name.' is required.');
             }
-        } elseif (!preg_match('/^\d{3,5}$/', $Value)) {
+        } elseif (! preg_match('/^\d{3,5}$/', $Value)) {
             throw new Exception('Invalid '.$Name.'.');
         }
     }
@@ -1068,10 +1068,10 @@ class AllpayLogistics
     protected function ValidateMixTypeID($Name, $Value, $MaxLength = 1, $AllowEmpty = false)
     {
         if (empty($Value)) {
-            if (!$AllowEmpty) {
+            if (! $AllowEmpty) {
                 throw new Exception($Name.' is required.');
             }
-        } elseif (!preg_match('/^[0-9a-zA-Z]{1,'.$MaxLength.'}$/', $Value)) {
+        } elseif (! preg_match('/^[0-9a-zA-Z]{1,'.$MaxLength.'}$/', $Value)) {
             throw new Exception('Invalid '.$Name.'.');
         }
     }
@@ -1089,7 +1089,7 @@ class AllpayLogistics
     {
         if (empty($this->PostParams['MerchantTradeNo'])) {
             throw new Exception('MerchantTradeNo is required.');
-        } elseif (!preg_match('/^[a-zA-Z0-9]{1,20}$/', $this->PostParams['MerchantTradeNo'])) {
+        } elseif (! preg_match('/^[a-zA-Z0-9]{1,20}$/', $this->PostParams['MerchantTradeNo'])) {
             throw new Exception('Invalid MerchantTradeNo.');
         }
     }
@@ -1128,7 +1128,7 @@ class AllpayLogistics
     protected function ValidateIsCollection($AllowEmpty = false)
     {
         if (empty($this->PostParams['IsCollection'])) {
-            if (!$AllowEmpty) {
+            if (! $AllowEmpty) {
                 throw new Exception('IsCollection is required.');
             }
         } elseif ($this->PostParams['IsCollection'] != IsCollection::YES and $this->PostParams['IsCollection'] != IsCollection::NO) {
@@ -1142,7 +1142,7 @@ class AllpayLogistics
     protected function ValidateDevice($AllowEmpty = false)
     {
         if (empty($this->PostParams['Device'])) {
-            if (!$AllowEmpty) {
+            if (! $AllowEmpty) {
                 throw new Exception('Device is required.');
             }
         } elseif (gettype($this->PostParams['Device']) != 'integer' or ($this->PostParams['Device'] != Device::PC and $this->PostParams['Device'] != Device::MOBILE)) {
@@ -1202,7 +1202,7 @@ class AllpayLogistics
     protected function ValidateScheduledDeliveryTime($AllowEmpty = false)
     {
         if (empty($this->PostParams['ScheduledDeliveryTime'])) {
-            if (!$AllowEmpty) {
+            if (! $AllowEmpty) {
                 throw new Exception('ScheduledDeliveryTime is required.');
             }
         } elseif (
@@ -1219,7 +1219,7 @@ class AllpayLogistics
     protected function ValidateShipmentDate($AllowEmpty = false)
     {
         if (empty($this->PostParams['ShipmentDate'])) {
-            if (!$AllowEmpty) {
+            if (! $AllowEmpty) {
                 throw new Exception('ShipmentDate is required.');
             }
         } elseif (date('Y/m/d', strtotime($this->PostParams['ShipmentDate'])) != $this->PostParams['ShipmentDate']) {
@@ -1247,34 +1247,34 @@ class AllpayLogistics
         if ($this->PostParams['MerchantID'] == AllpayTestMerchantID::B2C or $this->PostParams['MerchantID'] == AllpayTestMerchantID::C2C) {
             // 測試環境
             $UrlList = [
-                'CVS_MAP'                        => AllpayTestURL::CVS_MAP,
-                'SHIPPING_ORDER'                 => AllpayTestURL::SHIPPING_ORDER,
-                'HOME_RETURN_ORDER'              => AllpayTestURL::HOME_RETURN_ORDER,
-                'FAMILY_RETURN_ORDER'            => AllpayTestURL::FAMILY_RETURN_ORDER,
-                'FAMILY_RETURN_CHECK'            => AllpayTestURL::FAMILY_RETURN_CHECK,
-                'UNIMART_UPDATE_LOGISTICS_INFO'  => AllpayTestURL::UNIMART_UPDATE_LOGISTICS_INFO,
-                'UNIMART_UPDATE_STORE_INFO'      => AllpayTestURL::UNIMART_UPDATE_STORE_INFO,
+                'CVS_MAP' => AllpayTestURL::CVS_MAP,
+                'SHIPPING_ORDER' => AllpayTestURL::SHIPPING_ORDER,
+                'HOME_RETURN_ORDER' => AllpayTestURL::HOME_RETURN_ORDER,
+                'FAMILY_RETURN_ORDER' => AllpayTestURL::FAMILY_RETURN_ORDER,
+                'FAMILY_RETURN_CHECK' => AllpayTestURL::FAMILY_RETURN_CHECK,
+                'UNIMART_UPDATE_LOGISTICS_INFO' => AllpayTestURL::UNIMART_UPDATE_LOGISTICS_INFO,
+                'UNIMART_UPDATE_STORE_INFO' => AllpayTestURL::UNIMART_UPDATE_STORE_INFO,
                 'UNIMART_CANCEL_LOGISTICS_ORDER' => AllpayTestURL::UNIMART_CANCEL_LOGISTICS_ORDER,
-                'QUERY_LOGISTICS_INFO'           => AllpayTestURL::QUERY_LOGISTICS_INFO,
-                'PRINT_TRADE_DOC'                => AllpayTestURL::PRINT_TRADE_DOC,
-                'PRINT_UNIMART_C2C_BILL'         => AllpayTestURL::PRINT_UNIMART_C2C_BILL,
-                'PRINT_FAMILY_C2C_BILL'          => AllpayTestURL::PRINT_FAMILY_C2C_BILL,
+                'QUERY_LOGISTICS_INFO' => AllpayTestURL::QUERY_LOGISTICS_INFO,
+                'PRINT_TRADE_DOC' => AllpayTestURL::PRINT_TRADE_DOC,
+                'PRINT_UNIMART_C2C_BILL' => AllpayTestURL::PRINT_UNIMART_C2C_BILL,
+                'PRINT_FAMILY_C2C_BILL' => AllpayTestURL::PRINT_FAMILY_C2C_BILL,
             ];
         } else {
             // 正式環境
             $UrlList = [
-                'CVS_MAP'                        => AllpayURL::CVS_MAP,
-                'SHIPPING_ORDER'                 => AllpayURL::SHIPPING_ORDER,
-                'HOME_RETURN_ORDER'              => AllpayURL::HOME_RETURN_ORDER,
-                'FAMILY_RETURN_ORDER'            => AllpayURL::FAMILY_RETURN_ORDER,
-                'FAMILY_RETURN_CHECK'            => AllpayURL::FAMILY_RETURN_CHECK,
-                'UNIMART_UPDATE_LOGISTICS_INFO'  => AllpayURL::UNIMART_UPDATE_LOGISTICS_INFO,
-                'UNIMART_UPDATE_STORE_INFO'      => AllpayURL::UNIMART_UPDATE_STORE_INFO,
+                'CVS_MAP' => AllpayURL::CVS_MAP,
+                'SHIPPING_ORDER' => AllpayURL::SHIPPING_ORDER,
+                'HOME_RETURN_ORDER' => AllpayURL::HOME_RETURN_ORDER,
+                'FAMILY_RETURN_ORDER' => AllpayURL::FAMILY_RETURN_ORDER,
+                'FAMILY_RETURN_CHECK' => AllpayURL::FAMILY_RETURN_CHECK,
+                'UNIMART_UPDATE_LOGISTICS_INFO' => AllpayURL::UNIMART_UPDATE_LOGISTICS_INFO,
+                'UNIMART_UPDATE_STORE_INFO' => AllpayURL::UNIMART_UPDATE_STORE_INFO,
                 'UNIMART_CANCEL_LOGISTICS_ORDER' => AllpayURL::UNIMART_CANCEL_LOGISTICS_ORDER,
-                'QUERY_LOGISTICS_INFO'           => AllpayURL::QUERY_LOGISTICS_INFO,
-                'PRINT_TRADE_DOC'                => AllpayURL::PRINT_TRADE_DOC,
-                'PRINT_UNIMART_C2C_BILL'         => AllpayURL::PRINT_UNIMART_C2C_BILL,
-                'PRINT_FAMILY_C2C_BILL'          => AllpayURL::PRINT_FAMILY_C2C_BILL,
+                'QUERY_LOGISTICS_INFO' => AllpayURL::QUERY_LOGISTICS_INFO,
+                'PRINT_TRADE_DOC' => AllpayURL::PRINT_TRADE_DOC,
+                'PRINT_UNIMART_C2C_BILL' => AllpayURL::PRINT_UNIMART_C2C_BILL,
+                'PRINT_FAMILY_C2C_BILL' => AllpayURL::PRINT_FAMILY_C2C_BILL,
             ];
         }
 
@@ -1294,7 +1294,7 @@ class AllpayLogistics
         foreach ($this->PostParams as $Name => $Value) {
             $PostHTML .= $this->NextLine('    <input type="hidden" name="'.$Name.'" value="'.$Value.'" />');
         }
-        if (!empty($ButtonDesc)) {
+        if (! empty($ButtonDesc)) {
             $PostHTML .= $this->NextLine('    <input type="submit" id="__paymentButton" value="'.$ButtonDesc.'" />');
         } else {
             $PostHTML .= $this->NextLine('<script>document.getElementById("allpayForm").submit();</script>');

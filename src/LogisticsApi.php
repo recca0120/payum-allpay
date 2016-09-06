@@ -77,12 +77,12 @@ class LogisticsApi extends BaseApi
     {
         $api = $this->getApi();
         $api->Send = array_merge($api->Send, [
-            'ServerReplyURL'    => '',
-            'MerchantTradeNo'   => '',
+            'ServerReplyURL' => '',
+            'MerchantTradeNo' => '',
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
-            'LogisticsSubType'  => LogisticsSubType::UNIMART,
-            'IsCollection'      => IsCollection::NO,
-            'Device'            => $this->isMobile() ? Device::MOBILE : Device::PC,
+            'LogisticsSubType' => LogisticsSubType::UNIMART,
+            'IsCollection' => IsCollection::NO,
+            'Device' => $this->isMobile() ? Device::MOBILE : Device::PC,
         ]);
 
         $api->Send = array_replace(
@@ -94,7 +94,7 @@ class LogisticsApi extends BaseApi
 
         return [
             'apiEndpoint' => $api->ServiceURL,
-            'params'      => $params,
+            'params' => $params,
         ];
     }
 
@@ -110,26 +110,26 @@ class LogisticsApi extends BaseApi
     {
         $api = $this->getApi();
         $api->Send = array_merge($api->Send, [
-            'MerchantTradeNo'      => '',
-            'MerchantTradeDate'    => date('Y/m/d H:i:s'),
-            'LogisticsType'        => '',
-            'LogisticsSubType'     => LogisticsSubType::UNIMART,
-            'GoodsAmount'          => 0,
-            'CollectionAmount'     => 0,
-            'IsCollection'         => IsCollection::NO,
-            'GoodsName'            => '',
-            'SenderName'           => '',
-            'SenderPhone'          => '',
-            'SenderCellPhone'      => '',
-            'ReceiverName'         => '',
-            'ReceiverPhone'        => '',
-            'ReceiverCellPhone'    => '',
-            'ReceiverEmail'        => '',
-            'TradeDesc'            => '',
-            'ServerReplyURL'       => '',
+            'MerchantTradeNo' => '',
+            'MerchantTradeDate' => date('Y/m/d H:i:s'),
+            'LogisticsType' => '',
+            'LogisticsSubType' => LogisticsSubType::UNIMART,
+            'GoodsAmount' => 0,
+            'CollectionAmount' => 0,
+            'IsCollection' => IsCollection::NO,
+            'GoodsName' => '',
+            'SenderName' => '',
+            'SenderPhone' => '',
+            'SenderCellPhone' => '',
+            'ReceiverName' => '',
+            'ReceiverPhone' => '',
+            'ReceiverCellPhone' => '',
+            'ReceiverEmail' => '',
+            'TradeDesc' => '',
+            'ServerReplyURL' => '',
             'LogisticsC2CReplyURL' => '',
-            'Remark'               => '',
-            'PlatformID'           => '',
+            'Remark' => '',
+            'PlatformID' => '',
         ]);
 
         $api->SendExtend = [];
@@ -157,20 +157,20 @@ class LogisticsApi extends BaseApi
         switch ($api->Send['LogisticsType']) {
             case LogisticsType::HOME:
                 $api->SendExtend = array_merge($api->SendExtend, [
-                    'SenderZipCode'         => '',
-                    'SenderAddress'         => '',
-                    'ReceiverZipCode'       => '',
-                    'ReceiverAddress'       => '',
-                    'Temperature'           => '',
-                    'Distance'              => '',
-                    'Specification'         => '',
+                    'SenderZipCode' => '',
+                    'SenderAddress' => '',
+                    'ReceiverZipCode' => '',
+                    'ReceiverAddress' => '',
+                    'Temperature' => '',
+                    'Distance' => '',
+                    'Specification' => '',
                     'ScheduledDeliveryTime' => '',
                 ]);
                 break;
             case LogisticsType::CVS:
                 $api->SendExtend = array_merge($api->SendExtend, [
                     'ReceiverStoreID' => '',
-                    'ReturnStoreID'   => '',
+                    'ReturnStoreID' => '',
                 ]);
                 break;
         }

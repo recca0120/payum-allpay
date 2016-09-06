@@ -55,7 +55,7 @@ class CaptureLogisticsActionTest extends PHPUnit_Framework_TestCase
 
         $api->shouldReceive('prepareMap')->once()->andReturn([
             'apiEndpoint' => 'fooApiEndpoint',
-            'params'      => [
+            'params' => [
                 'foo' => 'bar',
             ],
         ]);
