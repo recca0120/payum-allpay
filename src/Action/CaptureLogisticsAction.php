@@ -43,13 +43,13 @@ class CaptureLogisticsAction implements ActionInterface, ApiAwareInterface, Gate
     public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
 
         $httpRequest = new GetHttpRequest();
         $this->gateway->execute($httpRequest);
 
         if (isset($httpRequest->request['CVSStoreID']) === true) {
-            $model->replace($this->api->parseResult($httpRequest->request));
+            $details->replace($this->api->parseResult($httpRequest->request));
 
             return;
         }
@@ -57,11 +57,11 @@ class CaptureLogisticsAction implements ActionInterface, ApiAwareInterface, Gate
         $token = $request->getToken();
         $targetUrl = $token->getTargetUrl();
         // 無 SenderName 時則執行地圖查詢
-        if (empty($model['SenderName']) === true) {
-            if (empty($model['ServerReplyURL']) === true) {
-                $model['ServerReplyURL'] = $targetUrl;
+        if (empty($details['SenderName']) === true) {
+            if (empty($details['ServerReplyURL']) === true) {
+                $details['ServerReplyURL'] = $targetUrl;
             }
-            $params = $this->api->prepareMap($model->toUnsafeArray());
+            $params = $this->api->prepareMap($details->toUnsafeArray());
 
             throw new HttpPostRedirect(
                 $params['apiEndpoint'],
@@ -69,21 +69,21 @@ class CaptureLogisticsAction implements ActionInterface, ApiAwareInterface, Gate
             );
         }
 
-        if (empty($model['ServerReplyURL']) === true) {
+        if (empty($details['ServerReplyURL']) === true) {
             $notifyToken = $this->tokenFactory->createNotifyToken(
                 $token->getGatewayName(),
                 $token->getDetails()
             );
 
-            $model['ServerReplyURL'] = $model['LogisticsC2CReplyURL'] = $notifyToken->getTargetUrl();
+            $details['ServerReplyURL'] = $details['LogisticsC2CReplyURL'] = $notifyToken->getTargetUrl();
         }
 
-        if (empty($model['ClientReplyURL']) === true) {
-            $model['ClientReplyURL'] = $targetUrl;
+        if (empty($details['ClientReplyURL']) === true) {
+            $details['ClientReplyURL'] = $targetUrl;
         }
 
-        $payment = $this->api->preparePayment($model->toUnsafeArray());
-        $model->replace($this->api->parseResult($payment));
+        $payment = $this->api->preparePayment($details->toUnsafeArray());
+        $details->replace($this->api->parseResult($payment));
     }
 
     /**

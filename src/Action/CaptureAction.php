@@ -43,13 +43,13 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
     public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
 
         $httpRequest = new GetHttpRequest();
         $this->gateway->execute($httpRequest);
 
         if (isset($httpRequest->request['RtnCode']) === true) {
-            $model->replace($this->api->parseResult($httpRequest->request));
+            $details->replace($this->api->parseResult($httpRequest->request));
 
             return;
         }
@@ -57,22 +57,22 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         $token = $request->getToken();
         $targetUrl = $token->getTargetUrl();
 
-        if (empty($model['OrderResultURL']) === true) {
-            $model['OrderResultURL'] = $targetUrl;
+        if (empty($details['OrderResultURL']) === true) {
+            $details['OrderResultURL'] = $targetUrl;
         }
 
-        if (empty($model['ReturnURL']) === true && $token && $this->tokenFactory) {
+        if (empty($details['ReturnURL']) === true && $token && $this->tokenFactory) {
             $notifyToken = $this->tokenFactory->createNotifyToken(
                 $token->getGatewayName(),
                 $token->getDetails()
             );
 
-            $model['ReturnURL'] = $notifyToken->getTargetUrl();
+            $details['ReturnURL'] = $notifyToken->getTargetUrl();
         }
 
         throw new HttpPostRedirect(
             $this->api->getApiEndpoint(),
-            $this->api->preparePayment($model->toUnsafeArray())
+            $this->api->preparePayment($details->toUnsafeArray())
         );
     }
 

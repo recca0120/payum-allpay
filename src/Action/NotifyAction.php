@@ -32,7 +32,7 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
     public function execute($request)
     {
         RequestNotSupportedException::assertSupports($this, $request);
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
 
         $httpRequest = new GetHttpRequest();
         $this->gateway->execute($httpRequest);
@@ -41,10 +41,10 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
             throw new HttpResponse('0|CheckMacValue verify fail.', 400, ['Content-Type' => 'text/plain']);
         }
 
-        if ($model['MerchantTradeNo'] !== $httpRequest->request['MerchantTradeNo']) {
+        if ($details['MerchantTradeNo'] !== $httpRequest->request['MerchantTradeNo']) {
             throw new HttpResponse('0|MerchantTradeNo fail.', 400, ['Content-Type' => 'text/plain']);
         }
-        $model->replace($httpRequest->request);
+        $details->replace($httpRequest->request);
 
         throw new HttpResponse('1|OK', 200, ['Content-Type' => 'text/plain']);
     }

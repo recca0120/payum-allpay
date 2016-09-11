@@ -18,7 +18,7 @@ class StatusLogisticsAction implements ActionInterface
     {
         RequestNotSupportedException::assertSupports($this, $request);
 
-        $model = ArrayObject::ensureArrayObject($request->getModel());
+        $details = ArrayObject::ensureArrayObject($request->getModel());
 
         // 300 訂單處理中(已收到訂單資料) 訂單處理中
         // 310 上傳電子訂單檔處理中 訂單處理中
@@ -27,7 +27,7 @@ class StatusLogisticsAction implements ActionInterface
         // 2000 出貨訂單修改 出貨訂單修改
         // 2001 檔案傳送成功 不建議呈現
 
-        if (isset($model['RtnCode']) === true && in_array($model['RtnCode'], ['300', '310', '311', '325', '2000', '2001'], true) === true) {
+        if (isset($details['RtnCode']) === true && in_array($details['RtnCode'], ['300', '310', '311', '325', '2000', '2001'], true) === true) {
             $request->markCaptured();
 
             return;
@@ -43,13 +43,13 @@ class StatusLogisticsAction implements ActionInterface
         //     "CVSTelephone" => "02-24245729"
         //     "ExtraData" => ""
         // ];
-        if (isset($model['CVSStoreID']) === true) {
+        if (isset($details['CVSStoreID']) === true) {
             $request->markCaptured();
 
             return;
         }
 
-        if (isset($model['CVSStoreID']) === false && isset($model['RtnCode']) === false) {
+        if (isset($details['CVSStoreID']) === false && isset($details['RtnCode']) === false) {
             $request->markNew();
 
             return;
