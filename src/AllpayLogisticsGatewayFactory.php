@@ -6,7 +6,6 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
 use PayumTW\Allpay\Action\CaptureLogisticsAction;
 use PayumTW\Allpay\Action\ConvertPaymentLogisticsAction;
-use PayumTW\Allpay\Action\NotifyAction;
 use PayumTW\Allpay\Action\StatusLogisticsAction;
 
 class AllpayLogisticsGatewayFactory extends GatewayFactory
@@ -22,7 +21,6 @@ class AllpayLogisticsGatewayFactory extends GatewayFactory
             'payum.action.capture' => new CaptureLogisticsAction(),
             'payum.action.status' => new StatusLogisticsAction(),
             'payum.action.convert_payment' => new ConvertPaymentLogisticsAction(),
-            'payum.action.notify' => new NotifyAction(),
         ]);
 
         /*
