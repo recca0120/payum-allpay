@@ -12,17 +12,12 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
+use Payum\Core\Request\Sync;
 use PayumTW\Allpay\Api;
 
-class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface
+class NotifyAction implements ActionInterface, GatewayAwareInterface
 {
-    use ApiAwareTrait;
     use GatewayAwareTrait;
-
-    public function __construct()
-    {
-        $this->apiClass = Api::class;
-    }
 
     /**
      * {@inheritdoc}
@@ -37,14 +32,13 @@ class NotifyAction implements ActionInterface, ApiAwareInterface, GatewayAwareIn
         $httpRequest = new GetHttpRequest();
         $this->gateway->execute($httpRequest);
 
-        if ($this->api->verifyHash($httpRequest->request) === false) {
+        $details->replace($httpRequest->request);
+
+        $this->gateway->execute(new Sync($details));
+
+        if($details['RtnCode'] == '-1') {
             throw new HttpResponse('0|CheckMacValue verify fail.', 400, ['Content-Type' => 'text/plain']);
         }
-
-        if ($details['MerchantTradeNo'] !== $httpRequest->request['MerchantTradeNo']) {
-            throw new HttpResponse('0|MerchantTradeNo fail.', 400, ['Content-Type' => 'text/plain']);
-        }
-        $details->replace($httpRequest->request);
 
         throw new HttpResponse('1|OK', 200, ['Content-Type' => 'text/plain']);
     }

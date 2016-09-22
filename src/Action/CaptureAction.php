@@ -13,27 +13,17 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
+use Payum\Core\Request\Sync;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use PayumTW\Allpay\Api;
+use PayumTW\Allpay\Request\Api\CreateTransaction;
 
-class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
+class CaptureAction implements ActionInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
 {
-    use ApiAwareTrait;
     use GatewayAwareTrait;
     use GenericTokenFactoryAwareTrait;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setApi($api)
-    {
-        if (false == $api instanceof Api) {
-            throw new UnsupportedApiException(sprintf('Not supported. Expected %s instance to be set as api.', Api::class));
-        }
-
-        $this->api = $api;
-    }
 
     /**
      * {@inheritdoc}
@@ -49,7 +39,9 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
         $this->gateway->execute($httpRequest);
 
         if (isset($httpRequest->request['RtnCode']) === true) {
-            $details->replace($this->api->parseResult($httpRequest->request));
+            $details->replace($httpRequest->request);
+
+            $this->gateway->execute(new Sync($details));
 
             return;
         }
@@ -70,10 +62,7 @@ class CaptureAction implements ActionInterface, ApiAwareInterface, GatewayAwareI
             $details['ReturnURL'] = $notifyToken->getTargetUrl();
         }
 
-        throw new HttpPostRedirect(
-            $this->api->getApiEndpoint(),
-            $this->api->preparePayment($details->toUnsafeArray())
-        );
+        $this->gateway->execute(new CreateTransaction($details));
     }
 
     /**

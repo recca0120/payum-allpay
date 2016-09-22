@@ -6,10 +6,11 @@ use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
+use Payum\Core\Request\Sync;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use PayumTW\Allpay\Action\CaptureAction;
 use PayumTW\Allpay\Api;
-
+use PayumTW\Allpay\Request\Api\CreateTransaction;
 class CaptureActionTest extends PHPUnit_Framework_TestCase
 {
     public function tearDown()
@@ -32,7 +33,7 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         $token = m::mock(stdClass::class);
         $notifyToken = m::mock(stdClass::class);
         $api = m::mock(Api::class);
-        $model = new ArrayObject([]);
+        $details = new ArrayObject([]);
 
         /*
         |------------------------------------------------------------
@@ -40,10 +41,12 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once();
+        $gateway
+            ->shouldReceive('execute')->with(m::type(GetHttpRequest::class))->once()
+            ->shouldReceive('execute')->with(m::type(CreateTransaction::class))->once();
 
         $request
-            ->shouldReceive('getModel')->twice()->andReturn($model)
+            ->shouldReceive('getModel')->twice()->andReturn($details)
             ->shouldReceive('getToken')->once()->andReturn($token);
 
         $token
@@ -58,10 +61,6 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         $tokenFactory
             ->shouldReceive('createNotifyToken')->once()->andReturn($notifyToken);
 
-        $api
-            ->shouldReceive('getApiEndpoint')->once()->andReturn('fooApiEndpoint')
-            ->shouldReceive('preparePayment')->once()->andReturn($model->toUnsafeArray());
-
         /*
         |------------------------------------------------------------
         | Assertion
@@ -69,15 +68,12 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action->setGateway($gateway);
-        $action->setApi($api);
         $action->setGenericTokenFactory($tokenFactory);
-        try {
-            $action->execute($request);
-        } catch (HttpResponse $response) {
-            $this->assertSame('fooApiEndpoint', $response->getUrl());
-            $this->assertSame('fooOrderResultURL', $model['OrderResultURL']);
-            $this->assertSame('fooReturnURL', $model['ReturnURL']);
-        }
+        $action->execute($request);
+        $this->assertSame([
+            'OrderResultURL' => 'fooOrderResultURL',
+            'ReturnURL' => 'fooReturnURL',
+        ], (array) $details);
     }
 
     public function test_allpay_response()
@@ -95,7 +91,7 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         $token = m::mock(stdClass::class);
         $notifyToken = m::mock(stdClass::class);
         $api = m::mock(Api::class);
-        $model = new ArrayObject([]);
+        $details = new ArrayObject([]);
 
         /*
         |------------------------------------------------------------
@@ -107,14 +103,14 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
             'RtnCode' => '1',
         ];
 
-        $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once()->andReturnUsing(function ($httpRequest) use ($api, $expected) {
-            $httpRequest->request = $expected;
-
-            $api->shouldReceive('parseResult')->once()->andReturn($httpRequest->request);
-        });
+        $gateway
+            ->shouldReceive('execute')->with(m::type(GetHttpRequest::class))->once()->andReturnUsing(function ($httpRequest) use ($api, $expected) {
+                $httpRequest->request = $expected;
+            })
+            ->shouldReceive('execute')->with(m::type(Sync::class))->once();
 
         $request
-            ->shouldReceive('getModel')->twice()->andReturn($model);
+            ->shouldReceive('getModel')->twice()->andReturn($details);
 
         /*
         |------------------------------------------------------------
@@ -123,38 +119,8 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action->setGateway($gateway);
-        $action->setApi($api);
         $action->setGenericTokenFactory($tokenFactory);
         $action->execute($request);
-        $this->assertSame($expected, $model->toUnsafeArray());
-    }
-
-    /**
-     * @expectedException Payum\Core\Exception\UnsupportedApiException
-     */
-    public function test_api_fail()
-    {
-        /*
-        |------------------------------------------------------------
-        | Set
-        |------------------------------------------------------------
-        */
-
-        $action = new CaptureAction();
-        $api = m::mock(stdClass::class);
-
-        /*
-        |------------------------------------------------------------
-        | Expectation
-        |------------------------------------------------------------
-        */
-
-        /*
-        |------------------------------------------------------------
-        | Assertion
-        |------------------------------------------------------------
-        */
-
-        $action->setApi($api);
+        $this->assertSame($expected, (array) $details);
     }
 }

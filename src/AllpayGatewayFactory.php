@@ -4,10 +4,13 @@ namespace PayumTW\Allpay;
 
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
+use PayumTW\Allpay\Action\Api\CreateTransactionAction;
+use PayumTW\Allpay\Action\Api\GetTransactionDataAction;
 use PayumTW\Allpay\Action\CaptureAction;
 use PayumTW\Allpay\Action\ConvertPaymentAction;
 use PayumTW\Allpay\Action\NotifyAction;
 use PayumTW\Allpay\Action\StatusAction;
+use PayumTW\Allpay\Action\SyncAction;
 
 class AllpayGatewayFactory extends GatewayFactory
 {
@@ -21,8 +24,12 @@ class AllpayGatewayFactory extends GatewayFactory
             'payum.factory_title' => 'Allpay',
             'payum.action.capture' => new CaptureAction(),
             'payum.action.notify' => new NotifyAction(),
+            'payum.action.sync' => new SyncAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
+
+            'payum.action.api.create_transaction' => new CreateTransactionAction(),
+            'payum.action.api.get_transaction_data' => new GetTransactionDataAction(),
         ]);
 
         if (false == $config['payum.api']) {

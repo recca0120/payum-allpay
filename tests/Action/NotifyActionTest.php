@@ -6,6 +6,7 @@ use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Notify;
+use Payum\Core\Request\Sync;
 use PayumTW\Allpay\Action\NotifyAction;
 use PayumTW\Allpay\Api;
 
@@ -27,8 +28,7 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         $action = new NotifyAction();
         $gateway = m::mock(GatewayInterface::class);
         $request = m::mock(Notify::class);
-        $api = m::mock(Api::class);
-        $model = new ArrayObject([
+        $details = new ArrayObject([
             'MerchantTradeNo' => 'fooMerchantTradeNo',
         ]);
 
@@ -38,17 +38,11 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once()->andReturnUsing(function ($request) {
-            $request->request = [
-                'MerchantTradeNo' => 'fooMerchantTradeNo',
-            ];
+        $gateway
+            ->shouldReceive('execute')->with(m::type(GetHttpRequest::class))->once()
+            ->shouldReceive('execute')->with(m::type(Sync::class));
 
-            return $request;
-        });
-
-        $api->shouldReceive('verifyHash')->once()->andReturn(true);
-
-        $request->shouldReceive('getModel')->twice()->andReturn($model);
+        $request->shouldReceive('getModel')->twice()->andReturn($details);
 
         /*
         |------------------------------------------------------------
@@ -57,7 +51,6 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action->setGateway($gateway);
-        $action->setApi($api);
         try {
             $action->execute($request);
         } catch (HttpResponse $response) {
@@ -77,9 +70,8 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         $action = new NotifyAction();
         $gateway = m::mock(GatewayInterface::class);
         $request = m::mock(Notify::class);
-        $api = m::mock(Api::class);
-        $model = new ArrayObject([
-            'MerchantTradeNo' => 'fooMerchantTradeNo',
+        $details = new ArrayObject([
+            'RtnCode' => '-1',
         ]);
 
         /*
@@ -88,17 +80,11 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once()->andReturnUsing(function ($request) {
-            $request->request = [
-                'MerchantTradeNo' => 'fooMerchantTradeNo',
-            ];
+        $gateway
+            ->shouldReceive('execute')->with(GetHttpRequest::class)->once()
+            ->shouldReceive('execute')->with(m::type(Sync::class));;
 
-            return $request;
-        });
-
-        $api->shouldReceive('verifyHash')->once()->andReturn(false);
-
-        $request->shouldReceive('getModel')->twice()->andReturn($model);
+        $request->shouldReceive('getModel')->twice()->andReturn($details);
 
         /*
         |------------------------------------------------------------
@@ -107,61 +93,10 @@ class NotifyActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action->setGateway($gateway);
-        $action->setApi($api);
         try {
             $action->execute($request);
         } catch (HttpResponse $response) {
             $this->assertSame('0|CheckMacValue verify fail.', $response->getContent());
-            $this->assertSame(400, $response->getStatusCode());
-        }
-    }
-
-    public function test_notify_mer_mbill_no_fail()
-    {
-        /*
-        |------------------------------------------------------------
-        | Set
-        |------------------------------------------------------------
-        */
-
-        $action = new NotifyAction();
-        $gateway = m::mock(GatewayInterface::class);
-        $request = m::mock(Notify::class);
-        $api = m::mock(Api::class);
-        $model = new ArrayObject([
-            'MerchantTradeNo' => 'foo',
-        ]);
-
-        /*
-        |------------------------------------------------------------
-        | Expectation
-        |------------------------------------------------------------
-        */
-
-        $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once()->andReturnUsing(function ($request) {
-            $request->request = [
-                'MerchantTradeNo' => 'fooMerchantTradeNo',
-            ];
-
-            return $request;
-        });
-
-        $api->shouldReceive('verifyHash')->once()->andReturn(true);
-
-        $request->shouldReceive('getModel')->twice()->andReturn($model);
-
-        /*
-        |------------------------------------------------------------
-        | Assertion
-        |------------------------------------------------------------
-        */
-
-        $action->setGateway($gateway);
-        $action->setApi($api);
-        try {
-            $action->execute($request);
-        } catch (HttpResponse $response) {
-            $this->assertSame('0|MerchantTradeNo fail.', $response->getContent());
             $this->assertSame(400, $response->getStatusCode());
         }
     }

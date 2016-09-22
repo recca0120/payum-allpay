@@ -806,14 +806,14 @@ class Api extends BaseApi
     }
 
     /**
-     * preparePayment.
+     * createTransaction.
      *
      * @param array $params
      * @param mixed $request
      *
      * @return array
      */
-    public function preparePayment(array $params)
+    public function createTransaction(array $params)
     {
         $api = $this->getApi();
         $api->Send['MerchantTradeDate'] = date('Y/m/d H:i:s');
@@ -847,13 +847,13 @@ class Api extends BaseApi
     }
 
     /**
-     * parseResult.
+     * getTransactionData.
      *
      * @param mixed $params
      *
      * @return array
      */
-    public function parseResult($params)
+    public function getTransactionData($params)
     {
         if ($this->verifyHash($params) === false) {
             $params['RtnCode'] = '10400002';

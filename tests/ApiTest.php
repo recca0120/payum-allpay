@@ -12,7 +12,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
         m::close();
     }
 
-    public function test_prepare_payment()
+    public function test_create_transaction()
     {
         /*
         |------------------------------------------------------------
@@ -62,12 +62,12 @@ class ApiTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $params = $api->preparePayment($params);
+        $params = $api->createTransaction($params);
         $this->assertSame(CheckMacValue::generate($params, $options['HashKey'], $options['HashIV'], 0), $params['CheckMacValue']);
         $this->assertSame('https://payment.allpay.com.tw/Cashier/AioCheckOut/V2', $api->getApiEndpoint());
     }
 
-    public function test_parse_result()
+    public function test_get_transaction_data()
     {
         /*
         |------------------------------------------------------------
@@ -116,7 +116,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $params = $api->parseResult($params);
+        $params = $api->getTransactionData($params);
 
         $expected = [
             'MerchantID' => '2000132',
@@ -192,7 +192,7 @@ class ApiTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $params = $api->parseResult($params);
+        $params = $api->getTransactionData($params);
         $this->assertSame('10400002', $params['RtnCode']);
     }
 
