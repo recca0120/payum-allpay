@@ -855,11 +855,12 @@ class Api extends BaseApi
      */
     public function getTransactionData($params)
     {
-        if ($this->verifyHash($params) === false) {
-            $params['RtnCode'] = '10400002';
+        $result = $params['response'];
+        if ($this->verifyHash($result) === false) {
+            $result['RtnCode'] = '10400002';
         }
-        $params['statusReason'] = preg_replace('/(\.|。)$/', '', $this->getStatusReason($params['RtnCode']));
+        $result['statusReason'] = preg_replace('/(\.|。)$/', '', $this->getStatusReason($result['RtnCode']));
 
-        return $params;
+        return $result;
     }
 }

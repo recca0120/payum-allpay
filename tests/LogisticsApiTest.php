@@ -64,7 +64,7 @@ class LogisticsApiTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $params = $api->preparePayment($params);
+        // $params = $api->preparePayment($params);
     }
 
     public function test_parse_result()

@@ -83,20 +83,22 @@ class ApiTest extends PHPUnit_Framework_TestCase
         ];
 
         $params = [
-            'MerchantID' => '2000132',
-            'MerchantTradeNo' => '57CBC66A39F82',
-            'PayAmt' => '340',
-            'PaymentDate' => '2016/09/04 15:03:08',
-            'PaymentType' => 'Credit_CreditCard',
-            'PaymentTypeChargeFee' => '3',
-            'RedeemAmt' => '0',
-            'RtnCode' => '1',
-            'RtnMsg' => 'Succeeded',
-            'SimulatePaid' => '0',
-            'TradeAmt' => '340',
-            'TradeDate' => '2016/09/04 14:59:13',
-            'TradeNo' => '1609041459136128',
-            'CheckMacValue' => '6812D213BF2C5B9377EBF101607BF2DF',
+            'response' => [
+                'MerchantID' => '2000132',
+                'MerchantTradeNo' => '57CBC66A39F82',
+                'PayAmt' => '340',
+                'PaymentDate' => '2016/09/04 15:03:08',
+                'PaymentType' => 'Credit_CreditCard',
+                'PaymentTypeChargeFee' => '3',
+                'RedeemAmt' => '0',
+                'RtnCode' => '1',
+                'RtnMsg' => 'Succeeded',
+                'SimulatePaid' => '0',
+                'TradeAmt' => '340',
+                'TradeDate' => '2016/09/04 14:59:13',
+                'TradeNo' => '1609041459136128',
+                'CheckMacValue' => '6812D213BF2C5B9377EBF101607BF2DF',
+            ],
         ];
 
         $httpClient = m::mock(HttpClientInterface::class);
@@ -119,24 +121,26 @@ class ApiTest extends PHPUnit_Framework_TestCase
         $params = $api->getTransactionData($params);
 
         $expected = [
-            'MerchantID' => '2000132',
-            'MerchantTradeNo' => '57CBC66A39F82',
-            'PayAmt' => '340',
-            'PaymentDate' => '2016/09/04 15:03:08',
-            'PaymentType' => 'Credit_CreditCard',
-            'PaymentTypeChargeFee' => '3',
-            'RedeemAmt' => '0',
-            'RtnCode' => '1',
-            'RtnMsg' => 'Succeeded',
-            'SimulatePaid' => '0',
-            'TradeAmt' => '340',
-            'TradeDate' => '2016/09/04 14:59:13',
-            'TradeNo' => '1609041459136128',
-            'CheckMacValue' => '6812D213BF2C5B9377EBF101607BF2DF',
-            'statusReason' => '成功',
+            'response' => [
+                'MerchantID' => '2000132',
+                'MerchantTradeNo' => '57CBC66A39F82',
+                'PayAmt' => '340',
+                'PaymentDate' => '2016/09/04 15:03:08',
+                'PaymentType' => 'Credit_CreditCard',
+                'PaymentTypeChargeFee' => '3',
+                'RedeemAmt' => '0',
+                'RtnCode' => '1',
+                'RtnMsg' => 'Succeeded',
+                'SimulatePaid' => '0',
+                'TradeAmt' => '340',
+                'TradeDate' => '2016/09/04 14:59:13',
+                'TradeNo' => '1609041459136128',
+                'CheckMacValue' => '6812D213BF2C5B9377EBF101607BF2DF',
+                'statusReason' => '成功',
+            ],
          ];
 
-        foreach ($expected as $key => $value) {
+        foreach ($expected['response'] as $key => $value) {
             $this->assertSame($value, $params[$key]);
         }
 
@@ -159,20 +163,22 @@ class ApiTest extends PHPUnit_Framework_TestCase
         ];
 
         $params = [
-            'MerchantID' => '2000132',
-            'MerchantTradeNo' => '57CBC66A39F82',
-            'PayAmt' => '340',
-            'PaymentDate' => '2016/09/04 15:03:08',
-            'PaymentType' => 'Credit_CreditCard',
-            'PaymentTypeChargeFee' => '3',
-            'RedeemAmt' => '0',
-            'RtnCode' => '1',
-            'RtnMsg' => 'Succeeded',
-            'SimulatePaid' => '0',
-            'TradeAmt' => '340',
-            'TradeDate' => '2016/09/04 14:59:13',
-            'TradeNo' => '1609041459136128',
-            'CheckMacValue' => '6812D213BF2C5B9377EBF101607BF2DD',
+            'response' => [
+                'MerchantID' => '2000132',
+                'MerchantTradeNo' => '57CBC66A39F82',
+                'PayAmt' => '340',
+                'PaymentDate' => '2016/09/04 15:03:08',
+                'PaymentType' => 'Credit_CreditCard',
+                'PaymentTypeChargeFee' => '3',
+                'RedeemAmt' => '0',
+                'RtnCode' => '1',
+                'RtnMsg' => 'Succeeded',
+                'SimulatePaid' => '0',
+                'TradeAmt' => '340',
+                'TradeDate' => '2016/09/04 14:59:13',
+                'TradeNo' => '1609041459136128',
+                'CheckMacValue' => '6812D213BF2C5B9377EBF101607BFEEE',
+            ],
         ];
 
         $httpClient = m::mock(HttpClientInterface::class);
@@ -192,8 +198,8 @@ class ApiTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $params = $api->getTransactionData($params);
-        $this->assertSame('10400002', $params['RtnCode']);
+        $result = $api->getTransactionData($params);
+        $this->assertSame('10400002', $result['RtnCode']);
     }
 
     public function test_sandbox()

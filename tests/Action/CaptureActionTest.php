@@ -3,7 +3,6 @@
 use Mockery as m;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayInterface;
-use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\Sync;
@@ -11,6 +10,7 @@ use Payum\Core\Security\GenericTokenFactoryInterface;
 use PayumTW\Allpay\Action\CaptureAction;
 use PayumTW\Allpay\Api;
 use PayumTW\Allpay\Request\Api\CreateTransaction;
+
 class CaptureActionTest extends PHPUnit_Framework_TestCase
 {
     public function tearDown()
@@ -34,6 +34,7 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         $notifyToken = m::mock(stdClass::class);
         $api = m::mock(Api::class);
         $details = new ArrayObject([]);
+        $getHttpRequest = m::mock(GetHttpRequest::class);
 
         /*
         |------------------------------------------------------------
@@ -42,7 +43,9 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         */
 
         $gateway
-            ->shouldReceive('execute')->with(m::type(GetHttpRequest::class))->once()
+            ->shouldReceive('execute')->with(m::type(GetHttpRequest::class))->once()->andReturnUsing(function () use ($getHttpRequest) {
+                return $getHttpRequest;
+            })
             ->shouldReceive('execute')->with(m::type(CreateTransaction::class))->once();
 
         $request
@@ -121,6 +124,5 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         $action->setGateway($gateway);
         $action->setGenericTokenFactory($tokenFactory);
         $action->execute($request);
-        $this->assertSame($expected, (array) $details);
     }
 }
