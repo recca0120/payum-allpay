@@ -2,13 +2,8 @@
 
 use Mockery as m;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\GatewayInterface;
 use Payum\Core\Reply\HttpResponse;
-use Payum\Core\Request\Capture;
-use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Security\GenericTokenFactoryInterface;
 use PayumTW\Allpay\Action\CaptureLogisticsAction;
-use PayumTW\Allpay\LogisticsApi;
 
 class CaptureLogisticsActionTest extends PHPUnit_Framework_TestCase
 {
@@ -26,12 +21,12 @@ class CaptureLogisticsActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action = new CaptureLogisticsAction();
-        $gateway = m::mock(GatewayInterface::class);
-        $request = m::mock(Capture::class);
-        $tokenFactory = m::mock(GenericTokenFactoryInterface::class);
-        $token = m::mock(stdClass::class);
-        $notifyToken = m::mock(stdClass::class);
-        $api = m::mock(LogisticsApi::class);
+        $gateway = m::mock('Payum\Core\GatewayInterface');
+        $request = m::mock('Payum\Core\Request\Capture');
+        $tokenFactory = m::mock('Payum\Core\Security\GenericTokenFactoryInterface');
+        $token = m::mock('stdClass');
+        $notifyToken = m::mock('stdClass');
+        $api = m::mock('PayumTW\Allpay\LogisticsApi');
         $model = new ArrayObject([]);
 
         /*
@@ -40,7 +35,7 @@ class CaptureLogisticsActionTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once();
+        $gateway->shouldReceive('execute')->with('Payum\Core\Request\GetHttpRequest')->once();
 
         $request
             ->shouldReceive('getModel')->twice()->andReturn($model)
@@ -84,12 +79,12 @@ class CaptureLogisticsActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action = new CaptureLogisticsAction();
-        $gateway = m::mock(GatewayInterface::class);
-        $request = m::mock(Capture::class);
-        $tokenFactory = m::mock(GenericTokenFactoryInterface::class);
-        $token = m::mock(stdClass::class);
-        $notifyToken = m::mock(stdClass::class);
-        $api = m::mock(LogisticsApi::class);
+        $gateway = m::mock('Payum\Core\GatewayInterface');
+        $request = m::mock('Payum\Core\Request\Capture');
+        $tokenFactory = m::mock('Payum\Core\Security\GenericTokenFactoryInterface');
+        $token = m::mock('stdClass');
+        $notifyToken = m::mock('stdClass');
+        $api = m::mock('PayumTW\Allpay\LogisticsApi');
         $model = new ArrayObject([]);
 
         /*
@@ -98,7 +93,7 @@ class CaptureLogisticsActionTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once()->andReturnUsing(function ($request) {
+        $gateway->shouldReceive('execute')->with('Payum\Core\Request\GetHttpRequest')->once()->andReturnUsing(function ($request) {
             $request->request = [
                 'CVSStoreID' => 'fooCVSStoreID',
             ];
@@ -131,12 +126,12 @@ class CaptureLogisticsActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action = new CaptureLogisticsAction();
-        $gateway = m::mock(GatewayInterface::class);
-        $request = m::mock(Capture::class);
-        $tokenFactory = m::mock(GenericTokenFactoryInterface::class);
-        $token = m::mock(stdClass::class);
-        $notifyToken = m::mock(stdClass::class);
-        $api = m::mock(LogisticsApi::class);
+        $gateway = m::mock('Payum\Core\GatewayInterface');
+        $request = m::mock('Payum\Core\Request\Capture');
+        $tokenFactory = m::mock('Payum\Core\Security\GenericTokenFactoryInterface');
+        $token = m::mock('stdClass');
+        $notifyToken = m::mock('stdClass');
+        $api = m::mock('PayumTW\Allpay\LogisticsApi');
         $model = new ArrayObject([
             'SenderName' => 'fooSenderName',
         ]);
@@ -147,7 +142,7 @@ class CaptureLogisticsActionTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $gateway->shouldReceive('execute')->with(GetHttpRequest::class)->once()->andReturnUsing(function ($request) {
+        $gateway->shouldReceive('execute')->with('Payum\Core\Request\GetHttpRequest')->once()->andReturnUsing(function ($request) {
             $request->request = [];
 
             return $request;
@@ -194,7 +189,7 @@ class CaptureLogisticsActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action = new CaptureLogisticsAction();
-        $api = m::mock(stdClass::class);
+        $api = m::mock('stdClass');
 
         /*
         |------------------------------------------------------------

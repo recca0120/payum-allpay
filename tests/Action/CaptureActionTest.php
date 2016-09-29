@@ -2,14 +2,7 @@
 
 use Mockery as m;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\GatewayInterface;
-use Payum\Core\Request\Capture;
-use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Request\Sync;
-use Payum\Core\Security\GenericTokenFactoryInterface;
 use PayumTW\Allpay\Action\CaptureAction;
-use PayumTW\Allpay\Api;
-use PayumTW\Allpay\Request\Api\CreateTransaction;
 
 class CaptureActionTest extends PHPUnit_Framework_TestCase
 {
@@ -27,14 +20,14 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action = new CaptureAction();
-        $gateway = m::mock(GatewayInterface::class);
-        $request = m::mock(Capture::class);
-        $tokenFactory = m::mock(GenericTokenFactoryInterface::class);
-        $token = m::mock(stdClass::class);
-        $notifyToken = m::mock(stdClass::class);
-        $api = m::mock(Api::class);
+        $gateway = m::mock('Payum\Core\GatewayInterface');
+        $request = m::mock('Payum\Core\Request\Capture');
+        $tokenFactory = m::mock('Payum\Core\Security\GenericTokenFactoryInterface');
+        $token = m::mock('stdClass');
+        $notifyToken = m::mock('stdClass');
+        $api = m::mock('PayumTW\Allpay\Api');
         $details = new ArrayObject([]);
-        $getHttpRequest = m::mock(GetHttpRequest::class);
+        $getHttpRequest = m::mock('Payum\Core\Request\GetHttpRequest');
 
         /*
         |------------------------------------------------------------
@@ -43,10 +36,10 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         */
 
         $gateway
-            ->shouldReceive('execute')->with(m::type(GetHttpRequest::class))->once()->andReturnUsing(function () use ($getHttpRequest) {
+            ->shouldReceive('execute')->with(m::type('Payum\Core\Request\GetHttpRequest'))->once()->andReturnUsing(function () use ($getHttpRequest) {
                 return $getHttpRequest;
             })
-            ->shouldReceive('execute')->with(m::type(CreateTransaction::class))->once();
+            ->shouldReceive('execute')->with(m::type('PayumTW\Allpay\Request\Api\CreateTransaction'))->once();
 
         $request
             ->shouldReceive('getModel')->twice()->andReturn($details)
@@ -88,12 +81,12 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action = new CaptureAction();
-        $gateway = m::mock(GatewayInterface::class);
-        $request = m::mock(Capture::class);
-        $tokenFactory = m::mock(GenericTokenFactoryInterface::class);
-        $token = m::mock(stdClass::class);
-        $notifyToken = m::mock(stdClass::class);
-        $api = m::mock(Api::class);
+        $gateway = m::mock('Payum\Core\GatewayInterface');
+        $request = m::mock('Payum\Core\Request\Capture');
+        $tokenFactory = m::mock('Payum\Core\Security\GenericTokenFactoryInterface');
+        $token = m::mock('stdClass');
+        $notifyToken = m::mock('stdClass');
+        $api = m::mock('PayumTW\Allpay\Api');
         $details = new ArrayObject([]);
 
         /*
@@ -107,10 +100,10 @@ class CaptureActionTest extends PHPUnit_Framework_TestCase
         ];
 
         $gateway
-            ->shouldReceive('execute')->with(m::type(GetHttpRequest::class))->once()->andReturnUsing(function ($httpRequest) use ($api, $expected) {
+            ->shouldReceive('execute')->with(m::type('Payum\Core\Request\GetHttpRequest'))->once()->andReturnUsing(function ($httpRequest) use ($api, $expected) {
                 $httpRequest->request = $expected;
             })
-            ->shouldReceive('execute')->with(m::type(Sync::class))->once();
+            ->shouldReceive('execute')->with(m::type('Payum\Core\Request\Sync'))->once();
 
         $request
             ->shouldReceive('getModel')->twice()->andReturn($details);

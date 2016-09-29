@@ -2,7 +2,6 @@
 
 use Mockery as m;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Request\GetStatusInterface;
 use PayumTW\Allpay\Action\StatusAction;
 
 class StatusActionTest extends PHPUnit_Framework_TestCase
@@ -21,7 +20,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action = new StatusAction();
-        $request = m::mock(GetStatusInterface::class);
+        $request = m::mock('Payum\Core\Request\GetStatusInterface');
         $model = new ArrayObject();
 
         /*
@@ -52,7 +51,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action = new StatusAction();
-        $request = m::mock(GetStatusInterface::class);
+        $request = m::mock('Payum\Core\Request\GetStatusInterface');
         $model = new ArrayObject([
             'RtnCode' => '1',
         ]);
@@ -85,7 +84,7 @@ class StatusActionTest extends PHPUnit_Framework_TestCase
         */
 
         $action = new StatusAction();
-        $request = m::mock(GetStatusInterface::class);
+        $request = m::mock('Payum\Core\Request\GetStatusInterface');
         $model = new ArrayObject([
             'RtnCode' => '-1',
         ]);

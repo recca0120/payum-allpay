@@ -1,8 +1,6 @@
 <?php
 
-use Http\Message\MessageFactory;
 use Mockery as m;
-use Payum\Core\HttpClientInterface;
 use PayumTW\Allpay\LogisticsApi;
 
 class LogisticsApiTest extends PHPUnit_Framework_TestCase
@@ -47,8 +45,8 @@ class LogisticsApiTest extends PHPUnit_Framework_TestCase
             'ServerReplyURL' => 'http://fooServerReplyURL',
         ];
 
-        $httpClient = m::mock(HttpClientInterface::class);
-        $message = m::mock(MessageFactory::class);
+        $httpClient = m::mock('Payum\Core\HttpClientInterface');
+        $message = m::mock('Http\Message\MessageFactory');
 
         /*
         |------------------------------------------------------------
@@ -104,8 +102,8 @@ class LogisticsApiTest extends PHPUnit_Framework_TestCase
             'UpdateStatusDate' => '2016/09/04 17:52:00',
         ];
 
-        $httpClient = m::mock(HttpClientInterface::class);
-        $message = m::mock(MessageFactory::class);
+        $httpClient = m::mock('Payum\Core\HttpClientInterface');
+        $message = m::mock('Http\Message\MessageFactory');
 
         /*
         |------------------------------------------------------------
@@ -144,8 +142,8 @@ class LogisticsApiTest extends PHPUnit_Framework_TestCase
             'ServerReplyURL' => 'http://fooServerReplyURL',
         ];
 
-        $httpClient = m::mock(HttpClientInterface::class);
-        $message = m::mock(MessageFactory::class);
+        $httpClient = m::mock('Payum\Core\HttpClientInterface');
+        $message = m::mock('Http\Message\MessageFactory');
 
         /*
         |------------------------------------------------------------

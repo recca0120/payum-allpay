@@ -1,11 +1,8 @@
 <?php
 
-use Http\Message\MessageFactory;
 use Mockery as m;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\HttpClientInterface;
 use PayumTW\Allpay\AllpayGatewayFactory;
-use PayumTW\Allpay\Api;
 
 class AllpayGatewayFactoryTest extends PHPUnit_Framework_TestCase
 {
@@ -22,8 +19,8 @@ class AllpayGatewayFactoryTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
 
-        $httpClient = m::mock(HttpClientInterface::class);
-        $message = m::mock(MessageFactory::class);
+        $httpClient = m::mock('Payum\Core\HttpClientInterface');
+        $message = m::mock('Http\Message\MessageFactory');
 
         /*
         |------------------------------------------------------------
@@ -50,6 +47,6 @@ class AllpayGatewayFactoryTest extends PHPUnit_Framework_TestCase
         ]);
 
         $api = call_user_func($config['payum.api'], ArrayObject::ensureArrayObject($config));
-        $this->assertInstanceOf(Api::class, $api);
+        $this->assertInstanceOf('PayumTW\Allpay\Api', $api);
     }
 }
