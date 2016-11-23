@@ -31,11 +31,6 @@ abstract class PaymentMethod
     const CVS = 'CVS';
 
     /**
-     * 超商條碼。
-     */
-    const BARCODE = 'BARCODE';
-
-    /**
      * 支付寶。
      */
     const Alipay = 'Alipay';
@@ -222,10 +217,6 @@ abstract class PaymentMethodItem
      */
     const TopUpUsed_ESUN = 'ESUN';
     // 其他類(901~999)
-    /**
-     * 超商條碼繳款。
-     */
-    const BARCODE = 'BARCODE';
 
     /**
      * 信用卡(MasterCard/JCB/VISA)。
@@ -445,8 +436,7 @@ abstract class UseRedeem
  *
  * AllInOne description.
  *
- * @version 1.1.0527
- *
+ * @version 1.1.0818
  * @author charlie
  */
 class AllInOne
@@ -468,25 +458,25 @@ class AllInOne
     {
         $this->PaymentType = 'aio';
         $this->Send = [
-            'ReturnURL' => '',
-            'ClientBackURL' => '',
-            'OrderResultURL' => '',
-            'MerchantTradeNo' => '',
+            'ReturnURL'         => '',
+            'ClientBackURL'     => '',
+            'OrderResultURL'    => '',
+            'MerchantTradeNo'   => '',
             'MerchantTradeDate' => '',
-            'PaymentType' => 'aio',
-            'TotalAmount' => '',
-            'TradeDesc' => '',
-            'ChoosePayment' => PaymentMethod::ALL,
-            'Remark' => '',
-            'ChooseSubPayment' => PaymentMethodItem::None,
+            'PaymentType'       => 'aio',
+            'TotalAmount'       => '',
+            'TradeDesc'         => '',
+            'ChoosePayment'     => PaymentMethod::ALL,
+            'Remark'            => '',
+            'ChooseSubPayment'  => PaymentMethodItem::None,
             'NeedExtraPaidInfo' => ExtraPaymentInfo::No,
-            'DeviceSource' => '',
-            'IgnorePayment' => '',
-            'PlatformID' => '',
-            'InvoiceMark' => InvoiceState::No,
-            'Items' => [],
-            'EncryptType' => EncryptType::ENC_MD5,
-            'UseRedeem' => UseRedeem::No,
+            'DeviceSource'      => '',
+            'IgnorePayment'     => '',
+            'PlatformID'        => '',
+            'InvoiceMark'       => InvoiceState::No,
+            'Items'             => [],
+            'EncryptType'       => EncryptType::ENC_MD5,
+            'UseRedeem'         => UseRedeem::No,
         ];
 
         $this->SendExtend = [];
@@ -589,7 +579,7 @@ class Send extends Aio
     {
         //宣告付款方式物件
         $PaymentMethod = 'allPay_'.$arParameters['ChoosePayment'];
-        self::$PaymentObj = new $PaymentMethod();
+        self::$PaymentObj = new $PaymentMethod;
 
         //檢查參數
         $arParameters = self::$PaymentObj->check_string($arParameters);
@@ -677,7 +667,6 @@ class CheckOutFeedback extends Aio
             if ($keys != 'CheckMacValue') {
                 if ($keys == 'PaymentType') {
                     $value = str_replace('_CVS', '', $value);
-                    $value = str_replace('_BARCODE', '', $value);
                     $value = str_replace('_Alipay', '', $value);
                     $value = str_replace('_Tenpay', '', $value);
                     $value = str_replace('_CreditCard', '', $value);
@@ -1240,13 +1229,13 @@ abstract class Verification
 class allPay_CVS extends Verification
 {
     public $arPayMentExtend = [
-                            'Desc_1' => '',
-                            'Desc_2' => '',
-                            'Desc_3' => '',
-                            'Desc_4' => '',
-                            'PaymentInfoURL' => '',
+                            'Desc_1'           => '',
+                            'Desc_2'           => '',
+                            'Desc_3'           => '',
+                            'Desc_4'           => '',
+                            'PaymentInfoURL'   => '',
                             'ClientRedirectURL' => '',
-                            'StoreExpireDate' => '',
+                            'StoreExpireDate'  => '',
                         ];
 
     //檢查共同參數
@@ -1326,104 +1315,13 @@ class allPay_CVS extends Verification
 }
 
 /**
- * 付款方式 : BARCODE.
- */
-class allPay_BARCODE extends Verification
-{
-    public $arPayMentExtend = [
-                            'Desc_1' => '',
-                            'Desc_2' => '',
-                            'Desc_3' => '',
-                            'Desc_4' => '',
-                            'PaymentInfoURL' => '',
-                            'ClientRedirectURL' => '',
-                            'StoreExpireDate' => '',
-                        ];
-
-    //檢查共同參數
-    public function check_string($arParameters = [])
-    {
-        parent::check_string($arParameters);
-        if (! $arParameters['PlatformID']) {
-            unset($arParameters['PlatformID']);
-        }
-        unset($arParameters['IgnorePayment']);
-
-        return $arParameters;
-    }
-
-    //檢查BARCODE的延伸參數
-    public function check_extend_string($arExtend = [], $InvoiceMark = '')
-    {
-
-        //沒設定參數的話，就給預設參數
-        foreach ($this->arPayMentExtend as $key => $value) {
-            if (! isset($arExtend[$key])) {
-                $arExtend[$key] = $value;
-            }
-        }
-
-        //若有開發票，檢查一下發票參數
-        if ($InvoiceMark == 'Y') {
-            $arExtend = $this->check_invoiceString($arExtend);
-        }
-
-        return $arExtend;
-    }
-
-    //過濾多餘參數
-    public function filter_string($arExtend = [], $InvoiceMark = '')
-    {
-        $arPayMentExtend = ($InvoiceMark == '') ? array_keys($this->arPayMentExtend) : array_merge(array_keys($this->arPayMentExtend), $this->arInvoice);
-        foreach ($arExtend as $key => $value) {
-            if (! in_array($key, $arPayMentExtend)) {
-                unset($arExtend[$key]);
-            }
-        }
-
-        return $arExtend;
-    }
-
-        //檢查商品
-    public function check_goods($arParameters = [])
-    {
-        // 檢查產品名稱。
-        $szItemName = '';
-        $arErrors = [];
-        if (count($arParameters['Items']) > 0) {
-            foreach ($arParameters['Items'] as $keys => $value) {
-                $szItemName .= vsprintf('#%s %d %s x %u', $arParameters['Items'][$keys]);
-                if (! array_key_exists('ItemURL', $arParameters)) {
-                    $arParameters['ItemURL'] = $arParameters['Items'][$keys]['URL'];
-                }
-            }
-
-            if (strlen($szItemName) > 0) {
-                $szItemName = mb_substr($szItemName, 1, 200);
-                $arParameters['ItemName'] = $szItemName;
-            }
-        } else {
-            array_push($arErrors, 'Goods information not found.');
-        }
-
-        if (count($arErrors) > 0) {
-            throw new Exception(implode('<br>', $arErrors));
-        }
-
-        unset($arParameters['Items']);
-
-        return $arParameters;
-    }
-}
-
-/**
  *  付款方式 ATM.
  */
 class allPay_ATM extends Verification
 {
     public $arPayMentExtend = [
-                            'ExpireDate' => 3,
-                            'PaymentInfoURL' => '',
+                            'ExpireDate'       => 3,
+                            'PaymentInfoURL'   => '',
                             'ClientRedirectURL' => '',
                         ];
 
@@ -1590,10 +1488,10 @@ class allPay_WebATM extends Verification
 class allPay_Alipay extends Verification
 {
     public $arPayMentExtend = [
-                            'Email' => '',
-                            'PhoneNo' => '',
-                            'UserName' => '',
-                            'AlipayItemName' => '',
+                            'Email'           => '',
+                            'PhoneNo'         => '',
+                            'UserName'        => '',
+                            'AlipayItemName'  => '',
                             'AlipayItemCounts' => '',
                             'AlipayItemPrice' => '',
                         ];
@@ -1789,14 +1687,14 @@ class allPay_Credit extends Verification
     public $arPayMentExtend = [
                                     'CreditInstallment' => 0,
                                     'InstallmentAmount' => 0,
-                                    'Redeem' => false,
-                                    'UnionPay' => false,
-                                    'Language' => '',
-                                    'PeriodAmount' => '',
-                                    'PeriodType' => '',
-                                    'Frequency' => '',
-                                    'ExecTimes' => '',
-                                    'PeriodReturnURL' => '',
+                                    'Redeem'            => false,
+                                    'UnionPay'          => false,
+                                    'Language'          => '',
+                                    'PeriodAmount'      => '',
+                                    'PeriodType'        => '',
+                                    'Frequency'         => '',
+                                    'ExecTimes'         => '',
+                                    'PeriodReturnURL'   => '',
                                 ];
 
     //檢查共同參數

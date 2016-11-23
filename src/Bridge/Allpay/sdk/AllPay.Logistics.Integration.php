@@ -9,124 +9,124 @@
     // 物流類型
     abstract class LogisticsType
     {
-        const CVS = 'CVS';// 超商取貨
-        const HOME = 'Home';// 宅配
+        const CVS = 'CVS'; // 超商取貨
+        const HOME = 'Home'; // 宅配
     }
 
     // 物流子類型
     abstract class LogisticsSubType
     {
-        const TCAT = 'TCAT';// 黑貓(宅配)
-        const FAMILY = 'FAMI';// 全家
-        const UNIMART = 'UNIMART';// 統一超商
-        const FAMILY_C2C = 'FAMIC2C';// 全家店到店
-        const UNIMART_C2C = 'UNIMARTC2C';// 統一超商寄貨便
+        const TCAT = 'TCAT'; // 黑貓(宅配)
+        const FAMILY = 'FAMI'; // 全家
+        const UNIMART = 'UNIMART'; // 統一超商
+        const FAMILY_C2C = 'FAMIC2C'; // 全家店到店
+        const UNIMART_C2C = 'UNIMARTC2C'; // 統一超商寄貨便
     }
 
     // 是否代收貨款
     abstract class IsCollection
     {
-        const YES = 'Y';// 貨到付款
-        const NO = 'N';// 僅配送
+        const YES = 'Y'; // 貨到付款
+        const NO = 'N'; // 僅配送
     }
 
     // 使用設備
     abstract class Device
     {
-        const PC = 0;// PC
-        const MOBILE = 1;// 行動裝置
+        const PC = 0; // PC
+        const MOBILE = 1; // 行動裝置
     }
 
     // 測試廠商編號
     abstract class AllpayTestMerchantID
     {
-        const B2C = '2000132';// B2C
-        const C2C = '2000933';// C2C
+        const B2C = '2000132'; // B2C
+        const C2C = '2000933'; // C2C
     }
 
     // 正式環境網址
     abstract class AllpayURL
     {
-        const CVS_MAP = 'https://logistics.ecpay.com.tw/Express/map';// 電子地圖
-        const SHIPPING_ORDER = 'https://logistics.ecpay.com.tw/Express/Create';// 物流訂單建立
-        const HOME_RETURN_ORDER = 'https://logistics.ecpay.com.tw/Express/ReturnHome';// 宅配逆物流訂單
-        const FAMILY_RETURN_ORDER = 'https://logistics.ecpay.com.tw/express/ReturnCVS';// 超商取貨逆物流訂單(全家超商B2C)
-        const FAMILY_RETURN_CHECK = 'https://logistics.ecpay.com.tw/Helper/LogisticsCheckAccoounts';// 全家逆物流核帳(全家超商B2C)
-        const UNIMART_UPDATE_LOGISTICS_INFO = 'https://logistics.ecpay.com.tw/Helper/UpdateShipmentInfo';// 統一修改物流資訊(全家超商B2C)
-        const UNIMART_UPDATE_STORE_INFO = 'https://logistics.ecpay.com.tw/Express/UpdateStoreInfo';// 更新門市(統一超商C2C)
-        const UNIMART_CANCEL_LOGISTICS_ORDER = 'https://logistics.ecpay.com.tw/Express/CancelC2COrder';// 取消訂單(統一超商C2C)
-        const QUERY_LOGISTICS_INFO = 'https://logistics.ecpay.com.tw/Helper/QueryLogisticsTradeInfo';// 物流訂單查詢
-        const PRINT_TRADE_DOC = 'https://logistics.ecpay.com.tw/helper/printTradeDocument';// 產生托運單(宅配)/一段標(超商取貨)
-        const PRINT_UNIMART_C2C_BILL = 'https://logistics.ecpay.com.tw/Express/PrintUniMartC2COrderInfo';// 列印繳款單(統一超商C2C)
-        const PRINT_FAMILY_C2C_BILL = 'https://logistics.ecpay.com.tw/Express/PrintFAMIC2COrderInfo';// 全家列印小白單(全家超商C2C)
+        const CVS_MAP = 'https://logistics.ecpay.com.tw/Express/map'; // 電子地圖
+        const SHIPPING_ORDER = 'https://logistics.ecpay.com.tw/Express/Create'; // 物流訂單建立
+        const HOME_RETURN_ORDER = 'https://logistics.ecpay.com.tw/Express/ReturnHome'; // 宅配逆物流訂單
+        const FAMILY_RETURN_ORDER = 'https://logistics.ecpay.com.tw/express/ReturnCVS'; // 超商取貨逆物流訂單(全家超商B2C)
+        const FAMILY_RETURN_CHECK = 'https://logistics.ecpay.com.tw/Helper/LogisticsCheckAccoounts'; // 全家逆物流核帳(全家超商B2C)
+        const UNIMART_UPDATE_LOGISTICS_INFO = 'https://logistics.ecpay.com.tw/Helper/UpdateShipmentInfo'; // 統一修改物流資訊(全家超商B2C)
+        const UNIMART_UPDATE_STORE_INFO = 'https://logistics.ecpay.com.tw/Express/UpdateStoreInfo'; // 更新門市(統一超商C2C)
+        const UNIMART_CANCEL_LOGISTICS_ORDER = 'https://logistics.ecpay.com.tw/Express/CancelC2COrder'; // 取消訂單(統一超商C2C)
+        const QUERY_LOGISTICS_INFO = 'https://logistics.ecpay.com.tw/Helper/QueryLogisticsTradeInfo'; // 物流訂單查詢
+        const PRINT_TRADE_DOC = 'https://logistics.ecpay.com.tw/helper/printTradeDocument'; // 產生托運單(宅配)/一段標(超商取貨)
+        const PRINT_UNIMART_C2C_BILL = 'https://logistics.ecpay.com.tw/Express/PrintUniMartC2COrderInfo'; // 列印繳款單(統一超商C2C)
+        const PRINT_FAMILY_C2C_BILL = 'https://logistics.ecpay.com.tw/Express/PrintFAMIC2COrderInfo'; // 全家列印小白單(全家超商C2C)
     }
 
     // 正式測試環境網址
     abstract class AllpayTestURL
     {
-        const CVS_MAP = 'https://logistics.ecpay.com.tw/Express/map';// 電子地圖(測試環境有問題，直接使用正式環境URL)
-        const SHIPPING_ORDER = 'http://logistics-stage.ecpay.com.tw/Express/Create';// 物流訂單建立
-        const HOME_RETURN_ORDER = 'http://logistics-stage.ecpay.com.tw/Express/ReturnHome';// 宅配逆物流訂單
-        const FAMILY_RETURN_ORDER = 'http://logistics-stage.ecpay.com.tw/express/ReturnCVS';// 超商取貨逆物流訂單(全家超商B2C)
-        const FAMILY_RETURN_CHECK = 'http://logistics-stage.ecpay.com.tw/Helper/LogisticsCheckAccoounts';// 全家逆物流核帳(全家超商B2C)
-        const UNIMART_UPDATE_LOGISTICS_INFO = 'http://logistics-stage.ecpay.com.tw/Helper/UpdateShipmentInfo';// 統一修改物流資訊(全家超商B2C)
-        const UNIMART_UPDATE_STORE_INFO = 'http://logistics-stage.ecpay.com.tw/Express/UpdateStoreInfo';// 更新門市(統一超商C2C)
-        const UNIMART_CANCEL_LOGISTICS_ORDER = 'http://logistics-stage.ecpay.com.tw/Express/CancelC2COrder';// 取消訂單(統一超商C2C)
-        const QUERY_LOGISTICS_INFO = 'http://logistics-stage.ecpay.com.tw/Helper/QueryLogisticsTradeInfo';// 物流訂單查詢
-        const PRINT_TRADE_DOC = 'http://logistics-stage.ecpay.com.tw/helper/printTradeDocument';// 產生托運單(宅配)/一段標(超商取貨)
-        const PRINT_UNIMART_C2C_BILL = 'http://logistics-stage.ecpay.com.tw/Express/PrintUniMartC2COrderInfo';// 列印繳款單(統一超商C2C)
-        const PRINT_FAMILY_C2C_BILL = 'http://logistics-stage.ecpay.com.tw/Express/PrintFAMIC2COrderInfo';// 全家列印小白單(全家超商C2C)
+        const CVS_MAP = 'https://logistics.ecpay.com.tw/Express/map'; // 電子地圖(測試環境有問題，直接使用正式環境URL)
+        const SHIPPING_ORDER = 'http://logistics-stage.ecpay.com.tw/Express/Create'; // 物流訂單建立
+        const HOME_RETURN_ORDER = 'http://logistics-stage.ecpay.com.tw/Express/ReturnHome'; // 宅配逆物流訂單
+        const FAMILY_RETURN_ORDER = 'http://logistics-stage.ecpay.com.tw/express/ReturnCVS'; // 超商取貨逆物流訂單(全家超商B2C)
+        const FAMILY_RETURN_CHECK = 'http://logistics-stage.ecpay.com.tw/Helper/LogisticsCheckAccoounts'; // 全家逆物流核帳(全家超商B2C)
+        const UNIMART_UPDATE_LOGISTICS_INFO = 'http://logistics-stage.ecpay.com.tw/Helper/UpdateShipmentInfo'; // 統一修改物流資訊(全家超商B2C)
+        const UNIMART_UPDATE_STORE_INFO = 'http://logistics-stage.ecpay.com.tw/Express/UpdateStoreInfo'; // 更新門市(統一超商C2C)
+        const UNIMART_CANCEL_LOGISTICS_ORDER = 'http://logistics-stage.ecpay.com.tw/Express/CancelC2COrder'; // 取消訂單(統一超商C2C)
+        const QUERY_LOGISTICS_INFO = 'http://logistics-stage.ecpay.com.tw/Helper/QueryLogisticsTradeInfo'; // 物流訂單查詢
+        const PRINT_TRADE_DOC = 'http://logistics-stage.ecpay.com.tw/helper/printTradeDocument'; // 產生托運單(宅配)/一段標(超商取貨)
+        const PRINT_UNIMART_C2C_BILL = 'http://logistics-stage.ecpay.com.tw/Express/PrintUniMartC2COrderInfo'; // 列印繳款單(統一超商C2C)
+        const PRINT_FAMILY_C2C_BILL = 'http://logistics-stage.ecpay.com.tw/Express/PrintFAMIC2COrderInfo'; // 全家列印小白單(全家超商C2C)
     }
 
     // 溫層
     abstract class Temperature
     {
-        const ROOM = '0001';// 常溫
-        const REFRIGERATION = '0002';// 冷藏
-        const FREEZE = '0003';// 冷凍
+        const ROOM = '0001'; // 常溫
+        const REFRIGERATION = '0002'; // 冷藏
+        const FREEZE = '0003'; // 冷凍
     }
 
     // 距離
     abstract class Distance
     {
-        const SAME = '00';// 同縣市
-        const OTHER = '01';// 外縣市
-        const ISLAND = '02';// 離島
+        const SAME = '00'; // 同縣市
+        const OTHER = '01'; // 外縣市
+        const ISLAND = '02'; // 離島
     }
 
     // 規格
     abstract class Specification
     {
-        const CM_60 = '0001';// 60cm
-        const CM_90 = '0002';// 90cm
-        const CM_120 = '0003';// 120cm
-        const CM_150 = '0004';// 150cm
+        const CM_60 = '0001'; // 60cm
+        const CM_90 = '0002'; // 90cm
+        const CM_120 = '0003'; // 120cm
+        const CM_150 = '0004'; // 150cm
     }
 
     // 預計取件時段
     abstract class ScheduledPickupTime
     {
-        const TIME_9_12 = '1';// 9~12時
-        const TIME_12_17 = '2';// 12~17時
-        const TIME_17_20 = '3';// 17~20時
-        const UNLIMITED = '4';// 不限時
+        const TIME_9_12 = '1'; // 9~12時
+        const TIME_12_17 = '2'; // 12~17時
+        const TIME_17_20 = '3'; // 17~20時
+        const UNLIMITED = '4'; // 不限時
     }
 
     // 預定送達時段
     abstract class ScheduledDeliveryTime
     {
-        const TIME_9_12 = '1';// 9~12時
-        const TIME_12_17 = '2';// 12~17時
-        const TIME_17_20 = '3';// 17~20時
-        const UNLIMITED = '4';// 不限時
-        const TIME_20_21 = '5';// 20~21時(需限定區域)
+        const TIME_9_12 = '1'; // 9~12時
+        const TIME_12_17 = '2'; // 12~17時
+        const TIME_17_20 = '3'; // 17~20時
+        const UNLIMITED = '4'; // 不限時
+        const TIME_20_21 = '5'; // 20~21時(需限定區域)
     }
 
     // 門市類型
     abstract class StoreType
     {
-        const RECIVE_STORE = '01';// 取件門市
-        const RETURN_STORE = '02';// 退件門市
+        const RECIVE_STORE = '01'; // 取件門市
+        const RETURN_STORE = '02'; // 退件門市
     }
 
     class AllpayLogistics
@@ -528,6 +528,7 @@
 
             return $Result;
         }
+
         // 回傳 CheckMacValue 檢查
         public function CheckOutFeedback($Feedback = [])
         {
@@ -628,7 +629,7 @@
             ];
             $this->PostParams = $this->GetPostParams($this->Send, $ParamList);
             $this->PostParams['CollectionAmount'] = 0;
-            $this->PostParams['ServiceType'] = 4;// 退貨不付款
+            $this->PostParams['ServiceType'] = 4; // 退貨不付款
 
             // 參數檢查
             $this->ValidateHashKey();
@@ -719,6 +720,7 @@
 
             return $Result;
         }
+
         // 廠商修改出貨日期、取貨門市(統一超商B2C)
         public function UpdateUnimartLogisticsInfo()
         {
@@ -759,6 +761,7 @@
 
             return $Result;
         }
+
         // 更新門市(統一超商C2C)
         public function UpdateUnimartStore()
         {
@@ -965,21 +968,21 @@
             return $this->GenPostHTML($ButtonDesc, $Target);
         }
 
-        protected function ValidateHashKey()
+        private function ValidateHashKey()
         {
             if (empty($this->HashKey)) {
                 throw new Exception('HashKey is required.');
             }
         }
 
-        protected function ValidateHashIV()
+        private function ValidateHashIV()
         {
             if (empty($this->HashIV)) {
                 throw new Exception('HashIV is required.');
             }
         }
 
-        protected function ValidateID($Name, $Value, $MaxLength = 1, $AllowEmpty = false)
+        private function ValidateID($Name, $Value, $MaxLength = 1, $AllowEmpty = false)
         {
             if (empty($Value)) {
                 if (! $AllowEmpty) {
@@ -990,7 +993,7 @@
             }
         }
 
-        protected function ValidateURL($Name, $Value, $MaxLength = 200, $AllowEmpty = false)
+        private function ValidateURL($Name, $Value, $MaxLength = 200, $AllowEmpty = false)
         {
             if (empty($Value)) {
                 if (! $AllowEmpty) {
@@ -1003,7 +1006,7 @@
             }
         }
 
-        protected function ValidateString($Name, $Value, $MaxLength = 1, $AllowEmpty = false)
+        private function ValidateString($Name, $Value, $MaxLength = 1, $AllowEmpty = false)
         {
             if (empty($Value)) {
                 if (! $AllowEmpty) {
@@ -1014,7 +1017,7 @@
             }
         }
 
-        protected function ValidateAmount($Name, $Value, $AllowEmpty = false)
+        private function ValidateAmount($Name, $Value, $AllowEmpty = false)
         {
             if (empty($Value)) {
                 if (! $AllowEmpty) {
@@ -1025,7 +1028,7 @@
             }
         }
 
-        protected function ValidatePhoneNumber($Name, $Value, $AllowEmpty = false)
+        private function ValidatePhoneNumber($Name, $Value, $AllowEmpty = false)
         {
             if (empty($Value)) {
                 if (! $AllowEmpty) {
@@ -1036,7 +1039,7 @@
             }
         }
 
-        protected function ValidateEmail($Name, $Value, $MaxLength = 100, $AllowEmpty = false)
+        private function ValidateEmail($Name, $Value, $MaxLength = 100, $AllowEmpty = false)
         {
             if (empty($Value)) {
                 if (! $AllowEmpty) {
@@ -1049,7 +1052,7 @@
             }
         }
 
-        protected function ValidateZipCode($Name, $Value, $AllowEmpty = false)
+        private function ValidateZipCode($Name, $Value, $AllowEmpty = false)
         {
             if (empty($Value)) {
                 if (! $AllowEmpty) {
@@ -1060,7 +1063,7 @@
             }
         }
 
-        protected function ValidateMixTypeID($Name, $Value, $MaxLength = 1, $AllowEmpty = false)
+        private function ValidateMixTypeID($Name, $Value, $MaxLength = 1, $AllowEmpty = false)
         {
             if (empty($Value)) {
                 if (! $AllowEmpty) {
@@ -1071,7 +1074,7 @@
             }
         }
 
-        protected function ValidateStoreType()
+        private function ValidateStoreType()
         {
             if (empty($this->PostParams['StoreType'])) {
                 throw new Exception('StoreType is required.');
@@ -1079,7 +1082,8 @@
                 throw new Exception('Invalid StoreType.');
             }
         }
-        protected function ValidateMerchantTradeNo()
+
+        private function ValidateMerchantTradeNo()
         {
             if (empty($this->PostParams['MerchantTradeNo'])) {
                 throw new Exception('MerchantTradeNo is required.');
@@ -1088,7 +1092,7 @@
             }
         }
 
-        protected function ValidateLogisticsType()
+        private function ValidateLogisticsType()
         {
             if (empty($this->PostParams['LogisticsType'])) {
                 throw new Exception('LogisticsType is required.');
@@ -1097,7 +1101,7 @@
             }
         }
 
-        protected function ValidateLogisticsSubType()
+        private function ValidateLogisticsSubType()
         {
             if (empty($this->PostParams['LogisticsSubType'])) {
                 throw new Exception('LogisticsSubType is required.');
@@ -1119,7 +1123,7 @@
             }
         }
 
-        protected function ValidateIsCollection($AllowEmpty = false)
+        private function ValidateIsCollection($AllowEmpty = false)
         {
             if (empty($this->PostParams['IsCollection'])) {
                 if (! $AllowEmpty) {
@@ -1133,7 +1137,7 @@
             }
         }
 
-        protected function ValidateDevice($AllowEmpty = false)
+        private function ValidateDevice($AllowEmpty = false)
         {
             if (empty($this->PostParams['Device'])) {
                 if (! $AllowEmpty) {
@@ -1144,7 +1148,7 @@
             }
         }
 
-        protected function ValidateMerchantTradeDate()
+        private function ValidateMerchantTradeDate()
         {
             if (empty($this->PostParams['MerchantTradeDate'])) {
                 throw new Exception('MerchantTradeDate is required.');
@@ -1152,7 +1156,8 @@
                 throw new Exception('Invalid MerchantTradeDate.');
             }
         }
-        protected function ValidateTemperature()
+
+        private function ValidateTemperature()
         {
             if (empty($this->PostParams['Temperature'])) {
                 throw new Exception('Temperature is required.');
@@ -1165,7 +1170,7 @@
             }
         }
 
-        protected function ValidateDistance()
+        private function ValidateDistance()
         {
             if (empty($this->PostParams['Distance'])) {
                 throw new Exception('Distance is required.');
@@ -1178,7 +1183,7 @@
             }
         }
 
-        protected function ValidateSpecification()
+        private function ValidateSpecification()
         {
             if (empty($this->PostParams['Specification'])) {
                 throw new Exception('Specification is required.');
@@ -1192,7 +1197,7 @@
             }
         }
 
-        protected function ValidateScheduledDeliveryTime($AllowEmpty = false)
+        private function ValidateScheduledDeliveryTime($AllowEmpty = false)
         {
             if (empty($this->PostParams['ScheduledDeliveryTime'])) {
                 if (! $AllowEmpty) {
@@ -1209,7 +1214,7 @@
             }
         }
 
-        protected function ValidateShipmentDate($AllowEmpty = false)
+        private function ValidateShipmentDate($AllowEmpty = false)
         {
             if (empty($this->PostParams['ShipmentDate'])) {
                 if (! $AllowEmpty) {
@@ -1219,7 +1224,8 @@
                 throw new Exception('Invalid ShipmentDate.');
             }
         }
-        protected function GetPostParams($Source, $ParamList, $MergeParams = [])
+
+        private function GetPostParams($Source, $ParamList, $MergeParams = [])
         {
             $PostParams = [];
             foreach ($ParamList as $Name => $Value) {
@@ -1233,7 +1239,7 @@
             return array_merge($MergeParams, $PostParams);
         }
 
-        protected function GetURL($FunctionType)
+        private function GetURL($FunctionType)
         {
             $UrlList = [];
             if ($this->PostParams['MerchantID'] == AllpayTestMerchantID::B2C or $this->PostParams['MerchantID'] == AllpayTestMerchantID::C2C) {
@@ -1364,4 +1370,3 @@
             return $Feedback;
         }
     }
-?>
