@@ -549,7 +549,7 @@ class AllInOne
  */
 abstract class Aio
 {
-    protected function ServerPost($parameters, $ServiceURL)
+    protected static function ServerPost($parameters, $ServiceURL)
     {
         $ch = curl_init();
 
@@ -723,7 +723,7 @@ class QueryTradeInfo extends Aio
             }
 
             // 驗證檢查碼。
-            if (count($arFeedback) > 0) {
+            if (count($arFeedback) > 0 && isset($szCheckMacValue) === true) {
                 $szConfirmMacValue = CheckMacValue::generate($arConfirmArgs, $HashKey, $HashIV, 0);
                 if ($szCheckMacValue != $szConfirmMacValue) {
                     array_push($arErrors, 'CheckMacValue verify fail.');

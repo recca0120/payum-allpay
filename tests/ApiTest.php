@@ -145,6 +145,48 @@ class ApiTest extends PHPUnit_Framework_TestCase
         $this->assertSame('https://payment.allpay.com.tw/Cashier/AioCheckOut/V2', $api->getApiEndpoint());
     }
 
+    public function test_query_trade_info()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+
+        $options = [
+            'MerchantID' => '2000132',
+            'HashKey' => '5294y06JbISpM5x9',
+            'HashIV' => 'v77hoKGq4kWxNNIS',
+            'sandbox' => false,
+        ];
+
+        $params = [
+            'MerchantTradeNo' => '5832985816073',
+            'response' => [],
+        ];
+
+        $httpClient = m::mock('Payum\Core\HttpClientInterface');
+        $message = m::mock('Http\Message\MessageFactory');
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+
+        $api = new Api($options, $httpClient, $message);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+
+        $params = $api->getTransactionData($params);
+
+        $this->assertSame('https://payment.allpay.com.tw/Cashier/AioCheckOut/V2', $api->getApiEndpoint());
+    }
+
     public function test_parse_result_fail()
     {
         /*

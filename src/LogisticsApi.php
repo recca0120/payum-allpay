@@ -14,19 +14,32 @@ use PayumTW\Allpay\Bridge\Allpay\AllpayLogistics;
 class LogisticsApi extends BaseApi
 {
     /**
+     * $client.
+     *
      * @var HttpClientInterface
      */
     protected $client;
 
     /**
+     * MessageFactory.
+     *
      * @var MessageFactory
      */
     protected $messageFactory;
 
     /**
+     * $options.
+     *
      * @var array
      */
     protected $options = [];
+
+    /**
+     * $api.
+     *
+     * @var \PayumTW\Allpay\Bridge\Allpay\AllpayLogistics
+     */
+    protected $api;
 
     /**
      * @var array
@@ -40,28 +53,15 @@ class LogisticsApi extends BaseApi
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
-    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
+    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory, AllpayLogistics $api = null)
     {
         $this->options = $options;
         $this->client = $client;
         $this->messageFactory = $messageFactory;
-    }
-
-    /**
-     * getApi.
-     *
-     * @method getApi
-     *
-     * @return \PayumTW\Allpay\Bridge\Allpay\AllpayLogistics
-     */
-    protected function getApi()
-    {
-        $api = new AllpayLogistics();
-        $api->HashKey = $this->options['HashKey'];
-        $api->HashIV = $this->options['HashIV'];
-        $api->Send['MerchantID'] = $this->options['MerchantID'];
-
-        return $api;
+        $this->api = is_null($api) === true ? new AllpayLogistics() : $api;
+        $this->api->HashKey = $this->options['HashKey'];
+        $this->api->HashIV = $this->options['HashIV'];
+        $this->api->Send['MerchantID'] = $this->options['MerchantID'];
     }
 
     /**
@@ -75,8 +75,7 @@ class LogisticsApi extends BaseApi
      */
     public function prepareMap(array $params)
     {
-        $api = $this->getApi();
-        $api->Send = array_merge($api->Send, [
+        $this->api->Send = array_merge($this->api->Send, [
             'ServerReplyURL' => '',
             'MerchantTradeNo' => '',
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
@@ -85,15 +84,15 @@ class LogisticsApi extends BaseApi
             'Device' => $this->isMobile() ? Device::MOBILE : Device::PC,
         ]);
 
-        $api->Send = array_replace(
-            $api->Send,
-            array_intersect_key($params, $api->Send)
+        $this->api->Send = array_replace(
+            $this->api->Send,
+            array_intersect_key($params, $this->api->Send)
         );
 
-        $params = $api->CvsMap();
+        $params = $this->api->CvsMap();
 
         return [
-            'apiEndpoint' => $api->ServiceURL,
+            'apiEndpoint' => $this->api->ServiceURL,
             'params' => $params,
         ];
     }
@@ -108,8 +107,7 @@ class LogisticsApi extends BaseApi
      */
     public function preparePayment(array $params)
     {
-        $api = $this->getApi();
-        $api->Send = array_merge($api->Send, [
+        $this->api->Send = array_merge($this->api->Send, [
             'MerchantTradeNo' => '',
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
             'LogisticsType' => '',
@@ -132,31 +130,31 @@ class LogisticsApi extends BaseApi
             'PlatformID' => '',
         ]);
 
-        $api->SendExtend = [];
+        $this->api->SendExtend = [];
 
-        $api->Send = array_replace(
-            $api->Send,
-            array_intersect_key($params, $api->Send)
+        $this->api->Send = array_replace(
+            $this->api->Send,
+            array_intersect_key($params, $this->api->Send)
         );
 
-        if (empty($api->Send['LogisticsType']) === true) {
-            $api->Send['LogisticsType'] = LogisticsType::CVS;
-            switch ($api->Send['LogisticsSubType']) {
+        if (empty($this->api->Send['LogisticsType']) === true) {
+            $this->api->Send['LogisticsType'] = LogisticsType::CVS;
+            switch ($this->api->Send['LogisticsSubType']) {
                 case LogisticsSubType::TCAT:
-                    $api->Send['LogisticsType'] = LogisticsType::HOME;
+                    $this->api->Send['LogisticsType'] = LogisticsType::HOME;
                     break;
             }
         }
 
-        if ($api->Send['IsCollection'] === IsCollection::NO) {
-            $api->Send['CollectionAmount'] = 0;
-        } elseif (isset($api->Send['CollectionAmount']) === false) {
-            $api->Send['CollectionAmount'] = (int) $api->Send['GoodsAmount'];
+        if ($this->api->Send['IsCollection'] === IsCollection::NO) {
+            $this->api->Send['CollectionAmount'] = 0;
+        } elseif (isset($this->api->Send['CollectionAmount']) === false) {
+            $this->api->Send['CollectionAmount'] = (int) $this->api->Send['GoodsAmount'];
         }
 
-        switch ($api->Send['LogisticsType']) {
+        switch ($this->api->Send['LogisticsType']) {
             case LogisticsType::HOME:
-                $api->SendExtend = array_merge($api->SendExtend, [
+                $this->api->SendExtend = array_merge($this->api->SendExtend, [
                     'SenderZipCode' => '',
                     'SenderAddress' => '',
                     'ReceiverZipCode' => '',
@@ -168,19 +166,19 @@ class LogisticsApi extends BaseApi
                 ]);
                 break;
             case LogisticsType::CVS:
-                $api->SendExtend = array_merge($api->SendExtend, [
+                $this->api->SendExtend = array_merge($this->api->SendExtend, [
                     'ReceiverStoreID' => '',
                     'ReturnStoreID' => '',
                 ]);
                 break;
         }
 
-        $api->SendExtend = array_replace(
-            $api->SendExtend,
-            array_intersect_key($params, $api->SendExtend)
+        $this->api->SendExtend = array_replace(
+            $this->api->SendExtend,
+            array_intersect_key($params, $this->api->SendExtend)
         );
 
-        return $api->BGCreateShippingOrder();
+        return $this->api->BGCreateShippingOrder();
     }
 
     /**
@@ -194,8 +192,7 @@ class LogisticsApi extends BaseApi
     {
         $result = false;
         try {
-            $api = $this->getApi();
-            $api->CheckOutFeedback($params);
+            $this->api->CheckOutFeedback($params);
             $result = true;
         } catch (Exception $e) {
         }

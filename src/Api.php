@@ -11,19 +11,32 @@ use PayumTW\Allpay\Bridge\Allpay\AllInOne;
 class Api extends BaseApi
 {
     /**
+     * $client.
+     *
      * @var HttpClientInterface
      */
     protected $client;
 
     /**
+     * MessageFactory.
+     *
      * @var MessageFactory
      */
     protected $messageFactory;
 
     /**
+     * $options.
+     *
      * @var array
      */
     protected $options = [];
+
+    /**
+     * $api.
+     *
+     * @var \PayumTW\Allpay\Bridge\Allpay\AllInOne
+     */
+    protected $api;
 
     /**
      * @var array
@@ -769,11 +782,15 @@ class Api extends BaseApi
      *
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
-    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory)
+    public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory, AllInOne $api = null)
     {
         $this->options = $options;
         $this->client = $client;
         $this->messageFactory = $messageFactory;
+        $this->api = is_null($api) === true ? new AllInOne() : $api;
+        $this->api->HashKey = $this->options['HashKey'];
+        $this->api->HashIV = $this->options['HashIV'];
+        $this->api->MerchantID = $this->options['MerchantID'];
     }
 
     /**
@@ -781,28 +798,25 @@ class Api extends BaseApi
      *
      * @return string
      */
-    public function getApiEndpoint()
+    public function getApiEndpoint($name = 'AioCheckOut')
     {
-        return $this->options['sandbox'] === false ?
-            'https://payment.allpay.com.tw/Cashier/AioCheckOut/V2' :
-            'https://payment-stage.allpay.com.tw/Cashier/AioCheckOut/V2';
-    }
+        $map = [
+            'AioCheckOut' => 'https://payment.allpay.com.tw/Cashier/AioCheckOut/V2',
+            'QueryTradeInfo' => 'https://payment.allpay.com.tw/Cashier/QueryTradeInfo/V2',
+            'QueryPeriodCreditCardTradeInfo' => 'https://payment.allpay.com.tw/Cashier/QueryCreditCardPeriodInfo',
+            'DoAction' => 'https://payment.allpay.com.tw/CreditDetail/DoAction',
+        ];
 
-    /**
-     * getApi.
-     *
-     * @method getApi
-     *
-     * @return \PayumTW\Allpay\Bridge\Allpay\AllInOne
-     */
-    protected function getApi()
-    {
-        $api = new AllInOne();
-        $api->HashKey = $this->options['HashKey'];
-        $api->HashIV = $this->options['HashIV'];
-        $api->MerchantID = $this->options['MerchantID'];
+        if ($this->options['sandbox'] === true) {
+            $map = [
+                'AioCheckOut' => 'https://payment-stage.allpay.com.tw/Cashier/AioCheckOut/V2',
+                'QueryTradeInfo' => 'https://payment-stage.allpay.com.tw/Cashier/QueryTradeInfo/V2',
+                'QueryPeriodCreditCardTradeInfo' => 'https://payment-stage.allpay.com.tw/Cashier/QueryCreditCardPeriodInfo',
+                'DoAction' => null,
+            ];
+        }
 
-        return $api;
+        return $map[$name];
     }
 
     /**
@@ -815,12 +829,12 @@ class Api extends BaseApi
      */
     public function createTransaction(array $params)
     {
-        $api = $this->getApi();
-        $api->Send['MerchantTradeDate'] = date('Y/m/d H:i:s');
-        $api->Send['DeviceSource'] = $this->isMobile() ? DeviceType::Mobile : DeviceType::PC;
-        $api->Send = array_replace(
-            $api->Send,
-            array_intersect_key($params, $api->Send)
+        $this->api->ServiceURL = $this->getApiEndpoint('AioCheckOut');
+        $this->api->Send['MerchantTradeDate'] = date('Y/m/d H:i:s');
+        $this->api->Send['DeviceSource'] = $this->isMobile() ? DeviceType::Mobile : DeviceType::PC;
+        $this->api->Send = array_replace(
+            $this->api->Send,
+            array_intersect_key($params, $this->api->Send)
         );
 
         // 電子發票參數
@@ -843,7 +857,7 @@ class Api extends BaseApi
         $api->SendExtend['InvType'] = InvType::General;
         */
 
-        return $api->CheckOut();
+        return $this->api->CheckOut();
     }
 
     /**
@@ -855,11 +869,21 @@ class Api extends BaseApi
      */
     public function getTransactionData($params)
     {
-        $result = $params['response'];
-        if ($this->verifyHash($result) === false) {
-            $result['RtnCode'] = '10400002';
+        if (empty($params['response']) === false) {
+            $result = $params['response'];
+            if ($this->verifyHash($result) === false) {
+                $result['RtnCode'] = '10400002';
+            }
+            $result['statusReason'] = $this->getStatusReason($result['RtnCode']);
+        } else {
+            $this->api->ServiceURL = $this->getApiEndpoint('QueryTradeInfo');
+            $this->api->Query['MerchantTradeNo'] = $params['MerchantTradeNo'];
+            $result = $this->api->QueryTradeInfo();
+            if ($result['TradeStatus'] !== '0') {
+                $result['RtnCode'] = $result['TradeStatus'];
+                $result['statusReason'] = $this->getStatusReason($result['RtnCode']);
+            }
         }
-        $result['statusReason'] = preg_replace('/(\.|。)$/', '', $this->getStatusReason($result['RtnCode']));
 
         return $result;
     }

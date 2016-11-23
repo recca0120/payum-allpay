@@ -7,8 +7,6 @@ use Exception;
 
 abstract class BaseApi
 {
-    abstract protected function getApi();
-
     /**
      * Verify if the hash of the given parameter is correct.
      *
@@ -20,8 +18,7 @@ abstract class BaseApi
     {
         $result = false;
         try {
-            $api = $this->getApi();
-            $api->CheckOutFeedback($params);
+            $this->api->CheckOutFeedback($params);
             $result = true;
         } catch (Exception $e) {
         }
@@ -43,7 +40,7 @@ abstract class BaseApi
             $statusReason = $this->code[$code];
         }
 
-        return $statusReason;
+        return preg_replace('/(\.|。)$/', '', $statusReason);
     }
 
     /**
