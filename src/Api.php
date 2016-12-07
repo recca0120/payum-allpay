@@ -2,11 +2,11 @@
 
 namespace PayumTW\Allpay;
 
-use DeviceType;
-use InvoiceState;
 use Http\Message\MessageFactory;
 use Payum\Core\HttpClientInterface;
 use PayumTW\Allpay\Bridge\Allpay\AllInOne;
+use PayumTW\Allpay\Bridge\Allpay\DeviceType;
+use PayumTW\Allpay\Bridge\Allpay\InvoiceState;
 
 class Api extends BaseApi
 {
