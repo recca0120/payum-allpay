@@ -217,9 +217,6 @@ class LogisticsApi extends BaseApi
             $params['RtnCode'] = '10400002';
         }
 
-        $params['statusReason'] = isset($params['RtnMsg']) === true ? $params['RtnMsg'] : '配送異常，請和客服聯繫';
-        // $params['statusReason'] = preg_replace('/(\.|。)$/', '', $this->getStatusReason($params['ResCode']));
-
         return $params;
     }
 }

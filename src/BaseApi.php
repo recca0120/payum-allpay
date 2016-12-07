@@ -27,23 +27,6 @@ abstract class BaseApi
     }
 
     /**
-     * getStatusReason.
-     *
-     * @param string $code
-     *
-     * @return string
-     */
-    protected function getStatusReason($code)
-    {
-        $statusReason = '拒絕交易';
-        if (isset($this->code[$code]) === true) {
-            $statusReason = $this->code[$code];
-        }
-
-        return preg_replace('/(\.|。)$/', '', $statusReason);
-    }
-
-    /**
      * isMobile.
      *
      * @return bool

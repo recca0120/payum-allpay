@@ -7,10 +7,14 @@ use PayumTW\Allpay\Action\SyncAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use PayumTW\Allpay\Action\NotifyAction;
 use PayumTW\Allpay\Action\StatusAction;
+use PayumTW\Allpay\Action\RefundAction;
+use PayumTW\Allpay\Action\CancelAction;
 use PayumTW\Allpay\Action\CaptureAction;
 use PayumTW\Allpay\Action\ConvertPaymentAction;
 use PayumTW\Allpay\Action\Api\CreateTransactionAction;
 use PayumTW\Allpay\Action\Api\GetTransactionDataAction;
+use PayumTW\Allpay\Action\Api\CancelTransactionAction;
+use PayumTW\Allpay\Action\Api\RefundTransactionAction;
 
 class AllpayGatewayFactory extends GatewayFactory
 {
@@ -24,11 +28,15 @@ class AllpayGatewayFactory extends GatewayFactory
             'payum.factory_title' => 'Allpay',
             'payum.action.capture' => new CaptureAction(),
             'payum.action.notify' => new NotifyAction(),
+            'payum.action.refund' => new RefundAction(),
+            'payum.action.cancel' => new CancelAction(),
             'payum.action.sync' => new SyncAction(),
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
 
             'payum.action.api.create_transaction' => new CreateTransactionAction(),
+            'payum.action.api.refund_transaction' => new RefundTransactionAction(),
+            'payum.action.api.cancel_transaction' => new CancelTransactionAction(),
             'payum.action.api.get_transaction_data' => new GetTransactionDataAction(),
         ]);
 
