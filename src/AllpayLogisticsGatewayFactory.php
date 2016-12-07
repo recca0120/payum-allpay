@@ -2,11 +2,11 @@
 
 namespace PayumTW\Allpay;
 
-use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayFactory;
+use Payum\Core\Bridge\Spl\ArrayObject;
+use PayumTW\Allpay\Action\StatusLogisticsAction;
 use PayumTW\Allpay\Action\CaptureLogisticsAction;
 use PayumTW\Allpay\Action\ConvertPaymentLogisticsAction;
-use PayumTW\Allpay\Action\StatusLogisticsAction;
 
 class AllpayLogisticsGatewayFactory extends GatewayFactory
 {

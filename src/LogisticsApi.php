@@ -4,10 +4,10 @@ namespace PayumTW\Allpay;
 
 use Device;
 use Exception;
-use Http\Message\MessageFactory;
 use IsCollection;
-use LogisticsSubType;
 use LogisticsType;
+use LogisticsSubType;
+use Http\Message\MessageFactory;
 use Payum\Core\HttpClientInterface;
 use PayumTW\Allpay\Bridge\Allpay\AllpayLogistics;
 

@@ -3,8 +3,8 @@
 namespace PayumTW\Allpay;
 
 use DeviceType;
-use Http\Message\MessageFactory;
 use InvoiceState;
+use Http\Message\MessageFactory;
 use Payum\Core\HttpClientInterface;
 use PayumTW\Allpay\Bridge\Allpay\AllInOne;
 

@@ -2,10 +2,10 @@
 
 namespace PayumTW\Allpay\Bridge\Allpay;
 
-use BadMethodCallException;
 use Device;
 use LogisticsType;
 use ReflectionObject;
+use BadMethodCallException;
 
 class AllpayLogistics extends \AllpayLogistics
 {
