@@ -5,16 +5,16 @@ namespace PayumTW\Allpay;
 use Payum\Core\GatewayFactory;
 use PayumTW\Allpay\Action\SyncAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use PayumTW\Allpay\Action\NotifyAction;
-use PayumTW\Allpay\Action\StatusAction;
-use PayumTW\Allpay\Action\RefundAction;
 use PayumTW\Allpay\Action\CancelAction;
+use PayumTW\Allpay\Action\NotifyAction;
+use PayumTW\Allpay\Action\RefundAction;
+use PayumTW\Allpay\Action\StatusAction;
 use PayumTW\Allpay\Action\CaptureAction;
 use PayumTW\Allpay\Action\ConvertPaymentAction;
-use PayumTW\Allpay\Action\Api\CreateTransactionAction;
-use PayumTW\Allpay\Action\Api\GetTransactionDataAction;
 use PayumTW\Allpay\Action\Api\CancelTransactionAction;
+use PayumTW\Allpay\Action\Api\CreateTransactionAction;
 use PayumTW\Allpay\Action\Api\RefundTransactionAction;
+use PayumTW\Allpay\Action\Api\GetTransactionDataAction;
 
 class AllpayGatewayFactory extends GatewayFactory
 {
