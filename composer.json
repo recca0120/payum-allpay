@@ -1,8 +1,8 @@
 {
     "name": "payum-tw/allpay",
     "type": "project",
-    "description": "The Payum extension. Rapid extensino development",
-    "keywords": ["payment"],
+    "description": "The Payum extension. 歐付寶金流",
+    "keywords": ["歐付寶", "金流程式", "Payum", "PayumTW"],
     "homepage": "http://payum.org",
     "license": "MIT",
     "authors": [
