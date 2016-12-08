@@ -3,13 +3,13 @@
 namespace PayumTW\Allpay;
 
 use Payum\Core\GatewayFactory;
+use PayumTW\Allpay\Action\SyncAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use PayumTW\Allpay\Action\StatusLogisticsAction;
 use PayumTW\Allpay\Action\CaptureLogisticsAction;
-use PayumTW\Allpay\Action\ConvertPaymentLogisticsAction;
 use PayumTW\Allpay\Action\Api\CreateTransactionAction;
 use PayumTW\Allpay\Action\Api\GetTransactionDataAction;
-use PayumTW\Allpay\Action\SyncAction;
+use PayumTW\Allpay\Action\ConvertPaymentLogisticsAction;
 
 class AllpayLogisticsGatewayFactory extends GatewayFactory
 {
