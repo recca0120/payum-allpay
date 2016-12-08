@@ -437,6 +437,7 @@ abstract class UseRedeem
  * AllInOne description.
  *
  * @version 1.1.0818
+ *
  * @author charlie
  */
 class AllInOne
@@ -458,25 +459,25 @@ class AllInOne
     {
         $this->PaymentType = 'aio';
         $this->Send = [
-            'ReturnURL'         => '',
-            'ClientBackURL'     => '',
-            'OrderResultURL'    => '',
-            'MerchantTradeNo'   => '',
+            'ReturnURL' => '',
+            'ClientBackURL' => '',
+            'OrderResultURL' => '',
+            'MerchantTradeNo' => '',
             'MerchantTradeDate' => '',
-            'PaymentType'       => 'aio',
-            'TotalAmount'       => '',
-            'TradeDesc'         => '',
-            'ChoosePayment'     => PaymentMethod::ALL,
-            'Remark'            => '',
-            'ChooseSubPayment'  => PaymentMethodItem::None,
+            'PaymentType' => 'aio',
+            'TotalAmount' => '',
+            'TradeDesc' => '',
+            'ChoosePayment' => PaymentMethod::ALL,
+            'Remark' => '',
+            'ChooseSubPayment' => PaymentMethodItem::None,
             'NeedExtraPaidInfo' => ExtraPaymentInfo::No,
-            'DeviceSource'      => '',
-            'IgnorePayment'     => '',
-            'PlatformID'        => '',
-            'InvoiceMark'       => InvoiceState::No,
-            'Items'             => [],
-            'EncryptType'       => EncryptType::ENC_MD5,
-            'UseRedeem'         => UseRedeem::No,
+            'DeviceSource' => '',
+            'IgnorePayment' => '',
+            'PlatformID' => '',
+            'InvoiceMark' => InvoiceState::No,
+            'Items' => [],
+            'EncryptType' => EncryptType::ENC_MD5,
+            'UseRedeem' => UseRedeem::No,
         ];
 
         $this->SendExtend = [];
@@ -579,7 +580,7 @@ class Send extends Aio
     {
         //宣告付款方式物件
         $PaymentMethod = 'allPay_'.$arParameters['ChoosePayment'];
-        self::$PaymentObj = new $PaymentMethod;
+        self::$PaymentObj = new $PaymentMethod();
 
         //檢查參數
         $arParameters = self::$PaymentObj->check_string($arParameters);
@@ -964,7 +965,7 @@ abstract class Verification
         $arErrors = [];
 
         // 廠商自訂編號RelateNumber(不可為空)
-        if (! array_key_exists('RelateNumber', $arExtend)) {
+        if (!array_key_exists('RelateNumber', $arExtend)) {
             array_push($arErrors, 'RelateNumber is required.');
         } else {
             if (strlen($arExtend['RelateNumber']) > 30) {
@@ -973,7 +974,7 @@ abstract class Verification
         }
 
         // 統一編號CustomerIdentifier(預設為空字串)
-        if (! array_key_exists('CustomerIdentifier', $arExtend)) {
+        if (!array_key_exists('CustomerIdentifier', $arExtend)) {
             $arExtend['CustomerIdentifier'] = '';
         } else {
             //統編長度只能為8
@@ -983,7 +984,7 @@ abstract class Verification
         }
 
         // 載具類別CarruerType(預設為None)
-        if (! array_key_exists('CarruerType', $arExtend)) {
+        if (!array_key_exists('CarruerType', $arExtend)) {
             $arExtend['CarruerType'] = CarruerType::None;
         } else {
             //有設定統一編號的話，載具參數必須是空字串
@@ -993,7 +994,7 @@ abstract class Verification
         }
 
         // 客戶代號CustomerID(預設為空字串)
-        if (! array_key_exists('CustomerID', $arExtend)) {
+        if (!array_key_exists('CustomerID', $arExtend)) {
             $arExtend['CustomerID'] = '';
         } else {
             if ($arExtend['CarruerType'] == CarruerType::Member && strlen($arExtend['CustomerID'] == 0)) {
@@ -1001,7 +1002,7 @@ abstract class Verification
             }
         }
         // 捐贈註記 Donation(預設為No)
-        if (! array_key_exists('Donation', $arExtend)) {
+        if (!array_key_exists('Donation', $arExtend)) {
             $arExtend['Donation'] = Donation::No;
         } else {
             //若有帶統一編號，不可捐贈
@@ -1011,7 +1012,7 @@ abstract class Verification
         }
 
         // 列印註記Print(預設為No)
-        if (! array_key_exists('Print', $arExtend)) {
+        if (!array_key_exists('Print', $arExtend)) {
             $arExtend['Print'] = PrintMark::No;
         } else {
             //捐贈註記為捐贈(Yes)時，請設定不列印(No)
@@ -1029,7 +1030,7 @@ abstract class Verification
             }
         }
         // 客戶名稱CustomerName(UrlEncode, 預設為空字串)
-        if (! array_key_exists('CustomerName', $arExtend)) {
+        if (!array_key_exists('CustomerName', $arExtend)) {
             $arExtend['CustomerName'] = '';
         } else {
             if (mb_strlen($arExtend['CustomerName'], 'UTF-8') > 20) {
@@ -1042,7 +1043,7 @@ abstract class Verification
         }
 
         // 客戶地址CustomerAddr(UrlEncode, 預設為空字串)
-        if (! array_key_exists('CustomerAddr', $arExtend)) {
+        if (!array_key_exists('CustomerAddr', $arExtend)) {
             $arExtend['CustomerAddr'] = '';
         } else {
             if (mb_strlen($arExtend['CustomerAddr'], 'UTF-8') > 200) {
@@ -1054,7 +1055,7 @@ abstract class Verification
             }
         }
         // 客戶電話CustomerPhone
-        if (! array_key_exists('CustomerPhone', $arExtend)) {
+        if (!array_key_exists('CustomerPhone', $arExtend)) {
             $arExtend['CustomerPhone'] = '';
         } else {
             if (strlen($arExtend['CustomerPhone']) > 20) {
@@ -1063,7 +1064,7 @@ abstract class Verification
         }
 
         // 客戶信箱CustomerEmail
-        if (! array_key_exists('CustomerEmail', $arExtend)) {
+        if (!array_key_exists('CustomerEmail', $arExtend)) {
             $arExtend['CustomerEmail'] = '';
         } else {
             if (strlen($arExtend['CustomerEmail']) > 200) {
@@ -1082,7 +1083,7 @@ abstract class Verification
         }
 
         //通關方式 ClearanceMark(預設為空字串)
-        if (! array_key_exists('ClearanceMark', $arExtend)) {
+        if (!array_key_exists('ClearanceMark', $arExtend)) {
             $arExtend['ClearanceMark'] = '';
         } else {
             //課稅類別為零稅率(Zero)時，ClearanceMark不可為空字串
@@ -1095,7 +1096,7 @@ abstract class Verification
         }
 
         // CarruerNum(預設為空字串)
-        if (! array_key_exists('CarruerNum', $arExtend)) {
+        if (!array_key_exists('CarruerNum', $arExtend)) {
             $arExtend['CarruerNum'] = '';
         } else {
             switch ($arExtend['CarruerType']) {
@@ -1108,13 +1109,13 @@ abstract class Verification
                 break;
                 // 載具類別為買受人自然人憑證(Citizen)時，請設定自然人憑證號碼，前2碼為大小寫英文，後14碼為數字
                 case CarruerType::Citizen:
-                    if (! preg_match('/^[a-zA-Z]{2}\d{14}$/', $arExtend['CarruerNum'])) {
+                    if (!preg_match('/^[a-zA-Z]{2}\d{14}$/', $arExtend['CarruerNum'])) {
                         array_push($arErrors, 'Invalid CarruerNum.');
                     }
                 break;
                 // 載具類別為買受人手機條碼(Cellphone)時，請設定手機條碼，第1碼為「/」，後7碼為大小寫英文、數字、「+」、「-」或「.」
                 case CarruerType::Cellphone:
-                    if (! preg_match('/^\/{1}[0-9a-zA-Z+-.]{7}$/', $arExtend['CarruerNum'])) {
+                    if (!preg_match('/^\/{1}[0-9a-zA-Z+-.]{7}$/', $arExtend['CarruerNum'])) {
                         array_push($arErrors, 'Invalid CarruerNum.');
                     }
                 break;
@@ -1125,12 +1126,12 @@ abstract class Verification
         }
 
         // 愛心碼 LoveCode(預設為空字串)
-        if (! array_key_exists('LoveCode', $arExtend)) {
+        if (!array_key_exists('LoveCode', $arExtend)) {
             $arExtend['LoveCode'] = '';
         }
         // 捐贈註記為捐贈(Yes)時，參數長度固定3~7碼，請設定全數字或第1碼大小寫「X」，後2~6碼全數字
         if ($arExtend['Donation'] == Donation::Yes) {
-            if (! preg_match('/^([xX]{1}[0-9]{2,6}|[0-9]{3,7})$/', $arExtend['LoveCode'])) {
+            if (!preg_match('/^([xX]{1}[0-9]{2,6}|[0-9]{3,7})$/', $arExtend['LoveCode'])) {
                 array_push($arErrors, 'Invalid LoveCode.');
             }
         } else {
@@ -1140,12 +1141,12 @@ abstract class Verification
         }
 
         //備註 InvoiceRemark(UrlEncode, 預設為空字串)
-        if (! array_key_exists('InvoiceRemark', $arExtend)) {
+        if (!array_key_exists('InvoiceRemark', $arExtend)) {
             $arExtend['InvoiceRemark'] = '';
         }
 
         // 延遲天數 DelayDay(不可為空, 預設為0) 延遲天數，範圍0~15，設定為0時，付款完成後立即開立發票
-        if (! array_key_exists('DelayDay', $arExtend)) {
+        if (!array_key_exists('DelayDay', $arExtend)) {
             $arExtend['DelayDay'] = 0;
         }
         if ($arExtend['DelayDay'] < 0 or $arExtend['DelayDay'] > 15) {
@@ -1153,12 +1154,12 @@ abstract class Verification
         }
 
         // 字軌類別 InvType(不可為空)
-        if (! array_key_exists('InvType', $arExtend)) {
+        if (!array_key_exists('InvType', $arExtend)) {
             array_push($arErrors, 'InvType is required.');
         }
 
         //商品相關整理
-        if (! array_key_exists('InvoiceItems', $arExtend)) {
+        if (!array_key_exists('InvoiceItems', $arExtend)) {
             array_push($arErrors, 'Invoice Goods information not found.');
         } else {
             $InvSptr = '|';
@@ -1229,20 +1230,20 @@ abstract class Verification
 class allPay_CVS extends Verification
 {
     public $arPayMentExtend = [
-                            'Desc_1'           => '',
-                            'Desc_2'           => '',
-                            'Desc_3'           => '',
-                            'Desc_4'           => '',
-                            'PaymentInfoURL'   => '',
+                            'Desc_1' => '',
+                            'Desc_2' => '',
+                            'Desc_3' => '',
+                            'Desc_4' => '',
+                            'PaymentInfoURL' => '',
                             'ClientRedirectURL' => '',
-                            'StoreExpireDate'  => '',
+                            'StoreExpireDate' => '',
                         ];
 
     //檢查共同參數
     public function check_string($arParameters = [])
     {
         parent::check_string($arParameters);
-        if (! $arParameters['PlatformID']) {
+        if (!$arParameters['PlatformID']) {
             unset($arParameters['PlatformID']);
         }
         unset($arParameters['IgnorePayment']);
@@ -1256,7 +1257,7 @@ class allPay_CVS extends Verification
 
         //沒設定參數的話，就給預設參數
         foreach ($this->arPayMentExtend as $key => $value) {
-            if (! isset($arExtend[$key])) {
+            if (!isset($arExtend[$key])) {
                 $arExtend[$key] = $value;
             }
         }
@@ -1274,7 +1275,7 @@ class allPay_CVS extends Verification
     {
         $arPayMentExtend = ($InvoiceMark == '') ? array_keys($this->arPayMentExtend) : array_merge(array_keys($this->arPayMentExtend), $this->arInvoice);
         foreach ($arExtend as $key => $value) {
-            if (! in_array($key, $arPayMentExtend)) {
+            if (!in_array($key, $arPayMentExtend)) {
                 unset($arExtend[$key]);
             }
         }
@@ -1291,7 +1292,7 @@ class allPay_CVS extends Verification
         if (count($arParameters['Items']) > 0) {
             foreach ($arParameters['Items'] as $keys => $value) {
                 $szItemName .= vsprintf('#%s %d %s x %u', $arParameters['Items'][$keys]);
-                if (! array_key_exists('ItemURL', $arParameters)) {
+                if (!array_key_exists('ItemURL', $arParameters)) {
                     $arParameters['ItemURL'] = $arParameters['Items'][$keys]['URL'];
                 }
             }
@@ -1320,8 +1321,8 @@ class allPay_CVS extends Verification
 class allPay_ATM extends Verification
 {
     public $arPayMentExtend = [
-                            'ExpireDate'       => 3,
-                            'PaymentInfoURL'   => '',
+                            'ExpireDate' => 3,
+                            'PaymentInfoURL' => '',
                             'ClientRedirectURL' => '',
                         ];
 
@@ -1329,7 +1330,7 @@ class allPay_ATM extends Verification
     public function check_string($arParameters = [])
     {
         parent::check_string($arParameters);
-        if (! $arParameters['PlatformID']) {
+        if (!$arParameters['PlatformID']) {
             unset($arParameters['PlatformID']);
         }
         unset($arParameters['IgnorePayment']);
@@ -1342,7 +1343,7 @@ class allPay_ATM extends Verification
     {
         //沒設定參數的話，就給預設參數
         foreach ($this->arPayMentExtend as $key => $value) {
-            if (! isset($arExtend[$key])) {
+            if (!isset($arExtend[$key])) {
                 $arExtend[$key] = $value;
             }
         }
@@ -1360,7 +1361,7 @@ class allPay_ATM extends Verification
     {
         $arPayMentExtend = ($InvoiceMark == '') ? array_keys($this->arPayMentExtend) : array_merge(array_keys($this->arPayMentExtend), $this->arInvoice);
         foreach ($arExtend as $key => $value) {
-            if (! in_array($key, $arPayMentExtend)) {
+            if (!in_array($key, $arPayMentExtend)) {
                 unset($arExtend[$key]);
             }
         }
@@ -1377,7 +1378,7 @@ class allPay_ATM extends Verification
         if (count($arParameters['Items']) > 0) {
             foreach ($arParameters['Items'] as $keys => $value) {
                 $szItemName .= vsprintf('#%s %d %s x %u', $arParameters['Items'][$keys]);
-                if (! array_key_exists('ItemURL', $arParameters)) {
+                if (!array_key_exists('ItemURL', $arParameters)) {
                     $arParameters['ItemURL'] = $arParameters['Items'][$keys]['URL'];
                 }
             }
@@ -1411,7 +1412,7 @@ class allPay_WebATM extends Verification
     public function check_string($arParameters = [])
     {
         parent::check_string($arParameters);
-        if (! $arParameters['PlatformID']) {
+        if (!$arParameters['PlatformID']) {
             unset($arParameters['PlatformID']);
         }
         unset($arParameters['IgnorePayment']);
@@ -1424,7 +1425,7 @@ class allPay_WebATM extends Verification
     {
         //沒設定參數的話，就給預設參數
         foreach ($this->arPayMentExtend as $key => $value) {
-            if (! isset($arExtend[$key])) {
+            if (!isset($arExtend[$key])) {
                 $arExtend[$key] = $value;
             }
         }
@@ -1442,7 +1443,7 @@ class allPay_WebATM extends Verification
     {
         $arPayMentExtend = ($InvoiceMark == '') ? array_keys($this->arPayMentExtend) : array_merge(array_keys($this->arPayMentExtend), $this->arInvoice);
         foreach ($arExtend as $key => $value) {
-            if (! in_array($key, $arPayMentExtend)) {
+            if (!in_array($key, $arPayMentExtend)) {
                 unset($arExtend[$key]);
             }
         }
@@ -1459,7 +1460,7 @@ class allPay_WebATM extends Verification
         if (count($arParameters['Items']) > 0) {
             foreach ($arParameters['Items'] as $keys => $value) {
                 $szItemName .= vsprintf('#%s %d %s x %u', $arParameters['Items'][$keys]);
-                if (! array_key_exists('ItemURL', $arParameters)) {
+                if (!array_key_exists('ItemURL', $arParameters)) {
                     $arParameters['ItemURL'] = $arParameters['Items'][$keys]['URL'];
                 }
             }
@@ -1488,10 +1489,10 @@ class allPay_WebATM extends Verification
 class allPay_Alipay extends Verification
 {
     public $arPayMentExtend = [
-                            'Email'           => '',
-                            'PhoneNo'         => '',
-                            'UserName'        => '',
-                            'AlipayItemName'  => '',
+                            'Email' => '',
+                            'PhoneNo' => '',
+                            'UserName' => '',
+                            'AlipayItemName' => '',
                             'AlipayItemCounts' => '',
                             'AlipayItemPrice' => '',
                         ];
@@ -1500,7 +1501,7 @@ class allPay_Alipay extends Verification
     public function check_string($arParameters = [])
     {
         parent::check_string($arParameters);
-        if (! $arParameters['PlatformID']) {
+        if (!$arParameters['PlatformID']) {
             unset($arParameters['PlatformID']);
         }
         unset($arParameters['IgnorePayment']);
@@ -1513,7 +1514,7 @@ class allPay_Alipay extends Verification
     {
         $arErrors = [];
         foreach ($this->arPayMentExtend as $value) {
-            if (! array_key_exists($value, $arExtend)) {
+            if (!array_key_exists($value, $arExtend)) {
                 array_push($arErrors, $value.' is required');
             }
         }
@@ -1539,7 +1540,7 @@ class allPay_Alipay extends Verification
     {
         $arPayMentExtend = ($InvoiceMark == '') ? $this->arPayMentExtend : array_merge($this->arPayMentExtend, $this->arInvoice);
         foreach ($arExtend as $key => $value) {
-            if (! in_array($key, $arPayMentExtend)) {
+            if (!in_array($key, $arPayMentExtend)) {
                 unset($arExtend[$key]);
             }
         }
@@ -1563,7 +1564,7 @@ class allPay_Alipay extends Verification
                 $szAlipayItemCounts .= sprintf('#%u', $arParameters['Items'][$keys]['Quantity']);
                 $szAlipayItemPrice .= sprintf('#%d', $arParameters['Items'][$keys]['Price']);
 
-                if (! array_key_exists('ItemURL', $arParameters)) {
+                if (!array_key_exists('ItemURL', $arParameters)) {
                     $arParameters['ItemURL'] = $arParameters['Items'][$keys]['URL'];
                 }
             }
@@ -1608,7 +1609,7 @@ class allPay_Tenpay extends Verification
     public function check_string($arParameters = [])
     {
         parent::check_string($arParameters);
-        if (! $arParameters['PlatformID']) {
+        if (!$arParameters['PlatformID']) {
             unset($arParameters['PlatformID']);
         }
         unset($arParameters['IgnorePayment']);
@@ -1621,7 +1622,7 @@ class allPay_Tenpay extends Verification
     {
         //沒設定參數的話，就給預設參數
         foreach ($this->arPayMentExtend as $key => $value) {
-            if (! isset($arExtend[$key])) {
+            if (!isset($arExtend[$key])) {
                 $arExtend[$key] = $value;
             }
         }
@@ -1639,7 +1640,7 @@ class allPay_Tenpay extends Verification
     {
         $arPayMentExtend = ($InvoiceMark == '') ? array_keys($this->arPayMentExtend) : array_merge(array_keys($this->arPayMentExtend), $this->arInvoice);
         foreach ($arExtend as $key => $value) {
-            if (! in_array($key, $arPayMentExtend)) {
+            if (!in_array($key, $arPayMentExtend)) {
                 unset($arExtend[$key]);
             }
         }
@@ -1656,7 +1657,7 @@ class allPay_Tenpay extends Verification
         if (count($arParameters['Items']) > 0) {
             foreach ($arParameters['Items'] as $keys => $value) {
                 $szItemName .= vsprintf('#%s %d %s x %u', $arParameters['Items'][$keys]);
-                if (! array_key_exists('ItemURL', $arParameters)) {
+                if (!array_key_exists('ItemURL', $arParameters)) {
                     $arParameters['ItemURL'] = $arParameters['Items'][$keys]['URL'];
                 }
             }
@@ -1687,21 +1688,21 @@ class allPay_Credit extends Verification
     public $arPayMentExtend = [
                                     'CreditInstallment' => 0,
                                     'InstallmentAmount' => 0,
-                                    'Redeem'            => false,
-                                    'UnionPay'          => false,
-                                    'Language'          => '',
-                                    'PeriodAmount'      => '',
-                                    'PeriodType'        => '',
-                                    'Frequency'         => '',
-                                    'ExecTimes'         => '',
-                                    'PeriodReturnURL'   => '',
+                                    'Redeem' => false,
+                                    'UnionPay' => false,
+                                    'Language' => '',
+                                    'PeriodAmount' => '',
+                                    'PeriodType' => '',
+                                    'Frequency' => '',
+                                    'ExecTimes' => '',
+                                    'PeriodReturnURL' => '',
                                 ];
 
     //檢查共同參數
     public function check_string($arParameters = [])
     {
         parent::check_string($arParameters);
-        if (! $arParameters['PlatformID']) {
+        if (!$arParameters['PlatformID']) {
             unset($arParameters['PlatformID']);
         }
         unset($arParameters['IgnorePayment']);
@@ -1712,7 +1713,7 @@ class allPay_Credit extends Verification
     public function check_extend_string($arExtend = [], $InvoiceMark = '')
     {
         foreach ($this->arPayMentExtend as $key => $value) {
-            if (! isset($arExtend[$key])) {
+            if (!isset($arExtend[$key])) {
                 $arExtend[$key] = $value;
             }
         }
@@ -1729,7 +1730,7 @@ class allPay_Credit extends Verification
     {
         $arPayMentExtend = ($InvoiceMark == '') ? array_keys($this->arPayMentExtend) : array_merge(array_keys($this->arPayMentExtend), $this->arInvoice);
         foreach ($arExtend as $key => $value) {
-            if (! in_array($key, $arPayMentExtend)) {
+            if (!in_array($key, $arPayMentExtend)) {
                 unset($arExtend[$key]);
             }
         }
@@ -1746,7 +1747,7 @@ class allPay_Credit extends Verification
         if (count($arParameters['Items']) > 0) {
             foreach ($arParameters['Items'] as $keys => $value) {
                 $szItemName .= vsprintf('#%s %d %s x %u', $arParameters['Items'][$keys]);
-                if (! array_key_exists('ItemURL', $arParameters)) {
+                if (!array_key_exists('ItemURL', $arParameters)) {
                     $arParameters['ItemURL'] = $arParameters['Items'][$keys]['URL'];
                 }
             }
@@ -1780,7 +1781,7 @@ class allPay_TopUpUsed extends Verification
     public function check_string($arParameters = [])
     {
         parent::check_string($arParameters);
-        if (! $arParameters['PlatformID']) {
+        if (!$arParameters['PlatformID']) {
             unset($arParameters['PlatformID']);
         }
         unset($arParameters['IgnorePayment']);
@@ -1813,7 +1814,7 @@ class allPay_TopUpUsed extends Verification
         if (count($arParameters['Items']) > 0) {
             foreach ($arParameters['Items'] as $keys => $value) {
                 $szItemName .= vsprintf('#%s %d %s x %u', $arParameters['Items'][$keys]);
-                if (! array_key_exists('ItemURL', $arParameters)) {
+                if (!array_key_exists('ItemURL', $arParameters)) {
                     $arParameters['ItemURL'] = $arParameters['Items'][$keys]['URL'];
                 }
             }
@@ -1847,7 +1848,7 @@ class allPay_ALL extends Verification
     public function check_string($arParameters = [])
     {
         parent::check_string($arParameters);
-        if (! $arParameters['PlatformID']) {
+        if (!$arParameters['PlatformID']) {
             unset($arParameters['PlatformID']);
         }
 
@@ -1888,7 +1889,7 @@ class allPay_ALL extends Verification
                 $szAlipayItemCounts .= sprintf('#%u', $arParameters['Items'][$keys]['Quantity']);
                 $szAlipayItemPrice .= sprintf('#%d', $arParameters['Items'][$keys]['Price']);
 
-                if (! array_key_exists('ItemURL', $arParameters)) {
+                if (!array_key_exists('ItemURL', $arParameters)) {
                     $arParameters['ItemURL'] = $arParameters['Items'][$keys]['URL'];
                 }
             }

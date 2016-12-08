@@ -128,7 +128,7 @@ class Api extends BaseApi
     /**
      * cancelTransaction.
      *
-     * @param  array $params
+     * @param array $params
      *
      * @return array
      */
@@ -146,7 +146,7 @@ class Api extends BaseApi
     /**
      * refundTransaction.
      *
-     * @param  array $params
+     * @param array $params
      *
      * @return array
      */
