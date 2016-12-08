@@ -20,19 +20,9 @@ class CreateTransactionAction extends BaseApiAwareAction
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        $result = $this->api->createTransaction((array) $details);
-
-        if (isset($result['RtnCode']) === true) {
-            $details->replace($result);
-
-            return;
-        }
-
-        $endpoint = $this->api->getApiEndpoint();
-
         throw new HttpPostRedirect(
-            $endpoint,
-            $result
+            $this->api->getApiEndpoint(),
+            $this->api->createTransaction((array) $details)
         );
     }
 
