@@ -65,15 +65,24 @@ class LogisticsApi extends BaseApi
     }
 
     /**
-     * prepareMap.
+     * getApiEndpoint.
      *
-     * @method prepareMap
+     * @return string
+     */
+    public function getApiEndpoint($name = 'AioCheckOut')
+    {
+        return $this->api->ServiceURL;
+    }
+
+    /**
+     * createTransaction.
      *
      * @param array $params
+     * @param mixed $request
      *
      * @return array
      */
-    public function prepareMap(array $params)
+    public function createCvsMapTransaction(array $params)
     {
         $this->api->Send = array_merge($this->api->Send, [
             'ServerReplyURL' => '',
@@ -89,24 +98,23 @@ class LogisticsApi extends BaseApi
             array_intersect_key($params, $this->api->Send)
         );
 
-        $params = $this->api->CvsMap();
-
-        return [
-            'apiEndpoint' => $this->api->ServiceURL,
-            'params' => $params,
-        ];
+        return $this->api->CvsMap();
     }
 
     /**
-     * payment.
+     * createTransaction.
      *
      * @param array $params
      * @param mixed $request
      *
      * @return array
      */
-    public function preparePayment(array $params)
+    public function createTransaction(array $params)
     {
+        if ($params['GoodsAmount'] === 0) {
+            return $this->createCvsMapTransaction($params);
+        }
+
         $this->api->Send = array_merge($this->api->Send, [
             'MerchantTradeNo' => '',
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
@@ -182,41 +190,21 @@ class LogisticsApi extends BaseApi
     }
 
     /**
-     * Verify if the hash of the given parameter is correct.
-     *
-     * @param array $params
-     *
-     * @return bool
-     */
-    public function verifyHash(array $params)
-    {
-        $result = false;
-        try {
-            $this->api->CheckOutFeedback($params);
-            $result = true;
-        } catch (Exception $e) {
-        }
-
-        return $result;
-    }
-
-    /**
-     * parseResult.
+     * getTransactionData.
      *
      * @param mixed $params
      *
      * @return array
      */
-    public function parseResult($params)
+    public function getTransactionData($params)
     {
-        if (isset($params['CVSStoreID']) === true) {
-            return $params;
+        $details = [];
+        if (empty($params['response']) === false) {
+            $details = $params['response'];
+        } else {
+            $details = $params;
         }
 
-        if ($this->verifyHash($params) === false) {
-            $params['RtnCode'] = '10400002';
-        }
-
-        return $params;
+        return $details;
     }
 }

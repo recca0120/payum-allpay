@@ -7,6 +7,9 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use PayumTW\Allpay\Action\StatusLogisticsAction;
 use PayumTW\Allpay\Action\CaptureLogisticsAction;
 use PayumTW\Allpay\Action\ConvertPaymentLogisticsAction;
+use PayumTW\Allpay\Action\Api\CreateTransactionAction;
+use PayumTW\Allpay\Action\Api\GetTransactionDataAction;
+use PayumTW\Allpay\Action\SyncAction;
 
 class AllpayLogisticsGatewayFactory extends GatewayFactory
 {
@@ -19,8 +22,12 @@ class AllpayLogisticsGatewayFactory extends GatewayFactory
             'payum.factory_name' => 'allpay_logistics',
             'payum.factory_title' => 'Allpay Logistics',
             'payum.action.capture' => new CaptureLogisticsAction(),
+            'payum.action.sync' => new SyncAction(),
             'payum.action.status' => new StatusLogisticsAction(),
             'payum.action.convert_payment' => new ConvertPaymentLogisticsAction(),
+
+            'payum.action.api.create_transaction' => new CreateTransactionAction(),
+            'payum.action.api.get_transaction_data' => new GetTransactionDataAction(),
         ]);
 
         /*
