@@ -2,8 +2,8 @@
 
 namespace PayumTW\Allpay;
 
-use PayumTW\Ecpay\EcpayLogisticsGatewayFactory;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use PayumTW\Ecpay\EcpayLogisticsGatewayFactory;
 
 class AllpayLogisticsGatewayFactory extends EcpayLogisticsGatewayFactory
 {
