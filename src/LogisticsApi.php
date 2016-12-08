@@ -3,7 +3,6 @@
 namespace PayumTW\Allpay;
 
 use Device;
-use Exception;
 use IsCollection;
 use LogisticsType;
 use LogisticsSubType;

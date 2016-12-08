@@ -2,11 +2,9 @@
 
 use Mockery as m;
 use PayumTW\Allpay\LogisticsApi;
-use Device;
-use Exception;
-use IsCollection;
-use LogisticsType;
-use LogisticsSubType;
+use PayumTW\Allpay\Bridge\Allpay\IsCollection;
+use PayumTW\Allpay\Bridge\Allpay\LogisticsType;
+use PayumTW\Allpay\Bridge\Allpay\LogisticsSubType;
 
 class LogisticsApiTest extends PHPUnit_Framework_TestCase
 {
@@ -32,8 +30,6 @@ class LogisticsApiTest extends PHPUnit_Framework_TestCase
             'HashIV' => 'v77hoKGq4kWxNNIS',
             'sandbox' => false,
         ];
-
-        $MerchantTradeDate = date('Y/m/d H:i:s');
 
         $params = [
             'GoodsAmount' => 0,
@@ -183,7 +179,7 @@ class LogisticsApiTest extends PHPUnit_Framework_TestCase
         $params = ['foo' => 'bar'];
         $this->assertSame($params, $api->getTransactionData($params));
         $params = [
-            'response' => ['foo' => 'bar']
+            'response' => ['foo' => 'bar'],
         ];
         $this->assertSame($params['response'], $api->getTransactionData($params));
     }
