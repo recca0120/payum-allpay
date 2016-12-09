@@ -2,11 +2,11 @@
 
 namespace PayumTW\Allpay;
 
-use DeviceType;
-use InvoiceState;
 use Http\Message\MessageFactory;
 use Payum\Core\HttpClientInterface;
 use PayumTW\Allpay\Bridge\Allpay\AllInOne;
+use PayumTW\Allpay\Bridge\Allpay\DeviceType;
+use PayumTW\Allpay\Bridge\Allpay\InvoiceState;
 
 class Api extends BaseApi
 {
@@ -128,7 +128,7 @@ class Api extends BaseApi
     /**
      * cancelTransaction.
      *
-     * @param  array $params
+     * @param array $params
      *
      * @return array
      */
@@ -146,7 +146,7 @@ class Api extends BaseApi
     /**
      * refundTransaction.
      *
-     * @param  array $params
+     * @param array $params
      *
      * @return array
      */
@@ -172,7 +172,7 @@ class Api extends BaseApi
     {
         $details = [];
         if (empty($params['response']) === false) {
-            if ($this->verifyHash($params) === false) {
+            if ($this->verifyHash($params['response']) === false) {
                 $details['RtnCode'] = '10400002';
             } else {
                 $details = $params['response'];

@@ -12,47 +12,51 @@ class CreateTransactionActionTest extends PHPUnit_Framework_TestCase
         m::close();
     }
 
-    public function test_get_transaction_data()
+    public function test_api_http_post_redirect()
     {
         /*
         |------------------------------------------------------------
-        | Set
+        | Arrange
         |------------------------------------------------------------
         */
 
-        $api = m::mock('PayumTW\Allpay\Api');
-        $request = m::mock('PayumTW\Allpay\Request\Api\CreateTransaction');
-        $details = new ArrayObject();
+        $api = m::spy('PayumTW\Allpay\Api');
+        $request = m::spy('PayumTW\Allpay\Request\Api\CreateTransaction');
+        $details = new ArrayObject([
+            'foo' => 'bar',
+        ]);
+        $endpoint = 'foo.endpoint';
 
         /*
         |------------------------------------------------------------
-        | Expectation
+        | Act
         |------------------------------------------------------------
         */
 
-        $request->shouldReceive('getModel')->twice()->andReturn($details);
+        $request
+            ->shouldReceive('getModel')->andReturn($details);
 
         $api
-            ->shouldReceive('getApiEndpoint')->once()->andReturn('fooApiEndpoint')
-            ->shouldReceive('createTransaction')->once()->andReturn([
-                'foo' => 'bar',
-            ]);
-
-        /*
-        |------------------------------------------------------------
-        | Assertion
-        |------------------------------------------------------------
-        */
+            ->shouldReceive('createTransaction')->andReturn((array) $details)
+            ->shouldReceive('getApiEndpoint')->andReturn($endpoint);
 
         $action = new CreateTransactionAction();
         $action->setApi($api);
+
+        /*
+        |------------------------------------------------------------
+        | Assert
+        |------------------------------------------------------------
+        */
+
         try {
             $action->execute($request);
         } catch (HttpResponse $response) {
-            $this->assertSame('fooApiEndpoint', $response->getUrl());
-            $this->assertSame([
-                'foo' => 'bar',
-            ], $response->getFields());
+            $this->assertSame((array) $details, $response->getFields());
         }
+
+        $request->shouldHaveReceived('getModel')->twice();
+        $api->shouldHaveReceived('createTransaction')->with((array) $details)->once();
+        $api->shouldHaveReceived('getApiEndpoint')->once();
     }
 }

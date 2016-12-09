@@ -45,7 +45,7 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, GenericTo
             $details['OrderResultURL'] = $targetUrl;
         }
 
-        if (empty($details['ReturnURL']) === true && $token && $this->tokenFactory) {
+        if (empty($details['ReturnURL']) === true) {
             $notifyToken = $this->tokenFactory->createNotifyToken(
                 $token->getGatewayName(),
                 $token->getDetails()

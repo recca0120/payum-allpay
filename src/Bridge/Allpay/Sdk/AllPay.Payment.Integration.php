@@ -437,6 +437,7 @@ abstract class UseRedeem
  * AllInOne description.
  *
  * @version 1.1.0818
+ *
  * @author charlie
  */
 class AllInOne
@@ -458,25 +459,25 @@ class AllInOne
     {
         $this->PaymentType = 'aio';
         $this->Send = [
-            'ReturnURL'         => '',
-            'ClientBackURL'     => '',
-            'OrderResultURL'    => '',
-            'MerchantTradeNo'   => '',
+            'ReturnURL' => '',
+            'ClientBackURL' => '',
+            'OrderResultURL' => '',
+            'MerchantTradeNo' => '',
             'MerchantTradeDate' => '',
-            'PaymentType'       => 'aio',
-            'TotalAmount'       => '',
-            'TradeDesc'         => '',
-            'ChoosePayment'     => PaymentMethod::ALL,
-            'Remark'            => '',
-            'ChooseSubPayment'  => PaymentMethodItem::None,
+            'PaymentType' => 'aio',
+            'TotalAmount' => '',
+            'TradeDesc' => '',
+            'ChoosePayment' => PaymentMethod::ALL,
+            'Remark' => '',
+            'ChooseSubPayment' => PaymentMethodItem::None,
             'NeedExtraPaidInfo' => ExtraPaymentInfo::No,
-            'DeviceSource'      => '',
-            'IgnorePayment'     => '',
-            'PlatformID'        => '',
-            'InvoiceMark'       => InvoiceState::No,
-            'Items'             => [],
-            'EncryptType'       => EncryptType::ENC_MD5,
-            'UseRedeem'         => UseRedeem::No,
+            'DeviceSource' => '',
+            'IgnorePayment' => '',
+            'PlatformID' => '',
+            'InvoiceMark' => InvoiceState::No,
+            'Items' => [],
+            'EncryptType' => EncryptType::ENC_MD5,
+            'UseRedeem' => UseRedeem::No,
         ];
 
         $this->SendExtend = [];
@@ -579,7 +580,7 @@ class Send extends Aio
     {
         //宣告付款方式物件
         $PaymentMethod = 'allPay_'.$arParameters['ChoosePayment'];
-        self::$PaymentObj = new $PaymentMethod;
+        self::$PaymentObj = new $PaymentMethod();
 
         //檢查參數
         $arParameters = self::$PaymentObj->check_string($arParameters);
@@ -1229,13 +1230,13 @@ abstract class Verification
 class allPay_CVS extends Verification
 {
     public $arPayMentExtend = [
-                            'Desc_1'           => '',
-                            'Desc_2'           => '',
-                            'Desc_3'           => '',
-                            'Desc_4'           => '',
-                            'PaymentInfoURL'   => '',
+                            'Desc_1' => '',
+                            'Desc_2' => '',
+                            'Desc_3' => '',
+                            'Desc_4' => '',
+                            'PaymentInfoURL' => '',
                             'ClientRedirectURL' => '',
-                            'StoreExpireDate'  => '',
+                            'StoreExpireDate' => '',
                         ];
 
     //檢查共同參數
@@ -1320,8 +1321,8 @@ class allPay_CVS extends Verification
 class allPay_ATM extends Verification
 {
     public $arPayMentExtend = [
-                            'ExpireDate'       => 3,
-                            'PaymentInfoURL'   => '',
+                            'ExpireDate' => 3,
+                            'PaymentInfoURL' => '',
                             'ClientRedirectURL' => '',
                         ];
 
@@ -1488,10 +1489,10 @@ class allPay_WebATM extends Verification
 class allPay_Alipay extends Verification
 {
     public $arPayMentExtend = [
-                            'Email'           => '',
-                            'PhoneNo'         => '',
-                            'UserName'        => '',
-                            'AlipayItemName'  => '',
+                            'Email' => '',
+                            'PhoneNo' => '',
+                            'UserName' => '',
+                            'AlipayItemName' => '',
                             'AlipayItemCounts' => '',
                             'AlipayItemPrice' => '',
                         ];
@@ -1687,14 +1688,14 @@ class allPay_Credit extends Verification
     public $arPayMentExtend = [
                                     'CreditInstallment' => 0,
                                     'InstallmentAmount' => 0,
-                                    'Redeem'            => false,
-                                    'UnionPay'          => false,
-                                    'Language'          => '',
-                                    'PeriodAmount'      => '',
-                                    'PeriodType'        => '',
-                                    'Frequency'         => '',
-                                    'ExecTimes'         => '',
-                                    'PeriodReturnURL'   => '',
+                                    'Redeem' => false,
+                                    'UnionPay' => false,
+                                    'Language' => '',
+                                    'PeriodAmount' => '',
+                                    'PeriodType' => '',
+                                    'Frequency' => '',
+                                    'ExecTimes' => '',
+                                    'PeriodReturnURL' => '',
                                 ];
 
     //檢查共同參數

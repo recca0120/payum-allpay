@@ -2,6 +2,13 @@
 
 use Mockery as m;
 use PayumTW\Allpay\Api;
+use PayumTW\Allpay\Bridge\Allpay\UseRedeem;
+use PayumTW\Allpay\Bridge\Allpay\ActionType;
+use PayumTW\Allpay\Bridge\Allpay\EncryptType;
+use PayumTW\Allpay\Bridge\Allpay\InvoiceState;
+use PayumTW\Allpay\Bridge\Allpay\PaymentMethod;
+use PayumTW\Allpay\Bridge\Allpay\ExtraPaymentInfo;
+use PayumTW\Allpay\Bridge\Allpay\PaymentMethodItem;
 
 class ApiTest extends PHPUnit_Framework_TestCase
 {
