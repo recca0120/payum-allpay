@@ -38,6 +38,9 @@
         "classmap": [
             "src/Bridge/Allpay/Sdk"
         ],
+        "files": [
+            "src/Bridge/helpers.php"
+        ],
         "psr-4": {
             "PayumTW\\Allpay\\": "src/"
         }
