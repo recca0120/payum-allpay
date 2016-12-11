@@ -1,6 +1,7 @@
 <?php
 
 use Mockery as m;
+use PayumTW\Allpay\AllpayLogisticsGatewayFactory;
 
 class AllpayLogisticsGatewayFactoryTest extends PHPUnit_Framework_TestCase
 {
