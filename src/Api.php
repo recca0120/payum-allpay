@@ -2,13 +2,15 @@
 
 namespace PayumTW\Allpay;
 
+use Exception;
+use Detection\MobileDetect;
 use Http\Message\MessageFactory;
 use Payum\Core\HttpClientInterface;
 use PayumTW\Allpay\Bridge\Allpay\AllInOne;
 use PayumTW\Allpay\Bridge\Allpay\DeviceType;
 use PayumTW\Allpay\Bridge\Allpay\InvoiceState;
 
-class Api extends BaseApi
+class Api
 {
     /**
      * $client.
@@ -187,5 +189,36 @@ class Api extends BaseApi
         }
 
         return $details;
+    }
+
+    /**
+     * Verify if the hash of the given parameter is correct.
+     *
+     * @param array $params
+     *
+     * @return bool
+     */
+    public function verifyHash(array $params)
+    {
+        $result = false;
+        try {
+            $this->api->CheckOutFeedback($params);
+            $result = true;
+        } catch (Exception $e) {
+        }
+
+        return $result;
+    }
+
+    /**
+     * isMobile.
+     *
+     * @return bool
+     */
+    protected function isMobile()
+    {
+        $detect = new MobileDetect();
+
+        return ($detect->isMobile() === false && $detect->isTablet() === false) ? false : true;
     }
 }
