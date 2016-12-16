@@ -3,6 +3,8 @@
 $classes = [
     'ActionType',
     'CarruerType',
+    'CheckMacValue',
+    'CheckOutFeedback',
     'ClearanceMark',
     'DeviceType',
     'Donation',
