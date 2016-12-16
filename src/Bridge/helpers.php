@@ -16,6 +16,7 @@ $classes = [
     'PaymentMethodItem',
     'PeriodType',
     'PrintMark',
+    'Send',
     'TaxType',
     'UseRedeem',
 ];
