@@ -2,19 +2,19 @@
 
 namespace PayumTW\Allpay\Action;
 
-use Payum\Core\Request\Sync;
 use Payum\Core\Request\Capture;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Request\GetHttpRequest;
+use PayumTW\Allpay\Action\Api\BaseApiAwareAction;
 use PayumTW\Allpay\Request\Api\CreateTransaction;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Security\GenericTokenFactoryAwareTrait;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
 
-class CaptureAction implements ActionInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
+class CaptureAction extends BaseApiAwareAction implements ActionInterface, GatewayAwareInterface, GenericTokenFactoryAwareInterface
 {
     use GatewayAwareTrait;
     use GenericTokenFactoryAwareTrait;
@@ -33,7 +33,10 @@ class CaptureAction implements ActionInterface, GatewayAwareInterface, GenericTo
         $this->gateway->execute($httpRequest);
 
         if (isset($httpRequest->request['RtnCode']) === true) {
-            $this->gateway->execute(new Sync($details));
+            if ($this->api->verifyHash($httpRequest->request) === false) {
+                $httpRequest->request['RtnCode'] = '10400002';
+            }
+            $details->replace($httpRequest->request);
 
             return;
         }

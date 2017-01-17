@@ -2,7 +2,6 @@
 
 namespace PayumTW\Allpay\Action;
 
-use Payum\Core\Request\Sync;
 use Payum\Core\Request\Notify;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpResponse;
@@ -34,7 +33,7 @@ class NotifyAction extends BaseApiAwareAction implements ActionInterface, Gatewa
             throw new HttpResponse('0|CheckMacValue verify fail.', 400, ['Content-Type' => 'text/plain']);
         }
 
-        $this->gateway->execute(new Sync($details));
+        $details->replace($httpRequest->request);
 
         throw new HttpResponse('1|OK', 200, ['Content-Type' => 'text/plain']);
     }
