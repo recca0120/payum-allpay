@@ -1,55 +1,33 @@
 <?php
 
+namespace PayumTW\Allpay\Tests\Action\Api;
+
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use PayumTW\Allpay\Request\Api\CancelTransaction;
 use PayumTW\Allpay\Action\Api\CancelTransactionAction;
 
-class CancelTransactionActionTest extends PHPUnit_Framework_TestCase
+class CancelTransactionActionTest extends TestCase
 {
-    public function tearDown()
+    protected function tearDown()
     {
         m::close();
     }
 
-    public function test_execute()
+    public function testExecute()
     {
-        /*
-        |------------------------------------------------------------
-        | Arrange
-        |------------------------------------------------------------
-        */
-
-        $request = m::spy('PayumTW\Allpay\Request\Api\CancelTransaction, ArrayAccess');
-        $api = m::spy('PayumTW\Allpay\Api');
-        $input = [];
-        $details = new ArrayObject($input);
-
-        $endpoint = 'foo.endpoint';
-        $data = ['foo.data'];
-
-        /*
-        |------------------------------------------------------------
-        | Act
-        |------------------------------------------------------------
-        */
-
-        $request
-            ->shouldReceive('getModel')->andReturn($details);
-
-        $api
-            ->shouldReceive('cancelTransaction')->andReturn($details);
-
         $action = new CancelTransactionAction();
-        $action->setApi($api);
+        $request = new CancelTransaction(new ArrayObject([]));
 
-        /*
-        |------------------------------------------------------------
-        | Assert
-        |------------------------------------------------------------
-        */
+        $action->setApi(
+            $api = m::mock('PayumTW\Allpay\Api')
+        );
+
+        $api->shouldReceive('cancelTransaction')->once()->with((array) $request->getModel())->andReturn($params = ['RepCode' => '1']);
 
         $action->execute($request);
-        $request->shouldHaveReceived('getModel')->twice();
-        $api->shouldHaveReceived('cancelTransaction')->with($input)->once();
+
+        $this->assertSame($params, (array) $request->getModel());
     }
 }

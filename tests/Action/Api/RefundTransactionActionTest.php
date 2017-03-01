@@ -1,59 +1,33 @@
 <?php
 
+namespace PayumTW\Allpay\Tests\Action\Api;
+
 use Mockery as m;
+use PHPUnit\Framework\TestCase;
 use Payum\Core\Bridge\Spl\ArrayObject;
+use PayumTW\Allpay\Request\Api\RefundTransaction;
 use PayumTW\Allpay\Action\Api\RefundTransactionAction;
 
-class RefundTransactionActionTest extends PHPUnit_Framework_TestCase
+class RefundTransactionActionTest extends TestCase
 {
-    public function tearDown()
+    protected function tearDown()
     {
         m::close();
     }
 
-    public function test_execute()
+    public function testExecute()
     {
-        /*
-        |------------------------------------------------------------
-        | Arrange
-        |------------------------------------------------------------
-        */
-
-        $request = m::spy('PayumTW\Allpay\Request\Api\RefundTransaction, ArrayAccess');
-        $api = m::spy('PayumTW\Allpay\Api');
-        $input = [
-            'cust_order_no' => 'foo.cust_order_no',
-            'order_amount' => 'foo.order_amount',
-            'refund_amount' => 'foo.refund_amount',
-        ];
-        $details = new ArrayObject($input);
-
-        $endpoint = 'foo.endpoint';
-        $data = ['foo.data'];
-
-        /*
-        |------------------------------------------------------------
-        | Act
-        |------------------------------------------------------------
-        */
-
-        $request
-            ->shouldReceive('getModel')->andReturn($details);
-
-        $api
-            ->shouldReceive('refundTransaction')->andReturn($details);
-
         $action = new RefundTransactionAction();
-        $action->setApi($api);
+        $request = new RefundTransaction(new ArrayObject([]));
 
-        /*
-        |------------------------------------------------------------
-        | Assert
-        |------------------------------------------------------------
-        */
+        $action->setApi(
+            $api = m::mock('PayumTW\Allpay\Api')
+        );
+
+        $api->shouldReceive('refundTransaction')->once()->with((array) $request->getModel())->andReturn($params = ['RepCode' => '1']);
 
         $action->execute($request);
-        $request->shouldHaveReceived('getModel')->twice();
-        $api->shouldHaveReceived('refundTransaction')->with($input)->once();
+
+        $this->assertSame($params, (array) $request->getModel());
     }
 }

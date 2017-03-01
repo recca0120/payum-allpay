@@ -1,85 +1,88 @@
 <?php
 
-use Mockery as m;
+namespace PayumTW\Allpay\Tests;
 
-class ClassAliasTest extends PHPUnit_Framework_TestCase
+use Mockery as m;
+use PHPUnit\Framework\TestCase;
+
+class ClassAliasTest extends TestCase
 {
-    public function tearDown()
+    protected function tearDown()
     {
         m::close();
     }
 
-    public function test_ActionType_exists()
+    public function testActionTypeExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\ActionType'));
     }
 
-    public function test_CarruerType_exists()
+    public function testCarruerTypeExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\CarruerType'));
     }
 
-    public function test_ClearanceMark_exists()
+    public function testClearanceMarkExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\ClearanceMark'));
     }
 
-    public function test_DeviceType_exists()
+    public function testDeviceTypeExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\DeviceType'));
     }
 
-    public function test_Donation_exists()
+    public function testDonationExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\Donation'));
     }
 
-    public function test_EncryptType_exists()
+    public function testEncryptTypeExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\EncryptType'));
     }
 
-    public function test_ExtraPaymentInfo_exists()
+    public function testExtraPaymentInfoExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\ExtraPaymentInfo'));
     }
 
-    public function test_InvoiceState_exists()
+    public function testInvoiceStateExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\InvoiceState'));
     }
 
-    public function test_InvType_exists()
+    public function testInvTypeExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\InvType'));
     }
 
-    public function test_PaymentMethod_exists()
+    public function testPaymentMethodExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\PaymentMethod'));
     }
 
-    public function test_PaymentMethodItem_exists()
+    public function testPaymentMethodItemExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\PaymentMethodItem'));
     }
 
-    public function test_PeriodType_exists()
+    public function testPeriodTypeExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\PeriodType'));
     }
 
-    public function test_PrintMark_exists()
+    public function testPrintMarkExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\PrintMark'));
     }
 
-    public function test_TaxType_exists()
+    public function testTaxTypeExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\TaxType'));
     }
 
-    public function test_UseRedeem_exists()
+    public function testUseRedeemExists()
     {
         $this->assertTrue(class_exists('PayumTW\Allpay\Bridge\Allpay\UseRedeem'));
     }

@@ -1,8 +1,10 @@
 <?php
 
+namespace PayumTW\Allpay\Tests;
+
 use Mockery as m;
 use PayumTW\Allpay\Api;
-use PayumTW\Allpay\Bridge\Allpay\UseRedeem;
+use PHPUnit\Framework\TestCase;
 use PayumTW\Allpay\Bridge\Allpay\ActionType;
 use PayumTW\Allpay\Bridge\Allpay\EncryptType;
 use PayumTW\Allpay\Bridge\Allpay\InvoiceState;
@@ -10,55 +12,40 @@ use PayumTW\Allpay\Bridge\Allpay\PaymentMethod;
 use PayumTW\Allpay\Bridge\Allpay\ExtraPaymentInfo;
 use PayumTW\Allpay\Bridge\Allpay\PaymentMethodItem;
 
-class ApiTest extends PHPUnit_Framework_TestCase
+class ApiTest extends TestCase
 {
-    public function tearDown()
+    protected function tearDown()
     {
         m::close();
     }
 
-    public function test_create_transaction()
+    public function testCreateTransaction()
     {
-        /*
-        |------------------------------------------------------------
-        | Arrange
-        |------------------------------------------------------------
-        */
-
-        $httpClient = m::spy('Payum\Core\HttpClientInterface');
-        $message = m::spy('Http\Message\MessageFactory');
-        $sdk = m::spy('PayumTW\Allpay\Bridge\Allpay\AllInOne');
+        $api = new Api(
+            $options = [
+                'MerchantID' => '2000132',
+                'HashKey' => '5294y06JbISpM5x9',
+                'HashIV' => 'v77hoKGq4kWxNNIS',
+                'sandbox' => false,
+            ],
+            $httpClient = m::mock('Payum\Core\HttpClientInterface'),
+            $message = m::mock('Http\Message\MessageFactory'),
+            $sdk = m::mock('PayumTW\Allpay\Bridge\Allpay\AllInOne')
+        );
 
         $sdk->Send = [
-            'ReturnURL'         => '',
-            'ClientBackURL'     => '',
-            'OrderResultURL'    => '',
-            'MerchantTradeNo'   => '',
-            'MerchantTradeDate' => '',
-            'PaymentType'       => 'aio',
-            'TotalAmount'       => '',
-            'TradeDesc'         => '',
-            'ChoosePayment'     => PaymentMethod::ALL,
-            'Remark'            => '',
-            'ChooseSubPayment'  => PaymentMethodItem::None,
-            'NeedExtraPaidInfo' => ExtraPaymentInfo::No,
-            'DeviceSource'      => '',
-            'IgnorePayment'     => '',
-            'PlatformID'        => '',
-            'InvoiceMark'       => InvoiceState::No,
-            'Items'             => [],
-            'EncryptType'       => EncryptType::ENC_MD5,
-            'UseRedeem'         => UseRedeem::No,
+            'ReturnURL' => null,
+            'MerchantTradeNo' => null,
+            'MerchantTradeDate' => null,
+            'TotalAmount' => null,
+            'TradeDesc' => null,
+            'ChoosePayment' => null,
+            'Items' => null,
         ];
+        $sdk->shouldReceive('CheckOutString')->once();
+        $sdk->shouldReceive('formToArray')->once();
 
-        $options = [
-            'MerchantID' => '2000132',
-            'HashKey' => '5294y06JbISpM5x9',
-            'HashIV' => 'v77hoKGq4kWxNNIS',
-            'sandbox' => false,
-        ];
-
-        $params = [
+        $api->createTransaction($params = [
             'ReturnURL' => 'http://www.allpay.com.tw/receive.php',
             'MerchantTradeNo' => 'Test'.time(),
             'MerchantTradeDate' => date('Y/m/d H:i:s'),
@@ -74,43 +61,26 @@ class ApiTest extends PHPUnit_Framework_TestCase
                     'URL' => 'dedwed',
                 ],
             ],
-        ];
+        ]);
 
-        /*
-        |------------------------------------------------------------
-        | Act
-        |------------------------------------------------------------
-        */
-
-        $api = new Api($options, $httpClient, $message, $sdk);
-
-        /*
-        |------------------------------------------------------------
-        | Assert
-        |------------------------------------------------------------
-        */
-
-        $api->createTransaction($params);
-        $this->assertSame($options['HashKey'], $sdk->HashKey);
-        $this->assertSame($options['HashIV'], $sdk->HashIV);
-        $this->assertSame($options['MerchantID'], $sdk->MerchantID);
-        $this->assertSame($api->getApiEndpoint('AioCheckOut'), $sdk->ServiceURL);
-        $this->assertSame($params['ReturnURL'], $sdk->Send['ReturnURL']);
-        $sdk->shouldHaveReceived('CheckOutString')->once();
-        $sdk->shouldHaveReceived('formToArray')->once();
+        $this->assertSame(array_merge($params, [
+            'DeviceSource' => 'P',
+        ]), $sdk->Send);
     }
 
-    public function test_cancel_transaction()
+    public function testCancelTransaction()
     {
-        /*
-        |------------------------------------------------------------
-        | Arrange
-        |------------------------------------------------------------
-        */
-
-        $httpClient = m::spy('Payum\Core\HttpClientInterface');
-        $message = m::spy('Http\Message\MessageFactory');
-        $sdk = m::spy('PayumTW\Allpay\Bridge\Allpay\AllInOne');
+        $api = new Api(
+            $options = [
+                'MerchantID' => '2000132',
+                'HashKey' => '5294y06JbISpM5x9',
+                'HashIV' => 'v77hoKGq4kWxNNIS',
+                'sandbox' => false,
+            ],
+            $httpClient = m::mock('Payum\Core\HttpClientInterface'),
+            $message = m::mock('Http\Message\MessageFactory'),
+            $sdk = m::mock('PayumTW\Allpay\Bridge\Allpay\AllInOne')
+        );
 
         $sdk->Action = [
             'MerchantTradeNo' => '',
@@ -119,55 +89,30 @@ class ApiTest extends PHPUnit_Framework_TestCase
             'TotalAmount' => 0,
         ];
 
-        $options = [
-            'MerchantID' => '2000132',
-            'HashKey' => '5294y06JbISpM5x9',
-            'HashIV' => 'v77hoKGq4kWxNNIS',
-            'sandbox' => false,
-        ];
+        $sdk->shouldReceive('DoAction')->once();
 
-        $params = [
+        $api->cancelTransaction($params = [
             'MerchantTradeNo' => '12345',
             'TradeNo' => '12345',
             'TotalAmount' => 0,
-        ];
+        ]);
 
-        /*
-        |------------------------------------------------------------
-        | Act
-        |------------------------------------------------------------
-        */
-
-        $api = new Api($options, $httpClient, $message, $sdk);
-
-        /*
-        |------------------------------------------------------------
-        | Assert
-        |------------------------------------------------------------
-        */
-
-        $api->cancelTransaction($params);
-        $this->assertSame($options['HashKey'], $sdk->HashKey);
-        $this->assertSame($options['HashIV'], $sdk->HashIV);
-        $this->assertSame($options['MerchantID'], $sdk->MerchantID);
-        $this->assertSame($api->getApiEndpoint('DoAction'), $sdk->ServiceURL);
-        $this->assertSame($params['MerchantTradeNo'], $sdk->Action['MerchantTradeNo']);
-        $this->assertSame($params['TradeNo'], $sdk->Action['TradeNo']);
-        $this->assertSame($params['TotalAmount'], $sdk->Action['TotalAmount']);
-        $sdk->shouldHaveReceived('DoAction')->once();
+        $this->assertSame(array_merge($sdk->Action, $params), $sdk->Action);
     }
 
-    public function test_refund_transaction()
+    public function testRefundTransaction()
     {
-        /*
-        |------------------------------------------------------------
-        | Arrange
-        |------------------------------------------------------------
-        */
-
-        $httpClient = m::spy('Payum\Core\HttpClientInterface');
-        $message = m::spy('Http\Message\MessageFactory');
-        $sdk = m::spy('PayumTW\Allpay\Bridge\Allpay\AllInOne');
+        $api = new Api(
+            $options = [
+                'MerchantID' => '2000132',
+                'HashKey' => '5294y06JbISpM5x9',
+                'HashIV' => 'v77hoKGq4kWxNNIS',
+                'sandbox' => false,
+            ],
+            $httpClient = m::mock('Payum\Core\HttpClientInterface'),
+            $message = m::mock('Http\Message\MessageFactory'),
+            $sdk = m::mock('PayumTW\Allpay\Bridge\Allpay\AllInOne')
+        );
 
         $sdk->ChargeBack = [
             'MerchantTradeNo' => '',
@@ -176,92 +121,43 @@ class ApiTest extends PHPUnit_Framework_TestCase
             'Remark' => '',
         ];
 
-        $options = [
-            'MerchantID' => '2000132',
-            'HashKey' => '5294y06JbISpM5x9',
-            'HashIV' => 'v77hoKGq4kWxNNIS',
-            'sandbox' => false,
-        ];
+        $sdk->shouldReceive('AioChargeback')->once();
 
-        $params = [
+        $api->refundTransaction($params = [
             'MerchantTradeNo' => '12345',
             'TradeNo' => '12345',
             'ChargeBackTotalAmount' => 0,
             'Remark' => '',
-        ];
+        ]);
 
-        /*
-        |------------------------------------------------------------
-        | Act
-        |------------------------------------------------------------
-        */
-
-        $api = new Api($options, $httpClient, $message, $sdk);
-
-        /*
-        |------------------------------------------------------------
-        | Assert
-        |------------------------------------------------------------
-        */
-
-        $api->refundTransaction($params);
-        $this->assertSame($options['HashKey'], $sdk->HashKey);
-        $this->assertSame($options['HashIV'], $sdk->HashIV);
-        $this->assertSame($options['MerchantID'], $sdk->MerchantID);
-        $this->assertSame($api->getApiEndpoint('AioChargeback'), $sdk->ServiceURL);
-        $this->assertSame($params['MerchantTradeNo'], $sdk->ChargeBack['MerchantTradeNo']);
-        $this->assertSame($params['TradeNo'], $sdk->ChargeBack['TradeNo']);
-        $this->assertSame($params['ChargeBackTotalAmount'], $sdk->ChargeBack['ChargeBackTotalAmount']);
-        $sdk->shouldHaveReceived('AioChargeback')->once();
+        $this->assertSame(array_merge($sdk->ChargeBack, $params), $sdk->ChargeBack);
     }
 
-    public function test_get_transaction_data_when_response_from_query_info()
+    public function testGetTransactionData()
     {
-        /*
-        |------------------------------------------------------------
-        | Arrange
-        |------------------------------------------------------------
-        */
-
-        $httpClient = m::spy('Payum\Core\HttpClientInterface');
-        $message = m::spy('Http\Message\MessageFactory');
-        $sdk = m::spy('PayumTW\Allpay\Bridge\Allpay\AllInOne');
+        $api = new Api(
+            $options = [
+                'MerchantID' => '2000132',
+                'HashKey' => '5294y06JbISpM5x9',
+                'HashIV' => 'v77hoKGq4kWxNNIS',
+                'sandbox' => false,
+            ],
+            $httpClient = m::mock('Payum\Core\HttpClientInterface'),
+            $message = m::mock('Http\Message\MessageFactory'),
+            $sdk = m::mock('PayumTW\Allpay\Bridge\Allpay\AllInOne')
+        );
 
         $sdk->Query = [
             'MerchantTradeNo' => '',
             'TimeStamp' => '',
         ];
 
-        $options = [
-            'MerchantID' => '2000132',
-            'HashKey' => '5294y06JbISpM5x9',
-            'HashIV' => 'v77hoKGq4kWxNNIS',
-            'sandbox' => false,
-        ];
+        $sdk->shouldReceive('QueryTradeInfo')->once();
 
-        $params = [
+        $api->getTransactionData($params = [
             'MerchantTradeNo' => '5832985816073',
-        ];
+        ]);
 
-        /*
-        |------------------------------------------------------------
-        | Act
-        |------------------------------------------------------------
-        */
-
-        $api = new Api($options, $httpClient, $message, $sdk);
-
-        /*
-        |------------------------------------------------------------
-        | Assert
-        |------------------------------------------------------------
-        */
-
-        $api->getTransactionData($params);
-        $this->assertSame($options['HashKey'], $sdk->HashKey);
-        $this->assertSame($options['HashIV'], $sdk->HashIV);
-        $this->assertSame($options['MerchantID'], $sdk->MerchantID);
-        $this->assertSame($api->getApiEndpoint('QueryTradeInfo'), $sdk->ServiceURL);
-        $sdk->shouldHaveReceived('QueryTradeInfo')->once();
+        $this->assertSame(array_merge($sdk->Query, $params), $sdk->Query);
     }
 }
