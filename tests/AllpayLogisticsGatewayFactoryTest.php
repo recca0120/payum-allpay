@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use PayumTW\Allpay\AllpayLogisticsGatewayFactory;
 
-class AllPayLogisticsGatewayFactoryTest extends TestCase
+class AllpayLogisticsGatewayFactoryTest extends TestCase
 {
     protected function tearDown()
     {
