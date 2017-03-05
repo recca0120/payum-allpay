@@ -8,6 +8,8 @@
 [![License](https://poser.pugx.org/payum-tw/allpay/license.svg)](https://packagist.org/packages/payum-tw/allpay)
 [![Monthly Downloads](https://poser.pugx.org/payum-tw/allpay/d/monthly)](https://packagist.org/packages/payum-tw/allpay)
 [![Daily Downloads](https://poser.pugx.org/payum-tw/allpay/d/daily)](https://packagist.org/packages/payum-tw/allpay)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/recca0120/payum-allpay/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/recca0120/payum-allpay/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/recca0120/payum-allpay/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/recca0120/payum-allpay/?branch=master)
 
 The Payum extension to rapidly build new extensions.
 
