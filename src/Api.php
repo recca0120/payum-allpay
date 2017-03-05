@@ -44,7 +44,7 @@ class Api
      * @param array $options
      * @param HttpClientInterface $client
      * @param MessageFactory $messageFactory
-     *
+     * @param \PayumTW\Allpay\Bridge\Allpay\AllInOne $sdk
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
     public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory, AllInOne $sdk = null)
