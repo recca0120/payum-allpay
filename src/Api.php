@@ -15,14 +15,14 @@ class Api
     /**
      * $client.
      *
-     * @var HttpClientInterface
+     * @var \Payum\Core\HttpClientInterface
      */
     protected $client;
 
     /**
      * MessageFactory.
      *
-     * @var MessageFactory
+     * @var \Http\Message\MessageFactory
      */
     protected $messageFactory;
 
@@ -42,8 +42,8 @@ class Api
 
     /**
      * @param array $options
-     * @param HttpClientInterface $client
-     * @param MessageFactory $messageFactory
+     * @param \Payum\Core\HttpClientInterface $client
+     * @param \Http\Message\MessageFactory $messageFactory
      * @param \PayumTW\Allpay\Bridge\Allpay\AllInOne $sdk
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
@@ -90,7 +90,6 @@ class Api
      * createTransaction.
      *
      * @param array $params
-     * @param mixed $request
      * @return array
      */
     public function createTransaction(array $params)
