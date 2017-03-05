@@ -91,7 +91,6 @@ class Api
      *
      * @param array $params
      * @param mixed $request
-     *
      * @return array
      */
     public function createTransaction(array $params)
@@ -104,25 +103,24 @@ class Api
             array_intersect_key($params, $this->sdk->Send)
         );
 
-        // 電子發票參數
-        /*
-        $this->sdk->Send['InvoiceMark'] = InvoiceState::Yes;
-        $this->sdk->SendExtend['RelateNumber'] = $MerchantTradeNo;
-        $this->sdk->SendExtend['CustomerEmail'] = 'test@allpay.com.tw';
-        $this->sdk->SendExtend['CustomerPhone'] = '0911222333';
-        $this->sdk->SendExtend['TaxType'] = TaxType::Dutiable;
-        $this->sdk->SendExtend['CustomerAddr'] = '台北市南港區三重路19-2號5樓D棟';
-        $this->sdk->SendExtend['InvoiceItems'] = array();
-        // 將商品加入電子發票商品列表陣列
-        foreach ($this->sdk->Send['Items'] as $info)
-        {
-            array_push($this->sdk->SendExtend['InvoiceItems'],array('Name' => $info['Name'],'Count' =>
-                $info['Quantity'],'Word' => '個','Price' => $info['Price'],'TaxType' => TaxType::Dutiable));
-        }
-        $this->sdk->SendExtend['InvoiceRemark'] = '測試發票備註';
-        $this->sdk->SendExtend['DelayDay'] = '0';
-        $this->sdk->SendExtend['InvType'] = InvType::General;
-        */
+        /**
+         * 電子發票參數
+         * $this->sdk->Send['InvoiceMark'] = InvoiceState::Yes;
+         * $this->sdk->SendExtend['RelateNumber'] = $MerchantTradeNo;
+         * $this->sdk->SendExtend['CustomerEmail'] = 'test@allpay.com.tw';
+         * $this->sdk->SendExtend['CustomerPhone'] = '0911222333';
+         * $this->sdk->SendExtend['TaxType'] = TaxType::Dutiable;
+         * $this->sdk->SendExtend['CustomerAddr'] = '台北市南港區三重路19-2號5樓D棟';
+         * $this->sdk->SendExtend['InvoiceItems'] = array();
+         *  將商品加入電子發票商品列表陣列
+         * foreach ($this->sdk->Send['Items'] as $info) {
+         *      array_push($this->sdk->SendExtend['InvoiceItems'],array('Name' => $info['Name'],'Count' =>
+         *          $info['Quantity'],'Word' => '個','Price' => $info['Price'],'TaxType' => TaxType::Dutiable));
+         * }
+         * $this->sdk->SendExtend['InvoiceRemark'] = '測試發票備註';
+         * $this->sdk->SendExtend['DelayDay'] = '0';
+         * $this->sdk->SendExtend['InvType'] = InvType::General;
+         */
 
         return $this->sdk->formToArray(
             $this->sdk->CheckOutString()
@@ -133,7 +131,6 @@ class Api
      * cancelTransaction.
      *
      * @param array $params
-     *
      * @return array
      */
     public function cancelTransaction($params)
@@ -151,7 +148,6 @@ class Api
      * refundTransaction.
      *
      * @param array $params
-     *
      * @return array
      */
     public function refundTransaction($params)
@@ -169,7 +165,6 @@ class Api
      * getTransactionData.
      *
      * @param mixed $params
-     *
      * @return array
      */
     public function getTransactionData($params)
@@ -186,7 +181,6 @@ class Api
      * Verify if the hash of the given parameter is correct.
      *
      * @param array $params
-     *
      * @return bool
      */
     public function verifyHash(array $params)
