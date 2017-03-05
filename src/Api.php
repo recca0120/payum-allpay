@@ -102,7 +102,7 @@ class Api
             array_intersect_key($params, $this->sdk->Send)
         );
 
-        /**
+        /*
          * 電子發票參數
          * $this->sdk->Send['InvoiceMark'] = InvoiceState::Yes;
          * $this->sdk->SendExtend['RelateNumber'] = $MerchantTradeNo;
