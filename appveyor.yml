@@ -40,6 +40,7 @@ install:
   - cd c:\projects\payum-allpay
   - mkdir %APPDATA%\Composer
   - composer update --prefer-dist --no-progress --ansi
+  - php -v
 
 test_script:
   - cd c:\projects\payum-allpay
