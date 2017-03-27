@@ -576,28 +576,6 @@ class Send extends Aio
     //付款方式物件
     public static $PaymentObj;
 
-    protected static function process($arParameters = [], $arExtend = [])
-    {
-        //宣告付款方式物件
-        $PaymentMethod = 'allPay_'.$arParameters['ChoosePayment'];
-        self::$PaymentObj = new $PaymentMethod();
-
-        //檢查參數
-        $arParameters = self::$PaymentObj->check_string($arParameters);
-
-        //檢查商品
-        $arParameters = self::$PaymentObj->check_goods($arParameters);
-
-        //檢查各付款方式的額外參數&電子發票參數
-        $arExtend = self::$PaymentObj->check_extend_string($arExtend, $arParameters['InvoiceMark']);
-
-        //過濾
-        $arExtend = self::$PaymentObj->filter_string($arExtend, $arParameters['InvoiceMark']);
-
-        //合併共同參數及延伸參數
-        return array_merge($arParameters, $arExtend);
-    }
-
     public static function CheckOut($target = '_self', $arParameters = [], $arExtend = [], $HashKey = '', $HashIV = '', $ServiceURL = '')
     {
         $arParameters = self::process($arParameters, $arExtend);
@@ -652,6 +630,28 @@ class Send extends Aio
         $szHtml .= '</html>';
 
         return  $szHtml;
+    }
+
+    protected static function process($arParameters = [], $arExtend = [])
+    {
+        //宣告付款方式物件
+        $PaymentMethod = 'allPay_'.$arParameters['ChoosePayment'];
+        self::$PaymentObj = new $PaymentMethod();
+
+        //檢查參數
+        $arParameters = self::$PaymentObj->check_string($arParameters);
+
+        //檢查商品
+        $arParameters = self::$PaymentObj->check_goods($arParameters);
+
+        //檢查各付款方式的額外參數&電子發票參數
+        $arExtend = self::$PaymentObj->check_extend_string($arExtend, $arParameters['InvoiceMark']);
+
+        //過濾
+        $arExtend = self::$PaymentObj->filter_string($arExtend, $arParameters['InvoiceMark']);
+
+        //合併共同參數及延伸參數
+        return array_merge($arParameters, $arExtend);
     }
 }
 
@@ -868,12 +868,6 @@ class AioCapture extends Aio
 
 abstract class Verification
 {
-    abstract public function check_goods($arParameters = []);
-
-    abstract public function filter_string($arExtend = [], $InvoiceMark = '');
-
-    abstract public function check_extend_string($arExtend = [], $InvoiceMark = '');
-
     // 電子發票延伸參數。
     public $arInvoice = [
             'RelateNumber',
@@ -899,6 +893,12 @@ abstract class Verification
             'InvoiceItemTaxType',
             'InvType',
         ];
+
+    abstract public function check_goods($arParameters = []);
+
+    abstract public function filter_string($arExtend = [], $InvoiceMark = '');
+
+    abstract public function check_extend_string($arExtend = [], $InvoiceMark = '');
 
     //檢查共同參數
     public function check_string($arParameters = [])
