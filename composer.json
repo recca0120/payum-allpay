@@ -39,7 +39,7 @@
             "src/Bridge/Allpay/Sdk"
         ],
         "files": [
-            "src/Bridge/helpers.php"
+            "src/Bridge/polyfill.php"
         ],
         "psr-4": {
             "PayumTW\\Allpay\\": "src/"
