@@ -3,12 +3,11 @@
 namespace PayumTW\Allpay;
 
 use Exception;
+use DeviceType;
+use InvoiceState;
 use Detection\MobileDetect;
 use Http\Message\MessageFactory;
 use Payum\Core\HttpClientInterface;
-use AllInOne;
-use DeviceType;
-use InvoiceState;
 
 class Api
 {

@@ -2,11 +2,11 @@
 
 namespace PayumTW\Allpay\Tests;
 
+use ActionType;
 use Mockery as m;
+use PaymentMethod;
 use PayumTW\Allpay\Api;
 use PHPUnit\Framework\TestCase;
-use ActionType;
-use PaymentMethod;
 
 class ApiTest extends TestCase
 {
