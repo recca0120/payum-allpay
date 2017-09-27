@@ -1,8 +1,8 @@
 <?php
 
-namespace PayumTW\Allpay\Bridge\Allpay;
+namespace PayumTW\Allpay\Sdk;
 
-use PayumTW\Ecpay\Bridge\Ecpay\FormToArrayTrait;
+use PayumTW\Ecpay\Sdk\FormToArrayTrait;
 
 class AllInOne extends \AllInOne
 {

@@ -5,8 +5,8 @@ namespace PayumTW\Allpay\Tests;
 use Mockery as m;
 use PayumTW\Allpay\Api;
 use PHPUnit\Framework\TestCase;
-use PayumTW\Allpay\Bridge\Allpay\ActionType;
-use PayumTW\Allpay\Bridge\Allpay\PaymentMethod;
+use ActionType;
+use PaymentMethod;
 
 class ApiTest extends TestCase
 {
@@ -26,7 +26,7 @@ class ApiTest extends TestCase
             ],
             $httpClient = m::mock('Payum\Core\HttpClientInterface'),
             $message = m::mock('Http\Message\MessageFactory'),
-            $sdk = m::mock('PayumTW\Allpay\Bridge\Allpay\AllInOne')
+            $sdk = m::mock('PayumTW\Allpay\Sdk\AllInOne')
         );
 
         $sdk->Send = [
@@ -75,7 +75,7 @@ class ApiTest extends TestCase
             ],
             $httpClient = m::mock('Payum\Core\HttpClientInterface'),
             $message = m::mock('Http\Message\MessageFactory'),
-            $sdk = m::mock('PayumTW\Allpay\Bridge\Allpay\AllInOne')
+            $sdk = m::mock('PayumTW\Allpay\Sdk\AllInOne')
         );
 
         $sdk->Action = [
@@ -107,7 +107,7 @@ class ApiTest extends TestCase
             ],
             $httpClient = m::mock('Payum\Core\HttpClientInterface'),
             $message = m::mock('Http\Message\MessageFactory'),
-            $sdk = m::mock('PayumTW\Allpay\Bridge\Allpay\AllInOne')
+            $sdk = m::mock('PayumTW\Allpay\Sdk\AllInOne')
         );
 
         $sdk->ChargeBack = [
@@ -140,7 +140,7 @@ class ApiTest extends TestCase
             ],
             $httpClient = m::mock('Payum\Core\HttpClientInterface'),
             $message = m::mock('Http\Message\MessageFactory'),
-            $sdk = m::mock('PayumTW\Allpay\Bridge\Allpay\AllInOne')
+            $sdk = m::mock('PayumTW\Allpay\Sdk\AllInOne')
         );
 
         $sdk->Query = [

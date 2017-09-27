@@ -6,9 +6,9 @@ use Exception;
 use Detection\MobileDetect;
 use Http\Message\MessageFactory;
 use Payum\Core\HttpClientInterface;
-use PayumTW\Allpay\Bridge\Allpay\AllInOne;
-use PayumTW\Allpay\Bridge\Allpay\DeviceType;
-use PayumTW\Allpay\Bridge\Allpay\InvoiceState;
+use AllInOne;
+use DeviceType;
+use InvoiceState;
 
 class Api
 {
@@ -36,7 +36,7 @@ class Api
     /**
      * $sdk.
      *
-     * @var \PayumTW\Allpay\Bridge\Allpay\AllInOne
+     * @var \PayumTW\Allpay\Sdk\AllInOne
      */
     protected $sdk;
 
@@ -44,7 +44,7 @@ class Api
      * @param array $options
      * @param \Payum\Core\HttpClientInterface $client
      * @param \Http\Message\MessageFactory $messageFactory
-     * @param \PayumTW\Allpay\Bridge\Allpay\AllInOne $sdk
+     * @param \PayumTW\Allpay\Sdk\AllInOne $sdk
      * @throws \Payum\Core\Exception\InvalidArgumentException if an option is invalid
      */
     public function __construct(array $options, HttpClientInterface $client, MessageFactory $messageFactory, AllInOne $sdk = null)
