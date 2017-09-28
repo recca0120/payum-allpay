@@ -7,6 +7,7 @@ use DeviceType;
 use InvoiceState;
 use Detection\MobileDetect;
 use Http\Message\MessageFactory;
+use PayumTW\Allpay\Sdk\AllInOne;
 use Payum\Core\HttpClientInterface;
 
 class Api
