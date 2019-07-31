@@ -15,6 +15,6 @@ class AllInOne extends \AllInOne
     {
         $params = func_get_arg(0);
 
-        return CheckOutFeedback::CheckOut($params, $this->HashKey, $this->HashIV, 0);
+        return \CheckOutFeedback::CheckOut($params, $this->HashKey, $this->HashIV, 0);
     }
 }
